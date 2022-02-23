@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.home.MainActivity
 
 class LoginActivity : BaseActivity() {
 
@@ -20,7 +21,7 @@ class LoginActivity : BaseActivity() {
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        binding.buttonLogin.setOnClickListener()
+        binding.buttonSignIn.setOnClickListener()
         {
             login()
         }
@@ -32,17 +33,16 @@ class LoginActivity : BaseActivity() {
     * */
     private fun login()
     {
-        val username = binding.editTextSignInEmail.text.toString()
-        val password = binding.editTextPw.text.toString()
+        val username = binding.editTextEmail.text.toString()
+        val password = binding.editTextPassword.text.toString()
         viewModel.login(username, password).observe(this, Observer {
             if (it.status == 2){
                 // Intent to next screen
-                show("Success")
                 Log.d("LoginActivity", it.message.toString())
+                openActivity(MainActivity::class.java)
             }else{
                 if (it.message.equals("NO DATA FOUND"))
                 {
-                    show("Failed")
                     Log.d("LoginActivity", it.status.toString())
                     Log.d("LoginActivity", it.message.toString())
                 }
