@@ -48,7 +48,11 @@ class AuthRepository {
                 {
                    for (ds in snapshot.children)
                    {
+                        val user = ds.getValue(User::class.java)
+                       if (user != null )
+                       {
 
+                       }
                    }
                     requestCall.status = 1
                     requestCall.message = "DATA FOUND"
