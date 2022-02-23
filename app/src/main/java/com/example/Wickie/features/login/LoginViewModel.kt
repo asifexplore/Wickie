@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.Wickie.AuthRepository
 
-class LoginViewModal( )  : ViewModel() {
+class LoginViewModel( )  : ViewModel() {
 
     private val authRepository: AuthRepository = AuthRepository()
     private var _loginStatus = MutableLiveData<Boolean>()

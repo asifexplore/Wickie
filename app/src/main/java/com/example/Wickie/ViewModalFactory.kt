@@ -2,7 +2,7 @@ package com.example.Wickie
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.Wickie.features.login.LoginViewModal
+import com.example.Wickie.features.login.LoginViewModel
 import java.lang.IllegalArgumentException
 
 class ViewModalFactory private constructor(
@@ -13,7 +13,7 @@ class ViewModalFactory private constructor(
 ) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return when {
-            modelClass.isAssignableFrom(LoginViewModal::class.java) -> LoginViewModal() as T
+            modelClass.isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel() as T
             else -> throw IllegalArgumentException("ViewModalClass not Found ")
         }
     }
