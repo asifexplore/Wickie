@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "365966319277",
+    "firebase_url": "https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "wickie-3cfa2",
+    "storage_bucket": "wickie-3cfa2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:365966319277:android:95b74f75684dcc24f7b024",
+        "android_client_info": {
+          "package_name": "com.example.project_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "365966319277-th9d9rpjthp0pojqmjfgjts95jn8ehj9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzdb3OxkwzSt-2F6bXKWn_v9NYs_eQRf4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "365966319277-th9d9rpjthp0pojqmjfgjts95jn8ehj9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
