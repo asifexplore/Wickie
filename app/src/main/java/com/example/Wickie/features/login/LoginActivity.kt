@@ -1,5 +1,6 @@
 package com.example.Wickie.features.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -7,6 +8,7 @@ import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.home.MainActivity
 
 class LoginActivity : BaseActivity() {
 
@@ -27,6 +29,8 @@ class LoginActivity : BaseActivity() {
                 // Toast Message
                 val toast = Toast.makeText(applicationContext, "Logged In", Toast.LENGTH_LONG)
                 toast.show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
             else
             {
@@ -36,10 +40,10 @@ class LoginActivity : BaseActivity() {
             }
         })
 
-        binding.buttonLogin.setOnClickListener()
+        binding.buttonSignIn.setOnClickListener()
         {
-            val username = binding.editTextSignInEmail.text.toString()
-            val password = binding.editTextPw.text.toString()
+            val username = binding.editTextEmail.text.toString()
+            val password = binding.editTextPassword.text.toString()
             viewModel.checkLogin(username,password)
             Log.d("LoginActivity","Button Pressed")
             Log.d("LoginActivity Status",viewModel.loginStatus().toString())
