@@ -17,6 +17,8 @@ import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.claims.ClaimsFormActivity
+
 
 class LoginActivity : BaseActivity() {
 
