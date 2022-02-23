@@ -33,12 +33,4 @@ open class BaseActivity : AppCompatActivity() {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-//    private fun openSetting() {
-//        val intent = Intent(BassBoost.Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-//        val uri = Uri.fromParts("package", packageName, null)
-//        intent.data = uri
-//        startActivityForResult(intent, 101)
-//    }
-
-
 }
