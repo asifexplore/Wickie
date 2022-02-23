@@ -12,4 +12,7 @@
     <string name="attachment_label">Attachment</string>
     <string name="request_button">Request</string>
     <string name="cancel_button">Cancel</string>
+    <string name="fingerprint">FingerPrint</string>
+    <string name="type_a_message">Type a message…</string>
+    <string name="send">Send</string>
 </resources>
