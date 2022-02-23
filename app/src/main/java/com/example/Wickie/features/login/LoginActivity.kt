@@ -19,39 +19,33 @@ class LoginActivity : BaseActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-//        viewModel.loginStatus().observe(this, Observer {
-//            if (it == true )
-//            {
-//                // Intent to MainActivity
-//                // Toast Message
-//                val toast = Toast.makeText(applicationContext, "Logged In", Toast.LENGTH_LONG)
-//                toast.show()
-//            }
-//            else
-//            {
-//                // Toast Message
-//                val toast = Toast.makeText(applicationContext, "Error Logging In", Toast.LENGTH_LONG)
-//                toast.show()
-//            }
-//        })
-
 
         binding.buttonLogin.setOnClickListener()
         {
             login()
         }
     }
-
+    /*
+    * Gets Username & Password. Observes for mutable live data from login function in view model class.
+    * Success: Intent to HomeActivity
+    * Failed: Display Error Message
+    * */
     private fun login()
     {
         val username = binding.editTextSignInEmail.text.toString()
         val password = binding.editTextPw.text.toString()
         viewModel.login(username, password).observe(this, Observer {
-            if (it.status == 1){
+            if (it.status == 2){
                 // Intent to next screen
                 show("Success")
+                Log.d("LoginActivity", it.message.toString())
             }else{
-                show("Failed")
+                if (it.message.equals("NO DATA FOUND"))
+                {
+                    show("Failed")
+                    Log.d("LoginActivity", it.status.toString())
+                    Log.d("LoginActivity", it.message.toString())
+                }
             }
         })
     }
