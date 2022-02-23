@@ -7,25 +7,15 @@ import com.example.Wickie.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // initialize view binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
-
-
         val homeFragment=HomeFragment()
         val claimFragment=ClaimFragment()
         val wickieFragment=WickieFragment()
-
         setCurrentFragment(homeFragment)
-
-
-
-
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.home->setCurrentFragment(homeFragment)
@@ -35,11 +25,9 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-
     private fun setCurrentFragment(fragment:Fragment)=
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment,fragment)
             commit()
         }
-
 }
