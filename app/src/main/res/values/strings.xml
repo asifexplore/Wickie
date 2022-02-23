@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Wickie</string>
+    <string name="signin_header">Sign In</string>
+    <string name="remember_switch">Remember Me</string>
+    <string name="email_placeholder">abc@gmail.com</string>
+    <string name="forgotpassword_text">Forgot Password?</string>
+    <string name="spenddate_label">Date</string>
+    <string name="amount_label">Amount</string>
+    <string name="balance_label">Balance</string>
+    <string name="type_label">Type</string>
+    <string name="reason_label">Reason</string>
+    <string name="attachment_label">Attachment</string>
+    <string name="request_button">Request</string>
+    <string name="cancel_button">Cancel</string>
 </resources>
