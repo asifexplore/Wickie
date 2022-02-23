@@ -18,6 +18,7 @@ import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.features.claims.ClaimsFormActivity
+import com.example.Wickie.features.home.MainActivity
 
 
 class LoginActivity : BaseActivity() {
@@ -92,6 +93,8 @@ class LoginActivity : BaseActivity() {
             viewModel.checkLogin(username,password)
             Log.d("LoginActivity","Button Pressed")
             Log.d("LoginActivity Status",viewModel.loginStatus().toString())
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 
