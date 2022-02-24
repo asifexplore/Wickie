@@ -48,7 +48,8 @@ class ClaimsFormActivity:BaseActivity() {
             val reason = binding.editTextReason.text.toString()
             val amount = binding.editTextAmount.text.toString()
 
-            viewModel.create(date,type,reason,amount)
+            //viewModel.create(date,type,reason,amount)
+            viewModel.update(date,type,reason,amount,"3")
 
 
         }
