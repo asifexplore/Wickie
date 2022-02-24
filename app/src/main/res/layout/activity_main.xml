@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <!--Layout for Bottom Navigation Bar (Claims, Home, ChatBot)-->
+    <!--Layout for Bottom Navigation Bar (Claim, Home, ChatBot)-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
