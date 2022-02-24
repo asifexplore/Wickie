@@ -22,13 +22,13 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile,
             Context.MODE_PRIVATE)
-        binding.switch2.setOnClickListener() {
-            val check = binding.switch2.isChecked
-            binding2.imageButtonFingerprintScan.isVisible = check
-            val editor:SharedPreferences.Editor =  sharedPreferences.edit()
-            editor.putBoolean("check_key",check)
-            editor.apply()
-            editor.commit()
-        }
+//        binding.switch2.setOnClickListener() {
+//            val check = binding.switch2.isChecked
+//            binding2.imageButtonFingerprintScan.isVisible = check
+//            val editor:SharedPreferences.Editor =  sharedPreferences.edit()
+//            editor.putBoolean("check_key",check)
+//            editor.apply()
+//            editor.commit()
+//        }
     }
 }

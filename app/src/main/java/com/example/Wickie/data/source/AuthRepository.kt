@@ -19,22 +19,24 @@ class AuthRepository {
         mLiveData.value = requestCall
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+
         database.get().addOnSuccessListener {
-            if (it.exists() && it.child("users").child(username).exists() )
+            Log.d("AuthRepo",it.toString())
+            if (it.exists() && it.child(username).exists() )
             {
-                // Need to remove stuff from object
-                Log.d("LoginActivity",it.child("users").child(username).child("user_pw").toString())
-                Log.d("LoginActivity",password)
-                    if (password.equals(it.child("users").child(username).child("user_pw").value))
-                    {
-                        requestCall.status = 2
-                        requestCall.message = "DATA FOUND"
-                    }else
-                    {
-                        requestCall.status = 1
-                        requestCall.message = "NO DATA FOUND"
-                    }
+                Log.d("AuthRepo","Inside exists")
+                Log.d("AuthRepo",it.child(username).child("user_pw").value.toString())
+                if (password.equals(it.child(username).child("user_pw").value))
+                {
+                    requestCall.status = 2
+                    requestCall.message = "DATA FOUND"
+                }else
+                {
+                    requestCall.status = 1
+                    requestCall.message = "NO DATA FOUND"
+                }
             }else{
+                Log.d("AuthRepo",it.child(username).toString())
                 // Data does not exits
                 requestCall.status = 1
                 requestCall.message = "NO DATA FOUND"

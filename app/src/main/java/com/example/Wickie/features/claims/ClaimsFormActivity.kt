@@ -4,27 +4,26 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
-import android.content.DialogInterface
+import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
+import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
-import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.util.*
 import com.example.Wickie.databinding.ActivityClaimsformBinding
-
+import com.google.firebase.storage.FirebaseStorage
+import java.text.SimpleDateFormat
 
 
 class ClaimsFormActivity:BaseActivity() {
@@ -32,10 +31,28 @@ class ClaimsFormActivity:BaseActivity() {
     private val REQUEST_IMAGE_GALLERY = 132
     private val REQUEST_IMAGE_CAMERA = 142
 
+    lateinit var imageURI : Uri
+    private lateinit var viewModel: ClaimViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimsformBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
+        binding.buttonRequest.setOnClickListener()
+        {
+            val date = binding.editTextDate.text.toString()
+            val type = binding.typeItems.text.toString()
+            val reason = binding.editTextReason.text.toString()
+            val amount = binding.editTextAmount.text.toString()
+
+            viewModel.create(date,type,reason,amount)
+
+
+        }
+
 
         //var textTypeDropdown = findViewById<TextInputLayout>(R.layout.typeItems.id.textTypeDropdown)
 
@@ -97,11 +114,55 @@ class ClaimsFormActivity:BaseActivity() {
             dialog.show()
         }
     }
+
+    private fun uploadImg()
+    {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Uploading Files...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
+        val now = Date()
+        val fileName = formatter.format(now)
+        // Need Username
+        var storageReference = FirebaseStorage.getInstance().getReference("images/asif/$fileName")
+        storageReference.putFile(imageURI).addOnSuccessListener {
+            show("Image Uploaded Successfully")
+            if(progressDialog.isShowing) progressDialog.dismiss()
+        }.addOnFailureListener{
+            show("Image Not Uploaded Successfully. Please try again later. ")
+            if(progressDialog.isShowing) progressDialog.dismiss()
+        }
+    }
+
+    private fun downloadImg()
+    {
+        var storageReference = FirebaseStorage.getInstance().reference.child("images/2022_02_24_08_26_21")
+        val localfile = File.createTempFile("tempImage","png")
+        show(storageReference.toString())
+
+        Log.d("ClaimsFormAct",storageReference.toString())
+        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
+
+        storageReference.getFile(localfile).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+            binding.imageButtonAttachment.setImageBitmap(bitmap)
+
+        }.addOnFailureListener(){
+            show("Image not downloaded successfully")
+        }
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
             binding.imageButtonAttachment.setImageURI(data.data)
+            imageURI = data.data!!
+            Log.d("ClaimsFormActivity",imageURI.toString())
+            uploadImg()
         }
         else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
