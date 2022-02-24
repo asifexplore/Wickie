@@ -20,19 +20,17 @@ class ClaimRepository {
         mLiveData.value = requestCall
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
-        database.get().addOnSuccessListener {
-            // Add onto Firebase
-            val claim = Claim()
-            claim.date = date
-            claim.type = type
-            claim.reason = reason
-            claim.amount = amount
+        // Add onto Firebase
+        val claim = Claim()
+        claim.date = date
+        claim.type = type
+        claim.reason = reason
+        claim.amount = amount
 
-            database.child("asif").setValue(claim)
+        database.child("asif").child("3").setValue(claim).addOnSuccessListener {
             requestCall.status = 2
             requestCall.message = "Add Success"
             mLiveData.postValue(requestCall)
-
         }.addOnFailureListener(){
             Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
