@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.R
 
@@ -21,7 +22,7 @@ class EventAdapter(private val eventList:ArrayList<Banner>) : RecyclerView.Adapt
 //        Log.d("Image_View", "Inside before ")
 //        Log.d("Image_View", eventList[position].image.toString())
 //        holder.imageView.setImageResource(eventList[position].image)
-
+        holder.imageView.setImageResource(eventList[position].image)
 
     }
 
@@ -29,7 +30,7 @@ class EventAdapter(private val eventList:ArrayList<Banner>) : RecyclerView.Adapt
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageView : ImageView = itemView.findViewById(R.id.EventView1)
-
+//        val textView: TextView = itemView.findViewById(R.id.title_text_view)
     }
 
 }
