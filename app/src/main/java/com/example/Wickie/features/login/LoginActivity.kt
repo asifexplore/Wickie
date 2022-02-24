@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.home.MainActivity
 
 class LoginActivity : BaseActivity() {
 
@@ -20,7 +21,7 @@ class LoginActivity : BaseActivity() {
 
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        binding.buttonLogin.setOnClickListener()
+        binding.buttonSignIn.setOnClickListener()
         {
             login()
         }
@@ -40,7 +41,7 @@ class LoginActivity : BaseActivity() {
                 Log.d("LoginActivity", it.message.toString())
                 openActivity(MainActivity::class.java)
             }else{
-                if (it.message.equals("NO DATA FOUND"))
+                if (it.message == "NO DATA FOUND")
                 {
                     Log.d("LoginActivity", it.status.toString())
                     Log.d("LoginActivity", it.message.toString())

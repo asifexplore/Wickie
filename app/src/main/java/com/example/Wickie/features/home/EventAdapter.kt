@@ -18,9 +18,11 @@ class EventAdapter(private val eventList:ArrayList<Banner>) : RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        Log.d("Image_View", "Inside before ")
-        Log.d("Image_View", eventList[position].image.toString())
-        holder.imageView.setImageResource(eventList[position].image)
+//        Log.d("Image_View", "Inside before ")
+//        Log.d("Image_View", eventList[position].image.toString())
+//        holder.imageView.setImageResource(eventList[position].image)
+
+
     }
 
     override fun getItemCount() = eventList.size
