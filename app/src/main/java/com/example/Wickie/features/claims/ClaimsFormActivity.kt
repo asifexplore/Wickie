@@ -1,5 +1,11 @@
 package com.example.Wickie.features.claims
 
+/*
+*  Base Activity will be the parent activity, allowing other activities to inherit functionalites. Prevent the need to rewrite codes.
+*
+* the camera function is in the image View
+*/
+
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
@@ -58,7 +64,7 @@ class ClaimsFormActivity:BaseActivity() {
             }, myYear, myMonth, day)
             datePickerDialog.show()
         }
-
+        //create a dialog
         binding.imageButtonAttachment.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             //set title for alert dialog
@@ -66,7 +72,7 @@ class ClaimsFormActivity:BaseActivity() {
             //set message for alert dialog
             builder.setMessage("How would you upload your attachment?")
 
-            //performing positive action
+            //call the gallery and ask permission for gallery
             builder.setPositiveButton("Gallery") { dialog, which ->
                 dialog.dismiss()
 
@@ -74,7 +80,7 @@ class ClaimsFormActivity:BaseActivity() {
                 intent.type = "image/*"
                 startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
             }
-            //performing negative action
+            //call the camera, check for permission to access the camera
             builder.setNegativeButton("Camera"){dialog, which ->
                 dialog.dismiss()
 
@@ -97,6 +103,7 @@ class ClaimsFormActivity:BaseActivity() {
             dialog.show()
         }
     }
+    //set the image of the imageView after pick image or take picture
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
