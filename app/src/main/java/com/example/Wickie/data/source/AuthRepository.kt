@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.RequestAuthCall
 import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
 
 class AuthRepository {
 

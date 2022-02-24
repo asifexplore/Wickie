@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Done by Muhaimin (merge branch due to issues) -->
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,7 +23,7 @@
             android:layout_marginTop="120dp"
             android:text="@string/signin_header"
             android:textColor="@color/black"
-            android:textSize="30sp"
+            android:textSize="40dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -79,7 +78,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/forgotpassword_text"
+            android:text="Forget Password"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.886"
@@ -99,6 +98,7 @@
 
         <ImageView
             android:id="@+id/imageButtonFingerprintScan"
+            android:visibility="invisible"
             android:layout_width="53dp"
             android:layout_height="62dp"
             android:layout_marginTop="24dp"
@@ -106,8 +106,19 @@
             app:layout_constraintHorizontal_bias="0.293"
             app:layout_constraintStart_toEndOf="@+id/buttonSignIn"
             app:layout_constraintTop_toBottomOf="@+id/textForgetPassword"
-            app:srcCompat="@drawable/fingerprintscan"
-            android:contentDescription="@string/fingerprint" />
+            app:srcCompat="@drawable/fingerprintscan" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use Fingerprint?"
+            app:layout_constraintBottom_toTopOf="@+id/buttonSignIn"
+            app:layout_constraintEnd_toStartOf="@+id/textForgetPassword"
+            app:layout_constraintHorizontal_bias="0.204"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutPassword"
+            app:layout_constraintVertical_bias="0.432" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

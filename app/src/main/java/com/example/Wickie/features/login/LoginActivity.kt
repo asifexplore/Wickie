@@ -41,7 +41,7 @@ class LoginActivity : BaseActivity() {
                 Log.d("LoginActivity", it.message.toString())
                 openActivity(MainActivity::class.java)
             }else{
-                if (it.message.equals("NO DATA FOUND"))
+                if (it.message == "NO DATA FOUND")
                 {
                     Log.d("LoginActivity", it.status.toString())
                     Log.d("LoginActivity", it.message.toString())

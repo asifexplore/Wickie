@@ -3,6 +3,10 @@
     package="com.example.Wickie">
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,17 +15,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_app">
         <activity
-            android:name=".features.login.LoginActivity"
+            android:name=".features.splashscreen.SplashScreenActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.home.MainActivity"
+        <activity
+            android:name=".features.home.MainActivity"
             android:exported="true">
-        </activity>
 
+        </activity>
+        <activity
+            android:name=".features.login.LoginActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
+            android:name=".features.claims.ClaimsFormActivity"
+            android:exported="true">
+
+        </activity>
     </application>
 
 </manifest>
