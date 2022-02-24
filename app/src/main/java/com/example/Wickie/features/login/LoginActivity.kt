@@ -1,11 +1,13 @@
 package com.example.Wickie.features.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.claims.ClaimsFormActivity
 import com.example.Wickie.features.home.MainActivity
 
 class LoginActivity : BaseActivity() {
@@ -39,7 +41,8 @@ class LoginActivity : BaseActivity() {
             if (it.status == 2){
                 // Intent to next screen
                 Log.d("LoginActivity", it.message.toString())
-                openActivity(MainActivity::class.java)
+                //openActivity(MainActivity::class.java)
+                openActivity(ClaimsFormActivity::class.java)
             }else{
                 if (it.message == "NO DATA FOUND")
                 {

@@ -28,7 +28,45 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textLayoutDate"
-            app:startIconDrawable="@drawable/spenddatecalendarlogo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="40dp"
+            app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.362"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textDateLabel"
+            app:startIconDrawable="@drawable/spenddatecalendarlogo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextDate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/black"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/textCreatedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Created Date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.07"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutDate" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textLayoutCreatedDate"
             app:boxCornerRadiusBottomEnd="10dp"
             app:boxCornerRadiusTopEnd="10dp"
             app:boxCornerRadiusBottomStart="10dp"
@@ -39,19 +77,19 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="40dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.362"
+            app:layout_constraintHorizontal_bias="0.245"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textDateLabel">
+            app:layout_constraintTop_toBottomOf="@+id/textCreatedDate">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextDate"
-                android:textColor="@color/black"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopStart="10dp"
+                android:id="@+id/editTextCreatedDate"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:inputType="numberDecimal"
+                app:boxCornerRadiusBottomEnd="10dp"
+                app:boxCornerRadiusBottomStart="10dp"
+                app:boxCornerRadiusTopEnd="10dp"
+                app:boxCornerRadiusTopStart="10dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -63,7 +101,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textLayoutDate" />
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutCreatedDate" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textLayoutAmount"
@@ -89,45 +127,8 @@
                 app:boxCornerRadiusTopStart="10dp"
                 android:inputType="numberDecimal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/textBalance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/balance_label"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.07"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textLayoutAmount" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textLayoutBalance"
-            app:boxCornerRadiusBottomEnd="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
-            app:boxCornerRadiusTopStart="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.245"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textBalance">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextBalance"
-                app:boxCornerRadiusBottomEnd="10dp"
-                app:boxCornerRadiusTopEnd="10dp"
-                app:boxCornerRadiusBottomStart="10dp"
-                app:boxCornerRadiusTopStart="10dp"
-                android:inputType="numberDecimal"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -139,7 +140,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.07"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textLayoutBalance" />
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutAmount" />
 
         <com.google.android.material.textfield.TextInputLayout
             app:boxCornerRadiusBottomEnd="10dp"
@@ -204,16 +205,17 @@
                 app:boxCornerRadiusBottomStart="10dp"
                 app:boxCornerRadiusTopEnd="10dp"
                 app:boxCornerRadiusTopStart="10dp" />
+
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textAttachmentLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="56dp"
             android:text="Attachment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.447"
+            app:layout_constraintHorizontal_bias="0.431"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textLayoutReason" />
 
@@ -221,21 +223,21 @@
             android:id="@+id/imageButtonAttachment"
             android:layout_width="92dp"
             android:layout_height="74dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.451"
+            app:layout_constraintHorizontal_bias="0.457"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textAttachmentLabel"
             app:srcCompat="@drawable/androidhrlogo" />
 
         <Button
             android:id="@+id/buttonRequest"
-            android:background="@drawable/custom_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="128dp"
             android:layout_marginEnd="23dp"
+            android:background="@drawable/custom_button"
             android:text="@string/request_button"
             app:layout_constraintEnd_toStartOf="@+id/imageButtonAttachment"
             app:layout_constraintHorizontal_bias="1.0"
@@ -244,16 +246,85 @@
 
         <Button
             android:id="@+id/buttonCancel"
-            android:background="@drawable/custom_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="128dp"
             android:layout_marginEnd="16dp"
+            android:background="@drawable/custom_button"
             android:text="@string/cancel_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.63"
+            app:layout_constraintHorizontal_bias="0.513"
             app:layout_constraintStart_toEndOf="@+id/imageButtonAttachment"
             app:layout_constraintTop_toBottomOf="@+id/textLayoutReason" />
+
+        <TextView
+            android:id="@+id/textErrorSpendDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="204dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/textCreatedDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutDate"
+            app:layout_constraintVertical_bias="0.789" />
+
+        <TextView
+            android:id="@+id/textErrorCreatedDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="204dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/textAmount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutCreatedDate"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textErrorSpendAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="204dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/textType"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutAmount"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textErrorType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="88dp"
+            android:layout_marginTop="12dp"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textReason"
+            app:layout_constraintTop_toBottomOf="@+id/textTypeDropdown" />
+
+        <TextView
+            android:id="@+id/textErrorReason"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textColor="@color/black"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/textAttachmentLabel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.453"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textLayoutReason"
+            app:layout_constraintVertical_bias="0.27" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
