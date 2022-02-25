@@ -19,8 +19,8 @@ import com.example.Wickie.features.profile.ProfileActivity
 *
 * Functions Within:
 * ==========================================================================
-* Function Name: openActivity(classProv: Class<*>?)
-* Function Purpose: Intent to Other Activity
+* Function Name: Recycler View
+* Function Purpose: Display Banner
 * Function Arguments: Class (Activity)
 * Results:
 *         Success: Goes to next page
@@ -33,7 +33,6 @@ class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private lateinit var recyclerview: RecyclerView;
     private lateinit var adapter: EventAdapter; //Call my Adapter
-    private lateinit var notif: ArrayList<String> //List
     private lateinit var banner:ArrayList<Banner>
 
 
@@ -43,10 +42,7 @@ class HomeFragment:Fragment() {
         //run recycler View
         recyclerview = binding.recyclerViewEventList
         recyclerview.layoutManager = LinearLayoutManager(this.context)
-        notif = ArrayList<String>()
         banner = ArrayList<Banner>()
-        notif.add("ImageView1")
-        notif.add("ImageView2")
         banner.add(Banner("String",R.drawable.event_banner1))
         banner.add(Banner("String2",R.drawable.event_banner1))
         banner.add(Banner("String3",R.drawable.event_banner1))
