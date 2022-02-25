@@ -19,11 +19,46 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
-import java.io.File
-import java.util.*
+import com.example.Wickie.Validation
 import com.example.Wickie.databinding.ActivityClaimsformBinding
+import com.example.Wickie.hardware.CameraLibrary
+import com.example.Wickie.hardware.GalleryLibrary
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 import java.text.SimpleDateFormat
+import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+/*
+*   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
+*
+* Functions Within:
+*  ==========================================================================
+* Function Name: uploadImg
+* Function Purpose: Uploads the image
+* Function Arguments: no arguments
+* Results:
+*         Success: Image uploaded
+*         Failed:
+*---------------------------------------------------
+* ==========================================================================
+* Function Name: downloadImg
+* Function Purpose: Download the image
+* Function Arguments: no arguments
+* Results:
+*         Success: Image downloaded
+*         Failed:
+*---------------------------------------------------
+* ==========================================================================
+* Function Name: onActivityResult
+* Function Purpose: Update the ImageView image to the image picked from gallery or taken by camera
+* Function Arguments: requestCode (int), resultCode (int) and data (Intent)
+* Results:
+*         Success: Imageview updated to selected image
+*         Failed:
+*---------------------------------------------------
+*/
 
 
 class ClaimsFormActivity:BaseActivity() {
@@ -47,18 +82,21 @@ class ClaimsFormActivity:BaseActivity() {
             val type = binding.typeItems.text.toString()
             val reason = binding.editTextReason.text.toString()
             val amount = binding.editTextAmount.text.toString()
+            val inputs = arrayOf(binding.editTextDate, binding.editTextAmount, binding.typeItems, binding.editTextReason)
+            val validate = Validation(inputs)
+
+            if (validate.validateClaim(inputs)) {
+                val validationMessage = Toast.makeText(this, "All requirements are met", Toast.LENGTH_SHORT)
+                validationMessage.show()
+            }
+
 
             //viewModel.create(date,type,reason,amount)
-            viewModel.update(date,type,reason,amount,"3")
+            //viewModel.update(date,type,reason,amount,"3")
 
 
         }
 
-
-        //var textTypeDropdown = findViewById<TextInputLayout>(R.layout.typeItems.id.textTypeDropdown)
-
-        //val editTextDate = findViewById<EditText>(R.id.editTextDate)
-        //val imageButtonAttachment = findViewById<ImageView>(R.id.imageButtonAttachment)
         val calendar = Calendar.getInstance()
         val myYear = calendar.get(Calendar.YEAR)
         val myMonth = calendar.get(Calendar.MONTH)
@@ -79,35 +117,25 @@ class ClaimsFormActivity:BaseActivity() {
 
         binding.imageButtonAttachment.setOnClickListener {
             val builder = AlertDialog.Builder(this)
-            //set title for alert dialog
             builder.setTitle("Attachment Upload")
-            //set message for alert dialog
             builder.setMessage("How would you upload your attachment?")
 
-            //performing positive action
+            //using the gallery feature
             builder.setPositiveButton("Gallery") { dialog, which ->
                 dialog.dismiss()
 
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
-                startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
+                val gallery = GalleryLibrary(this, packageManager)
+                gallery.useGallery()
+
+
+
             }
-            //performing negative action
+            //using the camera feature
             builder.setNegativeButton("Camera"){dialog, which ->
                 dialog.dismiss()
 
-                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {takePictureIntent ->
-                    takePictureIntent.resolveActivity(packageManager)?.also {
-                        val permission = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
-                        if (permission != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
-                        }
-                        else {
-                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAMERA)
-                        }
-                    }
-
-                }
+                val camera = CameraLibrary(this, packageManager)
+                camera.useCamera()
 
             }
             // Create the AlertDialog
@@ -172,6 +200,8 @@ class ClaimsFormActivity:BaseActivity() {
             Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
 }
 
