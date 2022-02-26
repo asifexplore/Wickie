@@ -51,12 +51,20 @@ class LoginActivity : BaseActivity() {
             }
         })
     }
+
+//    fingerprint feature with (shared preferences function, not sure how to update)
 //    private fun enableFingerprint(){
 //        val sharedBoolean = sharedPreferences.getBoolean("check_key")
 //        if(sharedBoolean) {
 //            var check = binding.imageButtonFingerprintScan.isVisible
 //            binding.imageButtonFingerprintScan.isVisible = !check
 //        }
+//    }
+
+//    TODO fingerprint feature with button on other page
+//    private fun enableFingerprint(){
+//        var check = binding.imageButtonFingerprintScan.isVisible
+//        binding.imageButtonFingerprintScan.isVisible = !check
 //    }
 
 }
