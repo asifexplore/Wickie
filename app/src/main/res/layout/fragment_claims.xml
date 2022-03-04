@@ -1,24 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Runs the home page screen of the menu-->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.home.MainActivity">
+    android:background="#D3D3D3"
+    tools:context=".features.home.ClaimFragment">
 
+    <!--Top title of the Home Menu-->
     <TextView
-        android:id="@+id/secondFragment"
-        android:layout_width="wrap_content"
+        android:id="@+id/title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Data Structures"
-        android:textColor="#43a047"
-        android:textSize="40sp"
-        android:textStyle="italic|bold"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text=""
+        android:background="#3D50DF"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Blue Background of the Application-->
+    <View
+        android:id="@+id/background"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="#3D50DF"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <!--Backdrop-->
+    <View
+        android:id="@+id/view"
+        android:layout_width="355dp"
+        android:layout_height="125dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/custom_box2"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewClaimsList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        android:layout_marginBottom="20dp"/>
+
+<!--Transport Name Text View-->
+
+    <TextView
+        android:id="@+id/textViewTransport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:text="Transport:"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textViewFood"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background" />
+
+<!--Transport TextViewValue    -->
+    <TextView
+        android:id="@+id/TextViewTransportValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:text="5/10"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewTransport"
+        app:layout_constraintBottom_toTopOf="@+id/textViewFoodValue"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintTop_toTopOf="@+id/background" />
+
+
+    <TextView
+        android:id="@+id/textViewFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:text="Food:"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/textViewClaims"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewTransport" />
+
+    <!--Food TextViewValue    -->
+    <TextView
+        android:id="@+id/textViewFoodValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:elevation="2dp"
+        android:text="5/10"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewFood"
+        app:layout_constraintBottom_toTopOf="@+id/textViewClaimsValue"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintTop_toBottomOf="@+id/TextViewTransportValue" />
+
+
+
+
+    <TextView
+        android:id="@+id/textViewClaims"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:text="Claims:"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFood" />
+
+    <!--Claims TextViewValue    -->
+    <TextView
+        android:id="@+id/textViewClaimsValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:elevation="2dp"
+        android:text="500/1000"
+        android:textColor="@color/black"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/textViewClaims"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/background"
+        app:layout_constraintTop_toBottomOf="@+id/textViewFoodValue" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Claims History"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/recyclerViewClaimsList"/>
+
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_marginStart="250dp"
+        android:elevation="2dp"
+        android:layout_marginBottom="45dp"
+        android:contentDescription="create_claims"
+        android:src="@drawable/ic_plus_foreground"
+        app:backgroundTint="#5D5FEF"
+        app:fabSize="auto"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerViewClaimsList" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

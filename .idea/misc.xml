@@ -3,19 +3,35 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_box.xml" value="0.1203125" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_button.xml" value="0.12395833333333334" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_attendance_background.xml" value="0.12395833333333334" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_attendance_foreground.xml" value="0.12395833333333334" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_login.xml" value="0.2875" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.24074074074074073" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/button1_bg.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_box.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_box2.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_facebook.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_lock.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_my_icon.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_person_foreground.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_plus_background.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_plus_foreground.xml" value="0.105" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_twitter.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_username.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_claimsform.xml" value="0.1078125" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_login.xml" value="0.25" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_profile.xml" value="0.1" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_history.xml" value="0.32192846034214617" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_claims.xml" value="0.1" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_home.xml" value="0.165" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_wickie.xml" value="0.1" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1078125" />
-        <entry key="..\:/Users/mohamedafiq/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_claimsform.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_home.xml" value="0.32192846034214617" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/message_item.xml" value="0.1078125" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/recycler_row.xml" value="0.165" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/type_list.xml" value="0.1078125" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/mohamedafiq/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_login.xml" value="0.2957427536231884" />
         <entry key="..\:/Users/mohamedafiq/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
+        <entry key="..\:/Users/muhai/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_button.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/muhai/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_claimsform.xml" value="0.1" />
+        <entry key="..\:/Users/muhai/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_login.xml" value="0.264" />
+        <entry key="..\:/Users/muhai/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_claims.xml" value="0.2513586956521739" />
+        <entry key="..\:/Users/muhai/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/type_list.xml" value="0.1" />
       </map>
     </option>
   </component>

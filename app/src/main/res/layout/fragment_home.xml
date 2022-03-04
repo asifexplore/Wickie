@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".features.home.MainActivity">
+    tools:context=".features.home.HomeFragment">
 
 <!--Top title of the Home Menu-->
     <TextView
@@ -26,41 +26,66 @@
     <TextView
         android:id="@+id/background"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="60dp"
         android:background="#3D50DF"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"/>
 
-    <!--    Backdrop    -->
+    <!--Backdrop-->
     <View
         android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="175dp"
-        android:layout_marginTop="75dp"
+        android:layout_width="305dp"
+        android:layout_height="105dp"
+        android:layout_marginTop="40dp"
         android:background="@drawable/custom_box"
         android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    Profile Button  -->
+    <!--Profile Button-->
     <Button
         android:id="@+id/profile_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="50dp"
         android:background="@drawable/ic_person_foreground"
         android:elevation="200dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintEnd_toStartOf="@+id/claim_button"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title"
+        app:layout_constraintVertical_bias="0.017" />
+
+    <!--Claim Button-->
+    <Button
+        android:id="@+id/claim_button"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/ic_submit_claim_foreground"
+        android:elevation="200dp"
+        android:rotation="225"
+        app:layout_constraintEnd_toStartOf="@+id/attendance_button"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintStart_toEndOf="@+id/profile_button"
         app:layout_constraintTop_toTopOf="@+id/title"
         app:layout_constraintVertical_bias="0.0" />
 
-
-    <!--Claim Button -->
-
+    <!--Check In Button-->
+    <Button
+        android:id="@+id/attendance_button"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/ic_attendance_foreground"
+        android:elevation="200dp"
+        app:layout_constraintStart_toEndOf="@+id/claim_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title" />
 
     <TextView
         android:id="@+id/textViewProfile"
@@ -69,26 +94,15 @@
         android:elevation="2dp"
         android:text="Profile"
         android:textColor="@color/black"
+        android:textSize="10dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.180"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_button" />
-
-    <Button
-        android:id="@+id/claim_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:background="@drawable/ic_submit_claim_foreground"
-        android:elevation="200dp"
-        android:rotation="225"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.165"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title"
-        app:layout_constraintVertical_bias="0.001" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194" />
+
 
     <TextView
         android:id="@+id/textViewSubmitClaims"
@@ -97,55 +111,42 @@
         android:elevation="2dp"
         android:text="Submit Claims"
         android:textColor="@color/black"
+        android:textSize="10dp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/claim_button" />
-
-
-
-
-    <!--Check In Button-->
-    <Button
-        android:id="@+id/attendance_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:elevation="200dp"
-        android:background="@drawable/ic_attendance_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/view"
-        app:layout_constraintHorizontal_bias="0.942"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.482"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/title"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194" />
+
     <TextView
         android:id="@+id/textViewAttendance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="2dp"
-        android:text="Check-In/Out"
+        android:text="Check-In"
         android:textColor="@color/black"
+        android:textSize="10dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.91"
+        app:layout_constraintHorizontal_bias="0.81"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/attendance_button" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.194" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEventList"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        />
-
-
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

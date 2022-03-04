@@ -4,16 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <!--Image Banner 1-->
+<!--    &lt;!&ndash;Image Banner 1&ndash;&gt;-->
     <ImageView
         android:id="@+id/EventView1"
-        android:layout_width="370dp"
-        android:layout_height="57dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:scaleType="centerCrop"
         android:src="@drawable/event_banner1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/title_text_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Text"-->
+<!--        android:textColor="#4689C8"-->
+<!--        android:textStyle="bold"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
