@@ -39,12 +39,14 @@ class LoginActivity : BaseActivity() {
             if (it.status == 2){
                 // Intent to next screen
                 Log.d("LoginActivity", it.message.toString())
+                Log.d("LoginActivitys", it.userDetail.user_email.toString())
                 openActivity(MainActivity::class.java)
             }else{
                 if (it.message == "NO DATA FOUND")
                 {
                     Log.d("LoginActivity", it.status.toString())
                     Log.d("LoginActivity", it.message.toString())
+
                 }
             }
         })

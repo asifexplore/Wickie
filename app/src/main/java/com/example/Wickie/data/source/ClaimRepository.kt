@@ -37,8 +37,6 @@ class ClaimRepository {
             requestCall.message = "Add Failed"
             mLiveData.postValue(requestCall)
         }
-
         return mLiveData
     }
-
 }

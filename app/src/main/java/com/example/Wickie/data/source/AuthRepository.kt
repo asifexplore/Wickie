@@ -3,6 +3,7 @@ package com.example.Wickie
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.RequestAuthCall
+import com.example.Wickie.data.source.data.User
 import com.google.firebase.database.*
 import com.google.firebase.database.DatabaseReference
 
@@ -30,6 +31,9 @@ class AuthRepository {
                 {
                     requestCall.status = 2
                     requestCall.message = "DATA FOUND"
+                    var user  = User()
+                    user.user_email = it.child(username).child("user_email").toString()
+                    requestCall.userDetail = user
                 }else
                 {
                     requestCall.status = 1
@@ -43,7 +47,7 @@ class AuthRepository {
                 Log.d("AuthRepo", "user does not exist ")
             }
 
-            requestCall.userDetail
+
             mLiveData.postValue(requestCall)
 
         }.addOnFailureListener()
