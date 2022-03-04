@@ -4,7 +4,7 @@
     <string name="remember_switch">Remember Me</string>
     <string name="email_placeholder">abc@gmail.com</string>
     <string name="forgotpassword_text">Forgot Password?</string>
-    <string name="spenddate_label">Date</string>
+    <string name="spenddate_label">Spend Date</string>
     <string name="amount_label">Amount</string>
     <string name="balance_label">Balance</string>
     <string name="type_label">Type</string>

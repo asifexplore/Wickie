@@ -7,6 +7,9 @@ import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.Wickie.R
 import com.example.Wickie.features.login.LoginActivity
+/*
+*   SplashscreenActivity is the responsible for the loading animation to the LoginActivity
+ */
 
 class SplashScreenActivity:AppCompatActivity() {
     lateinit var handler: Handler
@@ -20,6 +23,6 @@ class SplashScreenActivity:AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
-        }, 3000)
+        }, 500)
     }
 }

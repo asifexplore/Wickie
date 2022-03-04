@@ -14,4 +14,9 @@ class ClaimViewModel : ViewModel() {
     {
         return claimRepository.create(date,type,reason,amount)
     }
+
+    fun update(date : String,type : String,reason : String,amount : String, id: String)  : MutableLiveData<RequestClaimCall>
+    {
+        return claimRepository.update(date,type,reason,amount, id)
+    }
 }
