@@ -15,4 +15,5 @@
     <string name="fingerprint">FingerPrint</string>
     <string name="type_a_message">Type a message…</string>
     <string name="send">Send</string>
+    <string name="quote">“Happiness is when what you think, what you say, and what you do are in harmony.” “Where there is love there is life.”</string>
 </resources>

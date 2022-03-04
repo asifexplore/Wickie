@@ -1,10 +1,7 @@
 package com.example.Wickie.features.claims
 
 import android.Manifest
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.ProgressDialog
+import android.app.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -16,13 +13,18 @@ import android.util.Log
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.example.Wickie.Validation
 import com.example.Wickie.databinding.ActivityClaimsformBinding
+import com.example.Wickie.features.home.Claim
+import com.example.Wickie.features.home.ClaimFragment
+import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.hardware.CameraLibrary
 import com.example.Wickie.hardware.GalleryLibrary
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
 import java.text.SimpleDateFormat
@@ -83,13 +85,12 @@ class ClaimsFormActivity:BaseActivity() {
             val reason = binding.editTextReason.text.toString()
             val amount = binding.editTextAmount.text.toString()
             val inputs = arrayOf(binding.editTextDate, binding.editTextAmount, binding.typeItems, binding.editTextReason)
-            val validate = Validation(inputs)
+//            val validate = Validation(inputs)
 
-            if (validate.validateClaim(inputs)) {
-                val validationMessage = Toast.makeText(this, "All requirements are met", Toast.LENGTH_SHORT)
-                validationMessage.show()
-            }
-
+//            if (validate.validateClaim(inputs)) {
+//                val validationMessage = Toast.makeText(this, "All requirements are met", Toast.LENGTH_SHORT)
+//                validationMessage.show()
+//            }
 
             //viewModel.create(date,type,reason,amount)
             //viewModel.update(date,type,reason,amount,"3")
@@ -200,6 +201,7 @@ class ClaimsFormActivity:BaseActivity() {
             Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
 
