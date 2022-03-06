@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -77,72 +78,45 @@ class ClaimsFormActivity:BaseActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
-        binding.buttonRequest.setOnClickListener()
+        // Binding name of states to array stored in ViewModel
+        binding.ProgressBar.setStateDescriptionData(viewModel.descriptionData)
+        // To Go Next on Horizontal Status Progress Bar
+        binding.btnNext.setOnClickListener()
         {
-            val date = binding.editTextDate.text.toString()
-            val type = binding.typeItems.text.toString()
-            val reason = binding.editTextReason.text.toString()
-            val amount = binding.editTextAmount.text.toString()
-            val inputs = arrayOf(binding.editTextDate, binding.editTextAmount, binding.typeItems, binding.editTextReason)
-//            val validate = Validation(inputs)
-
-//            if (validate.validateClaim(inputs)) {
-//                val validationMessage = Toast.makeText(this, "All requirements are met", Toast.LENGTH_SHORT)
-//                validationMessage.show()
-//            }
-
-            //viewModel.create(date,type,reason,amount)
-            //viewModel.update(date,type,reason,amount,"3")
+            viewModel.incrementPageStatus()
+        }
+        // To Go Back on Horizontal Status Progress Bar
+        binding.btnBack.setOnClickListener()
+        {
+            viewModel.decrementPageStatus()
+        }
+        // Update Items on Screen based on pageStatus on ViewModel
+         viewModel.pageStatus.observe(this, androidx.lifecycle.Observer {
+           newStatus -> pageVisibility(newStatus)
+         })
 
 
         }
 
-        val calendar = Calendar.getInstance()
-        val myYear = calendar.get(Calendar.YEAR)
-        val myMonth = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        var itemList = arrayOf("transport", "meal", "phone")
-
-        var arrayAdapter = ArrayAdapter(this, R.layout.type_list, itemList)
-        binding.typeItems.setAdapter(arrayAdapter)
-
-        binding.editTextDate.setOnClickListener {
-            val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val display:String = dayOfMonth.toString() + "/" + (month+1) + "/" + year
-                binding.editTextDate.setText(display)
-            }, myYear, myMonth, day)
-            datePickerDialog.show()
-        }
-
-        binding.imageButtonAttachment.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Attachment Upload")
-            builder.setMessage("How would you upload your attachment?")
-
-            //using the gallery feature
-            builder.setPositiveButton("Gallery") { dialog, which ->
-                dialog.dismiss()
-
-                val gallery = GalleryLibrary(this, packageManager)
-                gallery.useGallery()
-
-
-
-            }
-            //using the camera feature
-            builder.setNegativeButton("Camera"){dialog, which ->
-                dialog.dismiss()
-
-                val camera = CameraLibrary(this, packageManager)
-                camera.useCamera()
-
-            }
-            // Create the AlertDialog
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
+    private fun pageVisibility(newStatus: Int)
+    {
+        // Set Visibility and Invisibility Accordingly
+        if (newStatus == 0)
+        {
+            // Details Page
+            binding.textView.visibility = View.VISIBLE
+            binding.titleEditText.visibility = View.VISIBLE
+            binding.btnBack.visibility = View.INVISIBLE
+        }else
+        {
+            binding.textView.visibility = View.INVISIBLE
+            binding.titleEditText.visibility = View.INVISIBLE
+            binding.imgViewUpload.visibility = View.VISIBLE
+            binding.btnBack.visibility = View.VISIBLE
         }
     }
+
+
 
     private fun uploadImg()
     {
@@ -165,41 +139,41 @@ class ClaimsFormActivity:BaseActivity() {
         }
     }
 
-    private fun downloadImg()
-    {
-        var storageReference = FirebaseStorage.getInstance().reference.child("images/2022_02_24_08_26_21")
-        val localfile = File.createTempFile("tempImage","png")
-        show(storageReference.toString())
-
-        Log.d("ClaimsFormAct",storageReference.toString())
-        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
-
-        storageReference.getFile(localfile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            binding.imageButtonAttachment.setImageBitmap(bitmap)
-
-        }.addOnFailureListener(){
-            show("Image not downloaded successfully")
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            binding.imageButtonAttachment.setImageURI(data.data)
-            imageURI = data.data!!
-            Log.d("ClaimsFormActivity",imageURI.toString())
-            uploadImg()
-        }
-        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
-            binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
-        }
-        else {
-            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun downloadImg()
+//    {
+//        var storageReference = FirebaseStorage.getInstance().reference.child("images/2022_02_24_08_26_21")
+//        val localfile = File.createTempFile("tempImage","png")
+//        show(storageReference.toString())
+//
+//        Log.d("ClaimsFormAct",storageReference.toString())
+//        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
+//
+//        storageReference.getFile(localfile).addOnSuccessListener {
+//            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+//            binding.imageButtonAttachment.setImageBitmap(bitmap)
+//
+//        }.addOnFailureListener(){
+//            show("Image not downloaded successfully")
+//        }
+//    }
+//
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+//            binding.imageButtonAttachment.setImageURI(data.data)
+//            imageURI = data.data!!
+//            Log.d("ClaimsFormActivity",imageURI.toString())
+//            uploadImg()
+//        }
+//        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+//            binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
+//        }
+//        else {
+//            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
 
 
