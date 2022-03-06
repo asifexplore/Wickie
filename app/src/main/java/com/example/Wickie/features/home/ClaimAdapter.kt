@@ -1,12 +1,9 @@
 package com.example.Wickie.features.home
 
 //code cleanup
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +12,7 @@ import com.example.Wickie.data.source.data.Claim
 
 class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapter<ClaimAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.claims_history,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.claims_fragment_cell,parent,false)
         return ViewHolder(view)
     }
 
