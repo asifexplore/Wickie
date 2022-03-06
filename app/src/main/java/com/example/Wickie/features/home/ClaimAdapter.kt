@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.R
+import com.example.Wickie.data.source.data.Claim
 
 class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapter<ClaimAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,14 +20,20 @@ class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        Log.d("Image_View", "Inside before ")
-//        Log.d("Image_View", eventList[position].image.toString())
-//        holder.imageView.setImageResource(eventList[position].image)
-        holder.tvName.text = claimList[position].name
+        holder.tvName.text = claimList[position].reason
         holder.tvDate.text = claimList[position].date
-        holder.status.text = claimList[position].status
-        holder.price.text = claimList[position].price.toString()
-        holder.ivType.setImageResource(claimList[position].image)
+        holder.status.text = claimList[position].type
+        holder.price.text = claimList[position].amount.toString()
+//        holder.ivType.setImageResource(claimList[position].image)
+
+        if (claimList[position].type == "transport")
+        {
+            holder.ivType.setImageResource(R.drawable.ic_transport_foreground)
+        }else
+        {
+            holder.ivType.setImageResource(R.drawable.ic_transport_foreground)
+        }
+
     }
 
     override fun getItemCount() = claimList.size

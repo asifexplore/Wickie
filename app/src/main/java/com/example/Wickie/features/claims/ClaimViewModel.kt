@@ -19,4 +19,11 @@ class ClaimViewModel : ViewModel() {
     {
         return claimRepository.update(date,type,reason,amount, id)
     }
+
+    fun retrieve() : MutableLiveData<RequestClaimCall>
+    {
+        return claimRepository.retrieve()
+    }
+
+
 }

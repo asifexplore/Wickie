@@ -89,7 +89,7 @@ class ClaimsFormActivity:BaseActivity() {
                 val validationMessage = Toast.makeText(this, "All requirements are met", Toast.LENGTH_SHORT)
                 validationMessage.show()
             }
-
+            viewModel.create(date,type,reason,amount)
 
             //viewModel.create(date,type,reason,amount)
             //viewModel.update(date,type,reason,amount,"3")
