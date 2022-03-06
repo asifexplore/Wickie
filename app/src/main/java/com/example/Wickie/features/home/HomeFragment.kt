@@ -12,6 +12,7 @@ import com.example.Wickie.features.profile.ProfileActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.features.login.LoginViewModel
 import androidx.lifecycle.Observer
+import com.example.Wickie.databinding.ActivityLoginBinding
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -36,6 +37,8 @@ class HomeFragment:Fragment() {
                               savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        var username = this.requireActivity().intent.getStringExtra("username")
+        binding.textUsername.text = username
         //Initiate ViewModel
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         //All Buttons on Home Fragment
@@ -57,8 +60,8 @@ class HomeFragment:Fragment() {
             //TODO
         }
 
-        //Wickie(Chatbot) Button Activity
-        binding.layoutWickie.setOnClickListener {
+        //Mood Button Activity
+        binding.layoutMood.setOnClickListener {
             //TODO
         }
 

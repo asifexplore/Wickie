@@ -11,12 +11,13 @@ class MainActivity : BaseActivity() {
 
         // initialize view binding on activity_main.xml
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.bottomNavigationView.itemIconTintList = null
         setContentView(binding.root)
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)
         val homeFragment=HomeFragment()
         val claimFragment=ClaimFragment()
-        val settingsFragment=SettingsFragment()
+        val wickieFragment=WickieFragment()
         setCurrentFragment(homeFragment)
 
         //If Claims has been created, redirect back to claims fragment (logic to check)
@@ -30,7 +31,7 @@ class MainActivity : BaseActivity() {
             when(it.itemId){
                 R.id.home->setCurrentFragment(homeFragment)
                 R.id.claim->setCurrentFragment(claimFragment)
-                R.id.settings->setCurrentFragment(settingsFragment)
+                R.id.wickie->setCurrentFragment(wickieFragment)
             }
             true
         }

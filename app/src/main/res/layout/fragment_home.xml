@@ -45,13 +45,11 @@
             android:id="@+id/imageMenu"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginEnd="15dp"
             android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_baseline_menu_24"
+            android:src="@drawable/wave"
             app:layout_constraintBottom_toBottomOf="@+id/textHello"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textHello"
-            app:tint="@color/colorPrimary" />
+            app:layout_constraintStart_toEndOf="@+id/textUsername"
+            app:layout_constraintTop_toTopOf="@id/textHello" />
 
 
 
@@ -72,8 +70,8 @@
                 android:layout_height="40dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:hint="Search Elements"
-                android:imeOptions="actionSearch"
+                android:hint="Say Hi to Wickie..."
+                android:imeOptions="actionSend"
                 android:paddingStart="15dp"
                 android:paddingEnd="15dp"
                 android:textColor="@color/purple_700"
@@ -84,10 +82,11 @@
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/search_icon_background"
+                android:background="@drawable/chat_icon_background"
                 android:padding="6dp"
-                android:src="@drawable/ic_baseline_search_24"
-                app:tint="@color/black"/>
+                android:src="@drawable/ic_chat_24"
+                app:tint="@color/black"
+                android:imeOptions="actionSend"/>
 
 
         </LinearLayout>
@@ -105,7 +104,7 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/layoutAttendance"
+                android:id="@+id/layoutProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="22dp"
@@ -115,7 +114,39 @@
                 android:padding="15dp"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layoutProfile"
+                app:layout_constraintEnd_toStartOf="@+id/layoutAttendance"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_margin="8dp"
+                    android:contentDescription="@string/app_name"
+                    android:padding="8dp"
+                    android:src="@drawable/slimeball_profile" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="User Profile"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutAttendance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:background="@drawable/white_rectangle_background"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="15dp"
+                app:layout_constraintDimensionRatio="H,1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/layoutProfile"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -130,39 +161,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Attendance"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layoutProfile"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/white_rectangle_background"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="15dp"
-                app:layout_constraintDimensionRatio="H,1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/layoutAttendance"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_margin="8dp"
-                    android:contentDescription="@string/app_name"
-                    android:padding="8dp"
-                    android:src="@drawable/profile" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="User Profile"
+                    android:text="Status: Checked-In"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -179,8 +178,8 @@
                 android:padding="15dp"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layoutProfile"
-                app:layout_constraintTop_toBottomOf="@id/layoutAttendance">
+                app:layout_constraintEnd_toStartOf="@+id/layoutAttendance"
+                app:layout_constraintTop_toBottomOf="@id/layoutProfile">
 
                 <ImageView
                     android:layout_width="100dp"
@@ -201,7 +200,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/layoutWickie"
+                android:id="@+id/layoutMood"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -211,8 +210,8 @@
                 android:padding="15dp"
                 app:layout_constraintDimensionRatio="H,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/layoutAttendance"
-                app:layout_constraintTop_toBottomOf="@id/layoutProfile">
+                app:layout_constraintStart_toEndOf="@+id/layoutProfile"
+                app:layout_constraintTop_toBottomOf="@id/layoutAttendance">
 
                 <ImageView
                     android:layout_width="100dp"
@@ -226,7 +225,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Wickie"
+                    android:text="Current Mood"
                     android:textColor="@color/black"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -238,8 +237,8 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/quote_background"
                 android:padding="20dp"
-                app:layout_constraintEnd_toEndOf="@id/layoutWickie"
-                app:layout_constraintStart_toStartOf="@+id/layoutAttendance"
+                app:layout_constraintEnd_toEndOf="@id/layoutMood"
+                app:layout_constraintStart_toStartOf="@+id/layoutProfile"
                 app:layout_constraintTop_toBottomOf="@id/layoutClaims">
 
                 <TextView
@@ -257,15 +256,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_favourite"
-                    app:tint="@color/white"
-                    app:layout_constraintBottom_toBottomOf="@id/textQuoteTopic"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/textQuoteTopic" />
 
                 <TextView
                     android:id="@+id/TextQuote"
