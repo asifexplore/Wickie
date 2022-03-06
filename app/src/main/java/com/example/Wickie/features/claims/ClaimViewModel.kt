@@ -16,19 +16,19 @@ class ClaimViewModel : ViewModel() {
     val pageStatus = MutableLiveData<Int>()
 
     init {
-        pageStatus.value = 0
+        pageStatus.value = 1
     }
 
     fun incrementPageStatus()
     {
-        if (pageStatus.value != 2)
+        if (pageStatus.value != 3)
         {
             pageStatus.value = (pageStatus.value)?.plus(1)
         }
     }
     fun decrementPageStatus()
     {
-        if (pageStatus.value != 0)
+        if (pageStatus.value != 1)
         {
             pageStatus.value = (pageStatus.value)?.minus(1)
         }

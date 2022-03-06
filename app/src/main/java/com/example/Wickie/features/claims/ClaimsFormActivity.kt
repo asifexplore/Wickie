@@ -27,6 +27,7 @@ import com.example.Wickie.hardware.CameraLibrary
 import com.example.Wickie.hardware.GalleryLibrary
 import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.storage.FirebaseStorage
+import com.kofigyan.stateprogressbar.StateProgressBar
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,11 +80,12 @@ class ClaimsFormActivity:BaseActivity() {
 
         viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
         // Binding name of states to array stored in ViewModel
-        binding.ProgressBar.setStateDescriptionData(viewModel.descriptionData)
+        binding.progressBar.setStateDescriptionData(viewModel.descriptionData)
         // To Go Next on Horizontal Status Progress Bar
         binding.btnNext.setOnClickListener()
         {
             viewModel.incrementPageStatus()
+
         }
         // To Go Back on Horizontal Status Progress Bar
         binding.btnBack.setOnClickListener()
@@ -93,6 +95,7 @@ class ClaimsFormActivity:BaseActivity() {
         // Update Items on Screen based on pageStatus on ViewModel
          viewModel.pageStatus.observe(this, androidx.lifecycle.Observer {
            newStatus -> pageVisibility(newStatus)
+
          })
 
 
@@ -101,18 +104,22 @@ class ClaimsFormActivity:BaseActivity() {
     private fun pageVisibility(newStatus: Int)
     {
         // Set Visibility and Invisibility Accordingly
-        if (newStatus == 0)
+        if (newStatus == 1)
         {
             // Details Page
+            binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE)
             binding.textView.visibility = View.VISIBLE
             binding.titleEditText.visibility = View.VISIBLE
             binding.btnBack.visibility = View.INVISIBLE
-        }else
+        }else if (newStatus == 2)
         {
+            binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO)
             binding.textView.visibility = View.INVISIBLE
             binding.titleEditText.visibility = View.INVISIBLE
             binding.imgViewUpload.visibility = View.VISIBLE
             binding.btnBack.visibility = View.VISIBLE
+        }else{
+            binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
         }
     }
 
