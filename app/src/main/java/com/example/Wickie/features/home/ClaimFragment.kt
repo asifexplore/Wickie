@@ -1,11 +1,11 @@
 package com.example.Wickie.features.home
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +14,7 @@ import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.FragmentClaimsBinding
 import com.example.Wickie.features.claims.ClaimViewModel
 import com.example.Wickie.features.claims.ClaimsFormActivity
+import com.example.Wickie.features.claims.ViewClaimsActivity
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -31,14 +32,17 @@ import com.example.Wickie.features.claims.ClaimsFormActivity
 */
 
 
-class ClaimFragment:Fragment() {
+class ClaimFragment:Fragment() , OnClaimsClickListener {
     private lateinit var binding : FragmentClaimsBinding
     private lateinit var recyclerview: RecyclerView;
     private lateinit var adapter: ClaimAdapter; //Call my Adapter
     private lateinit var viewModel: ClaimViewModel
+    var claims: ArrayList<Claim> = ArrayList()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         binding = FragmentClaimsBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
 
@@ -46,17 +50,15 @@ class ClaimFragment:Fragment() {
         recyclerview = binding.recyclerViewClaimsList
         recyclerview.layoutManager = LinearLayoutManager(this.context)
 
-        var claims: ArrayList<Claim> = ArrayList()
+//        var claims: ArrayList<Claim> = ArrayList()
 
         viewModel.retrieve().observe(viewLifecycleOwner) {
             // What do we do once we observe data from viewHolder?
             // Updated Recycler View
-            if (it.message == "NO DATA FOUND")
-            {
+            if (it.message == "NO DATA FOUND") {
                 binding.noDataTxtView.visibility = View.VISIBLE
                 binding.recyclerViewClaimsList.visibility = View.INVISIBLE
-            }else
-            {
+            } else {
                 binding.noDataTxtView.visibility = View.INVISIBLE
                 binding.recyclerViewClaimsList.visibility = View.VISIBLE
                 for (i in it.claimArray) {
@@ -74,7 +76,7 @@ class ClaimFragment:Fragment() {
                 }
                 binding.balanceTxtView.text = "$" + it.claimTotal.toString()
                 //This will pass the ArrayList to our Adapter
-                adapter = ClaimAdapter(claims)
+                adapter = ClaimAdapter(claims,this)
                 // Setting the Adapter with the recyclerview
                 recyclerview.adapter = adapter
             }
@@ -84,7 +86,17 @@ class ClaimFragment:Fragment() {
             val intent = Intent(context, ClaimsFormActivity::class.java)
             startActivity(intent)
         }
-        val root: View = binding.root
-        return root
+        return binding.root
+    }
+
+    override fun onClaimsClickListener(position: Int) {
+        val intent = Intent(context, ViewClaimsActivity::class.java)
+        startActivity(intent
+            .putExtra("title",claims[position].title)
+            .putExtra("claimDate",claims[position].claimDate.toString())
+            .putExtra("amount",claims[position].amount.toString())
+            .putExtra("type",claims[position].type.toString())
+            .putExtra("status",claims[position].status.toString())
+        )
     }
 }

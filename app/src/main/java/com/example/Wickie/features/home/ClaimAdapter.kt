@@ -10,7 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.R
 import com.example.Wickie.data.source.data.Claim
 
-class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapter<ClaimAdapter.ViewHolder>() {
+class ClaimAdapter(
+    private val claimList:ArrayList<Claim>,
+    private val onClaimsClickListener: OnClaimsClickListener
+
+    ) : RecyclerView.Adapter<ClaimAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.claims_fragment_cell,parent,false)
         return ViewHolder(view)
@@ -24,10 +28,16 @@ class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapte
 
         if (claimList[position].type == "transport")
         {
-            holder.typeImgView.setImageResource(R.drawable.ic_transport_foreground)
-        }else
+            holder.typeImgView.setImageResource(R.drawable.transport_icon)
+        }else if (claimList[position].type == "phone")
         {
-            holder.typeImgView.setImageResource(R.drawable.ic_transport_foreground)
+            holder.typeImgView.setImageResource(R.drawable.phone_bill)
+        }else{
+            holder.typeImgView.setImageResource(R.drawable.meal_icon)
+        }
+
+        holder.itemView.setOnClickListener{
+            onClaimsClickListener.onClaimsClickListener(position)
         }
 
     }

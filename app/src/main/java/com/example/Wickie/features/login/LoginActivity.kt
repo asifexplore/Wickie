@@ -10,6 +10,7 @@ import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.features.home.MainActivity
+import com.example.Wickie.features.splashscreen.SplashScreenActivity
 
 class LoginActivity : BaseActivity() {
 

@@ -25,7 +25,7 @@ class QuoteRepository {
         database.get().addOnSuccessListener {
             var quote  = Quote()
             //Collects Quote Children Values: mon_quote in database
-            quote.mon_quote = it.child("mon_quote").value.toString()
+            quote.mon_quote = it.child("mon_quotes").value.toString()
             requestCall.quoteDetail = quote
             mLiveData.postValue(requestCall)
         }.addOnFailureListener()
