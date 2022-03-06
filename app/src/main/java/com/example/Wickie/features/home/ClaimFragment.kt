@@ -1,4 +1,5 @@
 package com.example.Wickie.features.home
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.R
 import com.example.Wickie.databinding.FragmentClaimsBinding
+import com.example.Wickie.features.claims.ClaimsFormActivity
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -45,6 +47,12 @@ class ClaimFragment:Fragment() {
         adapter = ClaimAdapter(claims)
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter
+
+        binding.fab.setOnClickListener()
+        {
+            val intent = Intent(context, ClaimsFormActivity::class.java)
+            startActivity(intent)
+        }
 
         val root: View = binding.root
         return root

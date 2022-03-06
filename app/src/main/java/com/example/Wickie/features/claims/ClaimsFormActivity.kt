@@ -69,7 +69,6 @@ class ClaimsFormActivity:BaseActivity() {
     lateinit var imageURI : Uri
     private lateinit var viewModel: ClaimViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimsformBinding.inflate(layoutInflater)
