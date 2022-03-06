@@ -13,7 +13,8 @@
         android:id="@+id/flFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        android:background="@color/colorBackground"
+        app:layout_constraintBottom_toTopOf="@+id/viewDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,15 +25,20 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="65dp"
-        app:backgroundTint="#3D50DF"
-        app:itemIconSize="45dp"
-        app:itemIconTint="@color/white"
-        app:itemTextColor="@color/white"
+        android:layout_height="wrap_content"
+        app:backgroundTint="?android:attr/windowBackground"
+        app:itemIconSize="20dp"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
+
+    <View
+        android:id="@+id/viewDivider"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/colorDivider"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
