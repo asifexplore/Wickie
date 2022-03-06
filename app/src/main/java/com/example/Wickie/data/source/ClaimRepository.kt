@@ -28,7 +28,7 @@ class ClaimRepository {
         claim.reason = reason
         claim.amount = amount
 
-        database.child("asif").child("3").setValue(claim).addOnSuccessListener {
+        database.child("asif").child("4").setValue(claim).addOnSuccessListener {
             requestCall.status = 2
             requestCall.message = "Add Success"
             mLiveData.postValue(requestCall)
