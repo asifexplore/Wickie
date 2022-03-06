@@ -1,11 +1,10 @@
 package com.example.Wickie.features.claims
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.Wickie.data.source.ClaimRepository
 import com.example.Wickie.data.source.data.RequestClaimCall
-
+import com.example.Wickie.Utils.getCurrentDateTime
 
 class ClaimViewModel : ViewModel() {
 
@@ -36,13 +35,16 @@ class ClaimViewModel : ViewModel() {
 
     // Create Repo
     // Create Functions
-    fun create(date : String,type : String,reason : String,amount : String)  : MutableLiveData<RequestClaimCall>
+    fun create(title:  String,reason : String,amount : String,type : String, imgUrl : String,claimDate : String)  :
+            MutableLiveData<RequestClaimCall>
     {
-        return claimRepository.create(date,type,reason,amount)
+        val date = getCurrentDateTime()
+        val dateInString = date.toString()
+        return claimRepository.create(title,reason,amount,type, imgUrl, dateInString,claimDate)
     }
 
-    fun update(date : String,type : String,reason : String,amount : String, id: String)  : MutableLiveData<RequestClaimCall>
-    {
-        return claimRepository.update(date,type,reason,amount, id)
-    }
+//    fun update(date : String,type : String,reason : String,amount : String, id: String)  : MutableLiveData<RequestClaimCall>
+//    {
+//        return claimRepository.update(date,type,reason,amount, id)
+//    }
 }

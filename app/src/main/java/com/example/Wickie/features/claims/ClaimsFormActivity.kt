@@ -25,6 +25,7 @@ import com.example.Wickie.features.home.ClaimFragment
 import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.hardware.CameraLibrary
 import com.example.Wickie.hardware.GalleryLibrary
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.storage.FirebaseStorage
 import com.kofigyan.stateprogressbar.StateProgressBar
@@ -33,6 +34,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import androidx.lifecycle.Observer
 
 /*
 *   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
@@ -84,8 +86,36 @@ class ClaimsFormActivity:BaseActivity() {
         // To Go Next on Horizontal Status Progress Bar
         binding.btnNext.setOnClickListener()
         {
-            viewModel.incrementPageStatus()
+            if (viewModel.pageStatus.value == 1)
+            {
+                // Increment to Image Upload Section
+                viewModel.incrementPageStatus()
+            }else
+            {
+                // Obtain Data From Form
+                // Submitting to Firebase
+                var title = binding.editTextTitle.text.toString()
+                var reason = binding.editTextReason.text.toString()
+                var amount = binding.editTextAmount.text.toString()
+                var type = binding.autoCompleteType.text.toString()
+                var imgUrl = "No Img Yet"
+                var claimDate = binding.textViewDate.text.toString()
 
+                viewModel.create(title, reason, amount, type, imgUrl, claimDate).observe(this, Observer {
+                    if (it.status == 2){
+                        // Success
+                        Log.d("ClaimsFormActivity", it.message.toString())
+                        // Intent to Next Screen
+                    }else{
+                        if (it.message == "NO DATA FOUND")
+                        {
+                            Log.d("LoginActivity", it.status.toString())
+                            Log.d("LoginActivity", it.message.toString())
+
+                        }
+                    }
+                })
+            }
         }
         // To Go Back on Horizontal Status Progress Bar
         binding.btnBack.setOnClickListener()
@@ -95,11 +125,74 @@ class ClaimsFormActivity:BaseActivity() {
         // Update Items on Screen based on pageStatus on ViewModel
          viewModel.pageStatus.observe(this, androidx.lifecycle.Observer {
            newStatus -> pageVisibility(newStatus)
-
          })
 
+        // Dropdown Items for Claims Form
+        val types = resources.getStringArray(R.array.types)
+        val arrayAdapter = ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
+        binding.autoCompleteType.setAdapter(arrayAdapter)
 
+        // Date Picker Initalization
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+        datePicker.addOnPositiveButtonClickListener {
+            // Respond to positive button click.
+            binding.editTextCalendar.setText(datePicker.headerText.toString())
         }
+
+        binding.editTextCalendar.setOnClickListener()
+        {
+            // Open Calendar DialogBox
+            datePicker.show(supportFragmentManager, "DatePickerDialogBox");
+        }
+    }
+
+    private fun page1(status:Boolean)
+    {
+        if (status)
+        {
+            binding.textView.visibility = View.VISIBLE
+            binding.textInputLayoutTitle.visibility = View.VISIBLE
+            binding.editTextTitle.visibility = View.VISIBLE
+            binding.textViewCost.visibility = View.VISIBLE
+            binding.textInputLayoutAmount.visibility = View.VISIBLE
+            binding.editTextAmount.visibility = View.VISIBLE
+            binding.textViewType.visibility = View.VISIBLE
+            binding.textInputLayoutType.visibility = View.VISIBLE
+            binding.autoCompleteType.visibility = View.VISIBLE
+            binding.textViewDate.visibility = View.VISIBLE
+            binding.textInputLayout.visibility = View.VISIBLE
+            binding.editTextCalendar.visibility = View.VISIBLE
+            binding.textViewReason.visibility = View.VISIBLE
+            binding.textInputLayoutReason.visibility = View.VISIBLE
+            binding.editTextReason.visibility = View.VISIBLE
+            binding.btnBack.visibility = View.INVISIBLE
+            binding.imgViewUpload.visibility = View.INVISIBLE
+        }else
+        {
+            binding.textView.visibility = View.INVISIBLE
+            binding.textInputLayoutTitle.visibility = View.INVISIBLE
+            binding.editTextTitle.visibility = View.INVISIBLE
+            binding.textViewCost.visibility = View.INVISIBLE
+            binding.textInputLayoutAmount.visibility = View.INVISIBLE
+            binding.editTextAmount.visibility = View.INVISIBLE
+            binding.textViewType.visibility = View.INVISIBLE
+            binding.textInputLayoutType.visibility = View.INVISIBLE
+            binding.autoCompleteType.visibility = View.INVISIBLE
+            binding.textViewDate.visibility = View.INVISIBLE
+            binding.textInputLayout.visibility = View.INVISIBLE
+            binding.editTextCalendar.visibility = View.INVISIBLE
+            binding.textViewReason.visibility = View.INVISIBLE
+            binding.textInputLayoutReason.visibility = View.INVISIBLE
+            binding.editTextReason.visibility = View.INVISIBLE
+        }
+
+    }
+
 
     private fun pageVisibility(newStatus: Int)
     {
@@ -108,21 +201,20 @@ class ClaimsFormActivity:BaseActivity() {
         {
             // Details Page
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE)
-            binding.textView.visibility = View.VISIBLE
-            binding.titleEditText.visibility = View.VISIBLE
-            binding.btnBack.visibility = View.INVISIBLE
+            page1(true)
+            binding.btnNext.text = "Next"
+
         }else if (newStatus == 2)
         {
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO)
-            binding.textView.visibility = View.INVISIBLE
-            binding.titleEditText.visibility = View.INVISIBLE
+            page1(false)
             binding.imgViewUpload.visibility = View.VISIBLE
             binding.btnBack.visibility = View.VISIBLE
+            binding.btnNext.text = "Submit"
         }else{
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
         }
     }
-
 
 
     private fun uploadImg()
@@ -181,9 +273,5 @@ class ClaimsFormActivity:BaseActivity() {
 //            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
 //        }
 //    }
-
-
-
-
 }
 

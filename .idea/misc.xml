@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/baseline_attach_money_24.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/baseline_confirmation_number_24.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/baseline_event_24.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/baseline_title_24.xml" value="0.2585" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/claim_balance_background.xml" value="0.2585" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/header_background.xml" value="0.2585" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_plus_foreground.xml" value="0.2585" />
@@ -12,6 +16,7 @@
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/white_rectangle_background.xml" value="0.2585" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_claimsform.xml" value="0.22" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.286231884057971" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_dropdown_items.xml" value="0.286231884057971" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_fragment_cell.xml" value="0.286231884057971" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_history.xml" value="0.286231884057971" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_claims.xml" value="0.286231884057971" />
