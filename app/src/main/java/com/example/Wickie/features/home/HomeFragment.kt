@@ -13,6 +13,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.features.login.LoginViewModel
 import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
+import android.app.AlertDialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.widget.Button
+
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -33,6 +38,8 @@ import com.example.Wickie.databinding.ActivityLoginBinding
 class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private lateinit var viewModel: HomeViewModel
+    var dialogBuilder: AlertDialog.Builder? = null
+    var alertDialog: AlertDialog? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -58,11 +65,13 @@ class HomeFragment:Fragment() {
         //Submit Claims Button via Camera Activity
         binding.layoutClaims.setOnClickListener {
             //TODO
+
         }
 
-        //Mood Button Activity
+        //Mood Dialog Activity
         binding.layoutMood.setOnClickListener {
             //TODO
+            launchCustomDialog()
         }
 
         val root: View = binding.root
@@ -76,4 +85,27 @@ class HomeFragment:Fragment() {
             binding.TextQuote.text = it.quoteDetail.mon_quote.toString()
         })
     }
+
+    private fun launchCustomDialog() {
+        val customLayout = LayoutInflater.from(this.activity).inflate(R.layout.dialog_mood_layout, null)
+        val happy: Button = customLayout.findViewById(R.id.btnHappy)
+        val tired: Button = customLayout.findViewById(R.id.btnTired)
+
+        val builder = AlertDialog.Builder(this.activity)
+            .setView(customLayout)
+
+        alertDialog = builder.create()
+        alertDialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        alertDialog?.show()
+        happy.setOnClickListener {
+                binding.imageMoodie.setImageResource(R.drawable.slimeball_happy)
+                alertDialog?.cancel()
+            }
+        tired.setOnClickListener {
+                binding.imageMoodie.setImageResource(R.drawable.slimeball_tired)
+                alertDialog?.cancel()
+        }
+    }
+
+
 }

@@ -214,6 +214,7 @@
                 app:layout_constraintTop_toBottomOf="@id/layoutAttendance">
 
                 <ImageView
+                    android:id="@+id/imageMoodie"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="8dp"
