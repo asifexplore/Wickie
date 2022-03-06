@@ -3,8 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/claim_balance_background.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/header_background.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_plus_foreground.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/ic_transport_foreground.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/icon_background_circle.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/quote_background.xml" value="0.2585" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.286231884057971" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_fragment_cell.xml" value="0.286231884057971" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_history.xml" value="0.286231884057971" />
         <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_claims.xml" value="0.286231884057971" />
+        <entry key="..\:/Users/Moham/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_home.xml" value="0.286231884057971" />
         <entry key="..\:/Users/mohamedafiq/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_login.xml" value="0.2957427536231884" />
         <entry key="..\:/Users/mohamedafiq/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.2957427536231884" />
       </map>

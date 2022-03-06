@@ -17,18 +17,17 @@ class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvName.text = claimList[position].reason
-        holder.tvDate.text = claimList[position].date
-        holder.status.text = claimList[position].type
-        holder.price.text = claimList[position].amount.toString()
-//        holder.ivType.setImageResource(claimList[position].image)
+        holder.titleTxtView.text = claimList[position].title
+        holder.dateTxtView.text = claimList[position].claimDate
+        holder.amountTxtView.text = "$"+claimList[position].amount.toString()
+        holder.statusTxtView.text = claimList[position].status
 
         if (claimList[position].type == "transport")
         {
-            holder.ivType.setImageResource(R.drawable.ic_transport_foreground)
+            holder.typeImgView.setImageResource(R.drawable.ic_transport_foreground)
         }else
         {
-            holder.ivType.setImageResource(R.drawable.ic_transport_foreground)
+            holder.typeImgView.setImageResource(R.drawable.ic_transport_foreground)
         }
 
     }
@@ -36,12 +35,12 @@ class ClaimAdapter(private val claimList:ArrayList<Claim>) : RecyclerView.Adapte
     override fun getItemCount() = claimList.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvName : TextView = itemView.findViewById(R.id.tvName)
-        val tvDate : TextView = itemView.findViewById(R.id.tvDate)
-        val status : TextView = itemView.findViewById(R.id.claim_status)
-        val price : TextView = itemView.findViewById(R.id.claim_price)
-        val ivType : ImageView = itemView.findViewById(R.id.ivType)
-//        val textView: TextView = itemView.findViewById(R.id.title_text_view)
+        val titleTxtView: TextView = itemView.findViewById(R.id.claimTitle)
+        val dateTxtView : TextView = itemView.findViewById(R.id.claimDate)
+        val amountTxtView : TextView = itemView.findViewById(R.id.claimAmt)
+        val statusTxtView : TextView = itemView.findViewById(R.id.claimStatus)
+        val typeImgView : ImageView = itemView.findViewById(R.id.claimImageType)
+
     }
 
 }

@@ -5,16 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.Wickie.R
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.FragmentClaimsBinding
 import com.example.Wickie.features.claims.ClaimViewModel
 import com.example.Wickie.features.claims.ClaimsFormActivity
-import com.example.Wickie.features.login.LoginViewModel
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -36,8 +35,6 @@ class ClaimFragment:Fragment() {
     private lateinit var binding : FragmentClaimsBinding
     private lateinit var recyclerview: RecyclerView;
     private lateinit var adapter: ClaimAdapter; //Call my Adapter
-    private lateinit var claims:ArrayList<Claims>
-
     private lateinit var viewModel: ClaimViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -48,50 +45,46 @@ class ClaimFragment:Fragment() {
         //run recycler View
         recyclerview = binding.recyclerViewClaimsList
         recyclerview.layoutManager = LinearLayoutManager(this.context)
-//        claims = ArrayList<Claims>()
-//        claims.add(Claims("Transport Claim", "Site Visit: 23-05-2018","Pending",12.90, R.drawable.ic_transport_foreground))
-//        claims.add(Claims("Phone Bill", "Site Visit: 23-06-2018","Approved",12.90, R.drawable.ic_transport_foreground))
-//        claims.add(Claims("Transport", "Site Visit: 23-07-2018","Rejected",110.90, R.drawable.ic_transport_foreground))
-
-        // This will pass the ArrayList to our Adapter
-//        adapter = ClaimAdapter(claims)
-//        // Setting the Adapter with the recyclerview
-//        recyclerview.adapter = adapter
-
 
         var claims: ArrayList<Claim> = ArrayList()
 
-        viewModel.retrieve().observe(viewLifecycleOwner, {
+        viewModel.retrieve().observe(viewLifecycleOwner) {
             // What do we do once we observe data from viewHolder?
             // Updated Recycler View
-            Log.d("ClaimFrag", it.toString())
-            Log.d("ClaimFrag", it.message)
-            Log.d("ClaimFrag", it.claimArray.toString())
-
-            for (i in it.claimArray)
+            if (it.message == "NO DATA FOUND")
             {
-                var newClaim: Claim = Claim()
-                newClaim.type = i.type.toString()
-                claims.add(newClaim)
-                Log.d("ClaimFrag",  newClaim.type.toString())
+                binding.noDataTxtView.visibility = View.VISIBLE
+                binding.recyclerViewClaimsList.visibility = View.INVISIBLE
+            }else
+            {
+                binding.noDataTxtView.visibility = View.INVISIBLE
+                binding.recyclerViewClaimsList.visibility = View.VISIBLE
+                for (i in it.claimArray) {
+                    var newClaim: Claim = Claim(
+                        i.title.toString(),
+                        i.reason.toString(),
+                        i.amount.toString(),
+                        i.status.toString(),
+                        i.type.toString(),
+                        i.imgUrl.toString(),
+                        i.createdDate.toString(),
+                        i.claimDate.toString()
+                    )
+                    claims.add(newClaim)
+                }
+                binding.balanceTxtView.text = "$" + it.claimTotal.toString()
+                //This will pass the ArrayList to our Adapter
+                adapter = ClaimAdapter(claims)
+                // Setting the Adapter with the recyclerview
+                recyclerview.adapter = adapter
             }
-
-//             This will pass the ArrayList to our Adapter
-        adapter = ClaimAdapter(claims)
-//        // Setting the Adapter with the recyclerview
-        recyclerview.adapter = adapter
-
-        })
-
-
-        binding.fab.setOnClickListener()
+        }
+        binding.claimsFAB.setOnClickListener()
         {
             val intent = Intent(context, ClaimsFormActivity::class.java)
             startActivity(intent)
         }
-
         val root: View = binding.root
         return root
     }
-
 }
