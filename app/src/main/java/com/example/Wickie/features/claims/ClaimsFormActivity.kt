@@ -218,8 +218,9 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnNext.text = "Submit"
         }else{
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
+            binding.imgViewUpload.setImageDrawable(getResources().getDrawable(R.drawable.wickie_success))
             binding.btnHome.visibility = View.VISIBLE
-            binding.imgViewUpload.visibility = View.INVISIBLE
+            binding.imgViewUpload.visibility = View.VISIBLE
             binding.btnBack.visibility = View.INVISIBLE
             binding.btnNext.visibility = View.INVISIBLE
         }
