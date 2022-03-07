@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
@@ -93,10 +94,58 @@ class ClaimsFormActivity:BaseActivity() {
                 binding.autoCompleteType.setText(viewModel.chosenClaim.type)
                 // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
                 downloadImg("2022_02_24_08_26_21")
+            } else{
+                if (intent.data != null) {
+                    val bitmap = intent.getParcelableExtra<Parcelable>("BitmapImage") as Bitmap?
+                    binding.imgViewUpload.setImageBitmap(bitmap)
+                }
+
             }
+
+
 
             // Insert Data into Respective Edit Texts
         })
+
+        binding.imgViewUpload.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            //set title for alert dialog
+            builder.setTitle("Attachment Upload")
+            //set message for alert dialog
+            builder.setMessage("How would you upload your attachment?")
+
+            //performing positive action
+            builder.setPositiveButton("Gallery") { dialog, which ->
+                dialog.dismiss()
+
+                val intent = Intent(Intent.ACTION_PICK)
+                intent.type = "image/*"
+                startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
+            }
+            //performing negative action
+            builder.setNegativeButton("Camera"){dialog, which ->
+                dialog.dismiss()
+
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {takePictureIntent ->
+                    takePictureIntent.resolveActivity(packageManager)?.also {
+                        val permission = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
+                        if (permission != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
+                        }
+                        else {
+                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAMERA)
+                        }
+                    }
+
+                }
+
+            }
+            // Create the AlertDialog
+            val dialog: AlertDialog = builder.create()
+            dialog.show()
+
+
+        }
 
         // Binding name of states to array stored in ViewModel
         binding.progressBar.setStateDescriptionData(viewModel.descriptionData)
@@ -300,23 +349,25 @@ class ClaimsFormActivity:BaseActivity() {
             Log.d("ClaimFormsActivity",it.toString())
         }
     }
-//
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-//            binding.imageButtonAttachment.setImageURI(data.data)
-//            imageURI = data.data!!
-//            Log.d("ClaimsFormActivity",imageURI.toString())
-//            uploadImg()
-//        }
-//        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
-//            binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
-//        }
-//        else {
-//            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
-//        }
-//    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+           binding.imgViewUpload.setImageURI(data.data)
+            imageURI = data.data!!
+            Log.d("ClaimsFormActivity",imageURI.toString())
+            uploadImg()
+        }
+        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+            binding.imgViewUpload.setImageBitmap(data.extras?.get("data") as Bitmap)
+        }
+        else {
+            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 }
 

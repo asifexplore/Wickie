@@ -25,7 +25,7 @@ class ClaimViewModel : ViewModel() {
 
     init {
         pageStatus.value = 1
-        pageType.value = 1 // Hardcoded to 0 for testing Update Feature
+        pageType.value = 0 // Hardcoded to 0 for testing Update Feature
     }
 
     fun retrieve() : MutableLiveData<RequestClaimCall>
