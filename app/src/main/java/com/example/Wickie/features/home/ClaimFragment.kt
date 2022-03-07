@@ -79,6 +79,7 @@ class ClaimFragment:Fragment() , OnClaimsClickListener {
                 adapter = ClaimAdapter(claims,this)
                 // Setting the Adapter with the recyclerview
                 recyclerview.adapter = adapter
+                adapter.notifyDataSetChanged()
             }
         }
         binding.claimsFAB.setOnClickListener()
