@@ -18,6 +18,11 @@ class ClaimViewModel : ViewModel() {
         pageStatus.value = 1
     }
 
+    fun retrieve() : MutableLiveData<RequestClaimCall>
+    {
+        return claimRepository.retrieve()
+    }
+
     fun incrementPageStatus()
     {
         if (pageStatus.value != 3)

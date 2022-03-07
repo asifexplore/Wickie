@@ -20,7 +20,6 @@ import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.example.Wickie.Validation
 import com.example.Wickie.databinding.ActivityClaimsformBinding
-import com.example.Wickie.features.home.Claim
 import com.example.Wickie.features.home.ClaimFragment
 import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.hardware.CameraLibrary

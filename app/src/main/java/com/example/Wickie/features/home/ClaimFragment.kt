@@ -69,7 +69,8 @@ class ClaimFragment:Fragment() , OnClaimsClickListener {
                         i.type.toString(),
                         i.imgUrl.toString(),
                         i.createdDate.toString(),
-                        i.claimDate.toString()
+                        i.claimDate.toString(),
+                        i.claimID.toString()
                     )
                     claims.add(newClaim)
                 }
