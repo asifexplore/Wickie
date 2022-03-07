@@ -105,7 +105,7 @@ class ClaimsFormActivity:BaseActivity() {
                     if (it.status == 2){
                         // Success
                         Log.d("ClaimsFormActivity", it.message.toString())
-                        // Intent to Next Screen
+                        viewModel.incrementPageStatus()
                     }else{
                         if (it.message == "NO DATA FOUND")
                         {
@@ -149,6 +149,13 @@ class ClaimsFormActivity:BaseActivity() {
             // Open Calendar DialogBox
             datePicker.show(supportFragmentManager, "DatePickerDialogBox");
         }
+
+
+        // Btn Home to Redirect User to Claims Screen, when Claims are added successfully
+        binding.btnHome.setOnClickListener()
+        {
+            // Intent to MainActivity and call the Claim Fragment
+        }
     }
 
     private fun page1(status:Boolean)
@@ -171,7 +178,7 @@ class ClaimsFormActivity:BaseActivity() {
             binding.textInputLayoutReason.visibility = View.VISIBLE
             binding.editTextReason.visibility = View.VISIBLE
             binding.btnBack.visibility = View.INVISIBLE
-            binding.imgViewUpload.visibility = View.INVISIBLE
+            binding.imgViewUpload.visibility = View.GONE
         }else
         {
             binding.textView.visibility = View.INVISIBLE
@@ -190,9 +197,7 @@ class ClaimsFormActivity:BaseActivity() {
             binding.textInputLayoutReason.visibility = View.INVISIBLE
             binding.editTextReason.visibility = View.INVISIBLE
         }
-
     }
-
 
     private fun pageVisibility(newStatus: Int)
     {
@@ -213,6 +218,10 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnNext.text = "Submit"
         }else{
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
+            binding.btnHome.visibility = View.VISIBLE
+            binding.imgViewUpload.visibility = View.INVISIBLE
+            binding.btnBack.visibility = View.INVISIBLE
+            binding.btnNext.visibility = View.INVISIBLE
         }
     }
 

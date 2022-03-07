@@ -224,8 +224,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/imgViewUpload"
+        android:src ="@drawable/uploadimg"
         android:layout_marginTop="40dp"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@+id/layoutHeader" />
 
     <Button
@@ -246,6 +247,17 @@
         android:layout_marginBottom="20dp"
         android:text="Back"
         android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnHome"
+        android:visibility="gones"
+        android:text="Back to Home"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
