@@ -1,10 +1,7 @@
 package com.example.Wickie.features.claims
 
 import android.Manifest
-import android.app.Activity
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.ProgressDialog
+import android.app.*
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,22 +10,31 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.example.Wickie.Validation
 import com.example.Wickie.databinding.ActivityClaimsformBinding
+import com.example.Wickie.features.home.Claim
+import com.example.Wickie.features.home.ClaimFragment
+import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.hardware.CameraLibrary
 import com.example.Wickie.hardware.GalleryLibrary
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.internal.ContextUtils.getActivity
 import com.google.firebase.storage.FirebaseStorage
+import com.kofigyan.stateprogressbar.StateProgressBar
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import androidx.lifecycle.Observer
 
 /*
 *   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
@@ -69,80 +75,157 @@ class ClaimsFormActivity:BaseActivity() {
     lateinit var imageURI : Uri
     private lateinit var viewModel: ClaimViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimsformBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
-        binding.buttonRequest.setOnClickListener()
+        // Binding name of states to array stored in ViewModel
+        binding.progressBar.setStateDescriptionData(viewModel.descriptionData)
+        // To Go Next on Horizontal Status Progress Bar
+        binding.btnNext.setOnClickListener()
         {
-            val date = binding.editTextDate.text.toString()
-            val type = binding.typeItems.text.toString()
-            val reason = binding.editTextReason.text.toString()
-            val amount = binding.editTextAmount.text.toString()
-            val inputs = arrayOf(binding.editTextDate, binding.editTextAmount, binding.typeItems, binding.editTextReason)
-            val validate = Validation(inputs)
+            if (viewModel.pageStatus.value == 1)
+            {
+                // Increment to Image Upload Section
+                viewModel.incrementPageStatus()
+            }else
+            {
+                // Obtain Data From Form
+                // Submitting to Firebase
+                var title = binding.editTextTitle.text.toString()
+                var reason = binding.editTextReason.text.toString()
+                var amount = binding.editTextAmount.text.toString()
+                var type = binding.autoCompleteType.text.toString()
+                var imgUrl = "No Img Yet"
+                var claimDate = binding.textViewDate.text.toString()
 
-            if (validate.validateClaim(inputs)) {
-                val validationMessage = Toast.makeText(this, "All requirements are met", Toast.LENGTH_SHORT)
-                validationMessage.show()
+                viewModel.create(title, reason, amount, type, imgUrl, claimDate).observe(this, Observer {
+                    if (it.status == 2){
+                        // Success
+                        Log.d("ClaimsFormActivity", it.message.toString())
+                        viewModel.incrementPageStatus()
+                    }else{
+                        if (it.message == "NO DATA FOUND")
+                        {
+                            Log.d("LoginActivity", it.status.toString())
+                            Log.d("LoginActivity", it.message.toString())
+
+                        }
+                    }
+                })
             }
-//            viewModel.create(date,type,reason,amount)
+        }
+        // To Go Back on Horizontal Status Progress Bar
+        binding.btnBack.setOnClickListener()
+        {
+            viewModel.decrementPageStatus()
+        }
+        // Update Items on Screen based on pageStatus on ViewModel
+         viewModel.pageStatus.observe(this, androidx.lifecycle.Observer {
+           newStatus -> pageVisibility(newStatus)
+         })
 
-            //viewModel.create(date,type,reason,amount)
-            //viewModel.update(date,type,reason,amount,"3")
+        // Dropdown Items for Claims Form
+        val types = resources.getStringArray(R.array.types)
+        val arrayAdapter = ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
+        binding.autoCompleteType.setAdapter(arrayAdapter)
 
+        // Date Picker Initalization
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
 
+        datePicker.addOnPositiveButtonClickListener {
+            // Respond to positive button click.
+            binding.editTextCalendar.setText(datePicker.headerText.toString())
         }
 
-        val calendar = Calendar.getInstance()
-        val myYear = calendar.get(Calendar.YEAR)
-        val myMonth = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        var itemList = arrayOf("transport", "meal", "phone")
-
-        var arrayAdapter = ArrayAdapter(this, R.layout.type_list, itemList)
-        binding.typeItems.setAdapter(arrayAdapter)
-
-        binding.editTextDate.setOnClickListener {
-            val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                val display:String = dayOfMonth.toString() + "/" + (month+1) + "/" + year
-                binding.editTextDate.setText(display)
-            }, myYear, myMonth, day)
-            datePickerDialog.show()
+        binding.editTextCalendar.setOnClickListener()
+        {
+            // Open Calendar DialogBox
+            datePicker.show(supportFragmentManager, "DatePickerDialogBox");
         }
 
-        binding.imageButtonAttachment.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Attachment Upload")
-            builder.setMessage("How would you upload your attachment?")
 
-            //using the gallery feature
-            builder.setPositiveButton("Gallery") { dialog, which ->
-                dialog.dismiss()
-
-                val gallery = GalleryLibrary(this, packageManager)
-                gallery.useGallery()
-
-
-
-            }
-            //using the camera feature
-            builder.setNegativeButton("Camera"){dialog, which ->
-                dialog.dismiss()
-
-                val camera = CameraLibrary(this, packageManager)
-                camera.useCamera()
-
-            }
-            // Create the AlertDialog
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
+        // Btn Home to Redirect User to Claims Screen, when Claims are added successfully
+        binding.btnHome.setOnClickListener()
+        {
+            // Intent to MainActivity and call the Claim Fragment
         }
     }
+
+    private fun page1(status:Boolean)
+    {
+        if (status)
+        {
+            binding.textView.visibility = View.VISIBLE
+            binding.textInputLayoutTitle.visibility = View.VISIBLE
+            binding.editTextTitle.visibility = View.VISIBLE
+            binding.textViewCost.visibility = View.VISIBLE
+            binding.textInputLayoutAmount.visibility = View.VISIBLE
+            binding.editTextAmount.visibility = View.VISIBLE
+            binding.textViewType.visibility = View.VISIBLE
+            binding.textInputLayoutType.visibility = View.VISIBLE
+            binding.autoCompleteType.visibility = View.VISIBLE
+            binding.textViewDate.visibility = View.VISIBLE
+            binding.textInputLayout.visibility = View.VISIBLE
+            binding.editTextCalendar.visibility = View.VISIBLE
+            binding.textViewReason.visibility = View.VISIBLE
+            binding.textInputLayoutReason.visibility = View.VISIBLE
+            binding.editTextReason.visibility = View.VISIBLE
+            binding.btnBack.visibility = View.INVISIBLE
+            binding.imgViewUpload.visibility = View.GONE
+        }else
+        {
+            binding.textView.visibility = View.INVISIBLE
+            binding.textInputLayoutTitle.visibility = View.INVISIBLE
+            binding.editTextTitle.visibility = View.INVISIBLE
+            binding.textViewCost.visibility = View.INVISIBLE
+            binding.textInputLayoutAmount.visibility = View.INVISIBLE
+            binding.editTextAmount.visibility = View.INVISIBLE
+            binding.textViewType.visibility = View.INVISIBLE
+            binding.textInputLayoutType.visibility = View.INVISIBLE
+            binding.autoCompleteType.visibility = View.INVISIBLE
+            binding.textViewDate.visibility = View.INVISIBLE
+            binding.textInputLayout.visibility = View.INVISIBLE
+            binding.editTextCalendar.visibility = View.INVISIBLE
+            binding.textViewReason.visibility = View.INVISIBLE
+            binding.textInputLayoutReason.visibility = View.INVISIBLE
+            binding.editTextReason.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun pageVisibility(newStatus: Int)
+    {
+        // Set Visibility and Invisibility Accordingly
+        if (newStatus == 1)
+        {
+            // Details Page
+            binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.ONE)
+            page1(true)
+            binding.btnNext.text = "Next"
+
+        }else if (newStatus == 2)
+        {
+            binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.TWO)
+            page1(false)
+            binding.imgViewUpload.visibility = View.VISIBLE
+            binding.btnBack.visibility = View.VISIBLE
+            binding.btnNext.text = "Submit"
+        }else{
+            binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
+            binding.imgViewUpload.setImageDrawable(getResources().getDrawable(R.drawable.wickie_success))
+            binding.btnHome.visibility = View.VISIBLE
+            binding.imgViewUpload.visibility = View.VISIBLE
+            binding.btnBack.visibility = View.INVISIBLE
+            binding.btnNext.visibility = View.INVISIBLE
+        }
+    }
+
 
     private fun uploadImg()
     {
@@ -165,43 +248,40 @@ class ClaimsFormActivity:BaseActivity() {
         }
     }
 
-    private fun downloadImg()
-    {
-        var storageReference = FirebaseStorage.getInstance().reference.child("images/2022_02_24_08_26_21")
-        val localfile = File.createTempFile("tempImage","png")
-        show(storageReference.toString())
-
-        Log.d("ClaimsFormAct",storageReference.toString())
-        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
-
-        storageReference.getFile(localfile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            binding.imageButtonAttachment.setImageBitmap(bitmap)
-
-        }.addOnFailureListener(){
-            show("Image not downloaded successfully")
-        }
-    }
-
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            binding.imageButtonAttachment.setImageURI(data.data)
-            imageURI = data.data!!
-            Log.d("ClaimsFormActivity",imageURI.toString())
-            uploadImg()
-        }
-        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
-            binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
-        }
-        else {
-            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-
+//    private fun downloadImg()
+//    {
+//        var storageReference = FirebaseStorage.getInstance().reference.child("images/2022_02_24_08_26_21")
+//        val localfile = File.createTempFile("tempImage","png")
+//        show(storageReference.toString())
+//
+//        Log.d("ClaimsFormAct",storageReference.toString())
+//        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
+//
+//        storageReference.getFile(localfile).addOnSuccessListener {
+//            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+//            binding.imageButtonAttachment.setImageBitmap(bitmap)
+//
+//        }.addOnFailureListener(){
+//            show("Image not downloaded successfully")
+//        }
+//    }
+//
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+//            binding.imageButtonAttachment.setImageURI(data.data)
+//            imageURI = data.data!!
+//            Log.d("ClaimsFormActivity",imageURI.toString())
+//            uploadImg()
+//        }
+//        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+//            binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
+//        }
+//        else {
+//            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 }
 
