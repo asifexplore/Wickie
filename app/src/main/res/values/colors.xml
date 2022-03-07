@@ -22,4 +22,5 @@
     <color name="md_cyan_A200">#18FFFF</color>
     <color name="md_cyan_A400">#00E5FF</color>
     <color name="md_cyan_A700">#00B8D4</color>
+    <color name="colorPrimary">#2BCC6F</color>
 </resources>
