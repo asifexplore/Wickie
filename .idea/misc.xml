@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/button1_bg.xml" value="0.12395833333333334" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/button_background.xml" value="0.115" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_box.xml" value="0.12395833333333334" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/custom_box2.xml" value="0.12395833333333334" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/header_background.xml" value="0.1203125" />
@@ -24,13 +25,20 @@
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/search_icon_background.xml" value="0.12291666666666666" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/slimeball2.xml" value="0.1" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/slimeball_selector.xml" value="0.18703703703703703" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/top_button_background.xml" value="0.115" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/white_background.xml" value="0.1115" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/white_rectangle_background.xml" value="0.1" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/drawable/white_round_background.xml" value="0.12239583333333333" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_claimsform.xml" value="0.1078125" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_login.xml" value="0.25" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_profile.xml" value="0.1" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_profile.xml" value="0.25" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/activity_splashscreen.xml" value="0.1015625" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_details.xml" value="0.375" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_fragment_cell.xml" value="0.375" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/claims_history.xml" value="0.32192846034214617" />
-        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_claims.xml" value="0.1" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/dialog_mood_layout.xml" value="0.165" />
+        <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_claims.xml" value="0.25" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/fragment_settings.xml" value="0.1" />
         <entry key="..\:/Users/dania/AndroidStudioProjects/ict2105-team18-2022/app/src/main/res/layout/message_item.xml" value="0.1078125" />
