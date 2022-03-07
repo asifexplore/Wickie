@@ -10,13 +10,20 @@ class ClaimViewModel : ViewModel() {
     private val claimRepository: ClaimRepository = ClaimRepository()
     // Create Repo
     // Create Functions
-    fun create(date : String,type : String,reason : String,amount : String)  : MutableLiveData<RequestClaimCall>
+//    fun create(date : String,type : String,reason : String,amount : String)  : MutableLiveData<RequestClaimCall>
+//    {
+//        return claimRepository.create(date,type,reason,amount)
+//    }
+//
+//    fun update(date : String,type : String,reason : String,amount : String, id: String)  : MutableLiveData<RequestClaimCall>
+//    {
+//        return claimRepository.update(date,type,reason,amount, id)
+//    }
+
+    fun retrieve() : MutableLiveData<RequestClaimCall>
     {
-        return claimRepository.create(date,type,reason,amount)
+        return claimRepository.retrieve()
     }
 
-    fun update(date : String,type : String,reason : String,amount : String, id: String)  : MutableLiveData<RequestClaimCall>
-    {
-        return claimRepository.update(date,type,reason,amount, id)
-    }
+
 }
