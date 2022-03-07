@@ -50,11 +50,10 @@ class ClaimFragment:Fragment() , OnClaimsClickListener {
         recyclerview = binding.recyclerViewClaimsList
         recyclerview.layoutManager = LinearLayoutManager(this.context)
 
-//        var claims: ArrayList<Claim> = ArrayList()
-
         viewModel.retrieve().observe(viewLifecycleOwner) {
             // What do we do once we observe data from viewHolder?
             // Updated Recycler View
+            claims.clear()
             if (it.message == "NO DATA FOUND") {
                 binding.noDataTxtView.visibility = View.VISIBLE
                 binding.recyclerViewClaimsList.visibility = View.INVISIBLE
