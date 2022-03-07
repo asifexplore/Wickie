@@ -1,15 +1,14 @@
 package com.example.Wickie.features.login
 
-import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.features.home.MainActivity
+import com.example.Wickie.hardware.FingerprintLibrary
 
 class LoginActivity : BaseActivity() {
 
@@ -26,6 +25,11 @@ class LoginActivity : BaseActivity() {
         binding.buttonSignIn.setOnClickListener()
         {
             login()
+        }
+        binding.imageButtonFingerprintScan.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            val fingerprintLibrary = FingerprintLibrary(this, intent, binding.imageButtonFingerprintScan)
+            fingerprintLibrary.useBiometric()
         }
     }
     /*
@@ -53,20 +57,4 @@ class LoginActivity : BaseActivity() {
             }
         })
     }
-
-//    fingerprint feature with (shared preferences function, not sure how to update)
-//    private fun enableFingerprint(){
-//        val sharedBoolean = sharedPreferences.getBoolean("check_key")
-//        if(sharedBoolean) {
-//            var check = binding.imageButtonFingerprintScan.isVisible
-//            binding.imageButtonFingerprintScan.isVisible = !check
-//        }
-//    }
-
-//    TODO fingerprint feature with button on other page
-//    private fun enableFingerprint(){
-//        var check = binding.imageButtonFingerprintScan.isVisible
-//        binding.imageButtonFingerprintScan.isVisible = !check
-//    }
-
 }

@@ -19,6 +19,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import com.example.Wickie.BaseActivity
 import java.util.concurrent.Executor
 
 class FingerprintLibrary (currentActivity: Activity, intent: Intent, view: View)
@@ -54,9 +55,8 @@ class FingerprintLibrary (currentActivity: Activity, intent: Intent, view: View)
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
             }
-
-
         }
+
         val activity: FragmentActivity = currentActivity as FragmentActivity
         biometricPrompt = BiometricPrompt(activity, executor,
             authCallBack)
