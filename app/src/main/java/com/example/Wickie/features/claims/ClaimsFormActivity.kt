@@ -80,17 +80,33 @@ class ClaimsFormActivity:BaseActivity() {
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
+
+        // Update Items on Screen based on pageStatus on ViewModel
+        viewModel.pageType.observe(this, androidx.lifecycle.Observer { newStatus ->
+            if (newStatus == 1) {
+                binding.textHello.text = "Update Claims"
+                // Set edit txt field values
+                binding.editTextTitle.setText(viewModel.chosenClaim.title)
+                binding.editTextAmount.setText(viewModel.chosenClaim.amount)
+                binding.editTextCalendar.setText(viewModel.chosenClaim.claimDate)
+                binding.editTextReason.setText(viewModel.chosenClaim.reason)
+                binding.autoCompleteType.setText(viewModel.chosenClaim.type)
+                // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
+                downloadImg("2022_02_24_08_26_21")
+            }
+
+            // Insert Data into Respective Edit Texts
+        })
+
         // Binding name of states to array stored in ViewModel
         binding.progressBar.setStateDescriptionData(viewModel.descriptionData)
         // To Go Next on Horizontal Status Progress Bar
         binding.btnNext.setOnClickListener()
         {
-            if (viewModel.pageStatus.value == 1)
-            {
+            if (viewModel.pageStatus.value == 1) {
                 // Increment to Image Upload Section
                 viewModel.incrementPageStatus()
-            }else
-            {
+            } else {
                 // Obtain Data From Form
                 // Submitting to Firebase
                 var title = binding.editTextTitle.text.toString()
@@ -100,60 +116,79 @@ class ClaimsFormActivity:BaseActivity() {
                 var imgUrl = "No Img Yet"
                 var claimDate = binding.textViewDate.text.toString()
 
-                viewModel.create(title, reason, amount, type, imgUrl, claimDate).observe(this, Observer {
-                    if (it.status == 2){
-                        // Success
-                        Log.d("ClaimsFormActivity", it.message.toString())
-                        viewModel.incrementPageStatus()
-                    }else{
-                        if (it.message == "NO DATA FOUND")
-                        {
-                            Log.d("LoginActivity", it.status.toString())
-                            Log.d("LoginActivity", it.message.toString())
+                if (viewModel.pageType.equals(0)) {
+                    viewModel.create(title, reason, amount, type, imgUrl, claimDate)
+                        .observe(this, Observer {
+                            if (it.status == 2) {
+                                // Success
+                                Log.d("ClaimsFormActivity", it.message.toString())
+                                viewModel.incrementPageStatus()
+                            } else {
+                                if (it.message == "NO DATA FOUND") {
+                                    Log.d("LoginActivity", it.status.toString())
+                                    Log.d("LoginActivity", it.message.toString())
 
-                        }
-                    }
-                })
+                                }
+                            }
+                        })
+                } else {
+                    viewModel.update(title, reason, amount, type, imgUrl, claimDate)
+                        .observe(this, Observer {
+                            if (it.status == 2) {
+                                // Success
+                                Log.d("ClaimsFormActivity", "Update Success")
+                                Log.d("ClaimsFormActivity", it.message.toString())
+                                viewModel.incrementPageStatus()
+                            } else {
+                                if (it.message == "NO DATA FOUND") {
+                                    Log.d("ClaimsFormActivity", it.status.toString())
+                                    Log.d("ClaimsFormActivity", it.message.toString())
+
+                                }
+                            }
+                        })
+                }
             }
-        }
-        // To Go Back on Horizontal Status Progress Bar
-        binding.btnBack.setOnClickListener()
-        {
-            viewModel.decrementPageStatus()
-        }
-        // Update Items on Screen based on pageStatus on ViewModel
-         viewModel.pageStatus.observe(this, androidx.lifecycle.Observer {
-           newStatus -> pageVisibility(newStatus)
-         })
+            // To Go Back on Horizontal Status Progress Bar
+            binding.btnBack.setOnClickListener()
+            {
+                viewModel.decrementPageStatus()
+            }
+            // Update Items on Screen based on pageStatus on ViewModel
+            viewModel.pageStatus.observe(this, androidx.lifecycle.Observer { newStatus ->
+                pageVisibility(newStatus)
+            })
 
-        // Dropdown Items for Claims Form
-        val types = resources.getStringArray(R.array.types)
-        val arrayAdapter = ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
-        binding.autoCompleteType.setAdapter(arrayAdapter)
+            // Dropdown Items for Claims Form
+            val types = resources.getStringArray(R.array.types)
+            val arrayAdapter =
+                ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
+            binding.autoCompleteType.setAdapter(arrayAdapter)
 
-        // Date Picker Initalization
-        val datePicker =
-            MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select date")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build()
+            // Date Picker Initalization
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
 
-        datePicker.addOnPositiveButtonClickListener {
-            // Respond to positive button click.
-            binding.editTextCalendar.setText(datePicker.headerText.toString())
-        }
+            datePicker.addOnPositiveButtonClickListener {
+                // Respond to positive button click.
+                binding.editTextCalendar.setText(datePicker.headerText.toString())
+            }
 
-        binding.editTextCalendar.setOnClickListener()
-        {
-            // Open Calendar DialogBox
-            datePicker.show(supportFragmentManager, "DatePickerDialogBox");
-        }
+            binding.editTextCalendar.setOnClickListener()
+            {
+                // Open Calendar DialogBox
+                datePicker.show(supportFragmentManager, "DatePickerDialogBox");
+            }
 
 
-        // Btn Home to Redirect User to Claims Screen, when Claims are added successfully
-        binding.btnHome.setOnClickListener()
-        {
-            // Intent to MainActivity and call the Claim Fragment
+            // Btn Home to Redirect User to Claims Screen, when Claims are added successfully
+            binding.btnHome.setOnClickListener()
+            {
+                // Intent to MainActivity and call the Claim Fragment
+            }
         }
     }
 
@@ -247,23 +282,24 @@ class ClaimsFormActivity:BaseActivity() {
         }
     }
 
-//    private fun downloadImg()
-//    {
-//        var storageReference = FirebaseStorage.getInstance().reference.child("images/2022_02_24_08_26_21")
-//        val localfile = File.createTempFile("tempImage","png")
-//        show(storageReference.toString())
-//
-//        Log.d("ClaimsFormAct",storageReference.toString())
-//        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
-//
-//        storageReference.getFile(localfile).addOnSuccessListener {
-//            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-//            binding.imageButtonAttachment.setImageBitmap(bitmap)
-//
-//        }.addOnFailureListener(){
-//            show("Image not downloaded successfully")
-//        }
-//    }
+    private fun downloadImg(imgUrl : String )
+    {
+        var storageReference = FirebaseStorage.getInstance().reference.child("images").child("asif").child(imgUrl)
+        val localfile = File.createTempFile("tempImage","png")
+        show(storageReference.toString())
+
+        Log.d("ClaimsFormAct",storageReference.toString())
+        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
+
+        storageReference.getFile(localfile).addOnSuccessListener {
+            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+            binding.imgViewUpload.setImageBitmap(bitmap)
+
+        }.addOnFailureListener(){
+            show("Image not downloaded successfully")
+            Log.d("ClaimFormsActivity",it.toString())
+        }
+    }
 //
 //
 //    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
