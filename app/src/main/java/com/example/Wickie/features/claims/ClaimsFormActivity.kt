@@ -95,10 +95,54 @@ class ClaimsFormActivity:BaseActivity() {
                 // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
                 downloadImg("2022_02_24_08_26_21")
             } else{
-                if (intent.data != null) {
+                if (intent.extras != null) {
                     val bitmap = intent.getParcelableExtra<Parcelable>("BitmapImage") as Bitmap?
                     binding.imgViewUpload.setImageBitmap(bitmap)
                 }
+                else {
+                    binding.imgViewUpload.setImageResource(R.drawable.uploadimg)
+                }
+
+                binding.imgViewUpload.setOnClickListener {
+                    val builder = AlertDialog.Builder(this)
+                    //set title for alert dialog
+                    builder.setTitle("Attachment Upload")
+                    //set message for alert dialog
+                    builder.setMessage("How would you upload your attachment?")
+
+                    //performing positive action
+                    builder.setPositiveButton("Gallery") { dialog, which ->
+                        dialog.dismiss()
+
+                        val intent = Intent(Intent.ACTION_PICK)
+                        intent.type = "image/*"
+                        startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
+                    }
+                    //performing negative action
+                    builder.setNegativeButton("Camera"){dialog, which ->
+                        dialog.dismiss()
+
+                        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {takePictureIntent ->
+                            takePictureIntent.resolveActivity(packageManager)?.also {
+                                val permission = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
+                                if (permission != PackageManager.PERMISSION_GRANTED) {
+                                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
+                                }
+                                else {
+                                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAMERA)
+                                }
+                            }
+
+                        }
+
+                    }
+                    // Create the AlertDialog
+                    val dialog: AlertDialog = builder.create()
+                    dialog.show()
+
+
+                }
+
 
             }
 
@@ -107,45 +151,7 @@ class ClaimsFormActivity:BaseActivity() {
             // Insert Data into Respective Edit Texts
         })
 
-        binding.imgViewUpload.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            //set title for alert dialog
-            builder.setTitle("Attachment Upload")
-            //set message for alert dialog
-            builder.setMessage("How would you upload your attachment?")
 
-            //performing positive action
-            builder.setPositiveButton("Gallery") { dialog, which ->
-                dialog.dismiss()
-
-                val intent = Intent(Intent.ACTION_PICK)
-                intent.type = "image/*"
-                startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
-            }
-            //performing negative action
-            builder.setNegativeButton("Camera"){dialog, which ->
-                dialog.dismiss()
-
-                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {takePictureIntent ->
-                    takePictureIntent.resolveActivity(packageManager)?.also {
-                        val permission = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
-                        if (permission != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
-                        }
-                        else {
-                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAMERA)
-                        }
-                    }
-
-                }
-
-            }
-            // Create the AlertDialog
-            val dialog: AlertDialog = builder.create()
-            dialog.show()
-
-
-        }
 
         // Binding name of states to array stored in ViewModel
         binding.progressBar.setStateDescriptionData(viewModel.descriptionData)
