@@ -56,7 +56,7 @@ class HomeFragment:Fragment() {
         //Profile Button Activity
         binding.layoutProfile.setOnClickListener {
             val intent = Intent(this.activity,ProfileActivity::class.java)
-            startActivity(intent)
+            startActivity(intent.putExtra("username",username))
         }
 
         //Attendance Button Activity
