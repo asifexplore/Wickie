@@ -1,4 +1,5 @@
 package com.example.Wickie.features.home
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,6 +18,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.widget.Button
+import com.example.Wickie.hardware.CameraLibrary
 
 
 /*
@@ -65,6 +67,9 @@ class HomeFragment:Fragment() {
         //Submit Claims Button via Camera Activity
         binding.layoutClaims.setOnClickListener {
             //TODO
+            val current = this.activity as Activity
+            val camera = CameraLibrary(current, current.packageManager)
+            camera.useCamera()
 
         }
 
