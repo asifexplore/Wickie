@@ -12,6 +12,7 @@ import com.example.Wickie.features.chatbot.APIService
 import com.example.Wickie.features.chatbot.AdapterChatBot
 import com.example.Wickie.features.chatbot.ChatModel
 import com.example.Wickie.features.chatbot.ChatResponse
+import kotlinx.android.synthetic.main.fragment_wickie.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +27,7 @@ class WickieFragment:Fragment()  {
         binding = FragmentWickieBinding.inflate(inflater, container, false)
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.116:5000/")
+            .baseUrl("http://192.168.1.105:5000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -34,6 +35,8 @@ class WickieFragment:Fragment()  {
 
         binding.rvChatList.layoutManager = LinearLayoutManager(this.context)
         binding.rvChatList.adapter = adapterChatBot
+
+
 
         binding.btnSend.setOnClickListener {
             if(binding.etChat.text.isNullOrEmpty()){
@@ -43,7 +46,11 @@ class WickieFragment:Fragment()  {
 
             adapterChatBot.addChatToList(ChatModel(binding.etChat.text.toString()))
             apiService.chatWithTheBot(binding.etChat.text.toString()).enqueue(callBack)
+            onScrollPosition()
             binding.etChat.text.clear()
+//            if (adapterChatBot.itemCount > 8){
+//                adapterChatBot.removeChatToList()
+//            }
         }
 
         val root: View = binding.root
@@ -62,6 +69,12 @@ class WickieFragment:Fragment()  {
             Toast.makeText(context, "Something went wrong", Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    private fun onScrollPosition() {
+        binding.rvChatList.scrollToPosition(adapterChatBot.itemCount)
+        binding.rvChatList.smoothScrollToPosition(adapterChatBot.itemCount)
+        binding.rvChatList.layoutManager?.scrollToPosition(adapterChatBot.itemCount)
     }
 
 }

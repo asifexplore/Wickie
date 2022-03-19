@@ -3,6 +3,7 @@ package com.example.Wickie.features.chatbot
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.R
 import kotlinx.android.synthetic.main.chat_item_list.view.*
@@ -11,17 +12,15 @@ class AdapterChatBot : RecyclerView.Adapter<AdapterChatBot.MyViewHolder>() {
     private val list = ArrayList<ChatModel>()
 
     inner class MyViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-        LayoutInflater.from(parent.context).inflate(R.layout.chat_item_list, parent, false)
+        LayoutInflater.from(parent.context).inflate(R.layout.message_item, parent, false)
     ) {
         fun bind(chat: ChatModel) = with(itemView) {
             if(!chat.isBot) {
-                txtChat.setBackgroundColor(Color.WHITE)
-                txtChat.setTextColor(Color.BLACK)
                 txtChat.text = chat.chat
+                txtBot.isVisible = false
             }else{
-                txtChat.setBackgroundColor(Color.CYAN)
-                txtChat.setTextColor(Color.BLACK)
-                txtChat.text = chat.chat
+                txtChat.isVisible = false
+                txtBot.text = chat.chat
             }
         }
     }
@@ -37,6 +36,11 @@ class AdapterChatBot : RecyclerView.Adapter<AdapterChatBot.MyViewHolder>() {
     fun addChatToList(chat: ChatModel) {
         list.add(chat)
         notifyDataSetChanged()
+    }
+
+
+    fun getListPosition(): Int {
+        return list.size-1
     }
 
 }
