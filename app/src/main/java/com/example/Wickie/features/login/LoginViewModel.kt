@@ -1,11 +1,11 @@
 package com.example.Wickie.features.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.Wickie.AuthRepository
 import com.example.Wickie.data.source.data.RequestAuthCall
+import com.example.Wickie.data.source.data.UserPreferencesRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LoginViewModel( )  : ViewModel() {
 
