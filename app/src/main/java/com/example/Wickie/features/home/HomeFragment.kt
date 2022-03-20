@@ -1,5 +1,4 @@
 package com.example.Wickie.features.home
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -17,8 +16,12 @@ import com.example.Wickie.databinding.ActivityLoginBinding
 import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
-import com.example.Wickie.hardware.CameraLibrary
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import kotlinx.android.synthetic.main.fragment_home.*
 
 
 /*
@@ -67,9 +70,6 @@ class HomeFragment:Fragment() {
         //Submit Claims Button via Camera Activity
         binding.layoutClaims.setOnClickListener {
             //TODO
-            val current = this.activity as Activity
-            val camera = CameraLibrary(current, current.packageManager)
-            camera.useCamera()
 
         }
 
@@ -78,6 +78,8 @@ class HomeFragment:Fragment() {
             //TODO
             launchCustomDialog()
         }
+
+        sendMessage(binding.chatMessageText)
 
         val root: View = binding.root
         showQuote()
@@ -110,6 +112,18 @@ class HomeFragment:Fragment() {
                 binding.imageMoodie.setImageResource(R.drawable.slimeball_tired)
                 alertDialog?.cancel()
         }
+    }
+
+    //Send Chat Message
+    private fun sendMessage(search: EditText){
+        search.setOnEditorActionListener(TextView.OnEditorActionListener{ _, actionId, _ ->
+
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show()
+                return@OnEditorActionListener true
+            }
+            false
+        })
     }
 
 
