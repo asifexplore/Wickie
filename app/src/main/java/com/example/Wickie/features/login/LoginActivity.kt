@@ -32,6 +32,11 @@ class LoginActivity : BaseActivity() {
             val fingerprintLibrary = FingerprintLibrary(this, intent, binding.imageButtonFingerprintScan)
             fingerprintLibrary.useBiometric()
         }
+
+        binding.buttonForgotPassword.setOnClickListener()
+        {
+            forgotPw()
+        }
     }
     /*
     * Gets Username & Password. Observes for mutable live data from login function in view model class.
@@ -58,4 +63,10 @@ class LoginActivity : BaseActivity() {
             }
         })
     }
+
+    private fun forgotPw()
+    {
+        show("HR has been notified")
+    }
+
 }

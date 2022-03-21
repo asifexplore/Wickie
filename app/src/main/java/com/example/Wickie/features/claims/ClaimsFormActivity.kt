@@ -83,7 +83,7 @@ class ClaimsFormActivity:BaseActivity() {
         viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
 
         // Update Items on Screen based on pageStatus on ViewModel
-        viewModel.pageType.observe(this, androidx.lifecycle.Observer { newStatus ->
+            viewModel.pageType.observe(this, androidx.lifecycle.Observer { newStatus ->
             if (newStatus == 1) {
                 binding.textHello.text = "Update Claims"
                 // Set edit txt field values

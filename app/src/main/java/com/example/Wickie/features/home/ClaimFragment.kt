@@ -31,7 +31,6 @@ import com.example.Wickie.features.claims.ViewClaimsActivity
 *---------------------------------------------------
 */
 
-
 class ClaimFragment:Fragment() , OnClaimsClickListener {
     private lateinit var binding : FragmentClaimsBinding
     private lateinit var recyclerview: RecyclerView;
