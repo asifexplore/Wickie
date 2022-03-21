@@ -1,6 +1,11 @@
 package com.example.Wickie
 
+import android.content.Context
 import android.util.Log
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.RequestAuthCall
 import com.example.Wickie.data.source.data.User
@@ -8,6 +13,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.DatabaseReference
 
 class AuthRepository {
+
 
     fun login(username:String, password: String) : MutableLiveData<RequestAuthCall>
     {

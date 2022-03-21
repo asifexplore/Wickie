@@ -107,3 +107,6 @@ class FingerprintLibrary (currentActivity: Activity, intent: Intent, view: View)
 
 
 }
+
+
+

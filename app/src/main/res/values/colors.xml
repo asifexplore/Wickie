@@ -7,7 +7,6 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorTextInputBackground">#F7F7F7</color>
     <color name="md_cyan_50">#E0F7FA</color>
     <color name="md_cyan_100">#B2EBF2</color>
     <color name="md_cyan_200">#80DEEA</color>
@@ -22,4 +21,13 @@
     <color name="md_cyan_A200">#18FFFF</color>
     <color name="md_cyan_A400">#00E5FF</color>
     <color name="md_cyan_A700">#00B8D4</color>
+    <color name="colorPrimary">#2BCC6F</color>
+    <color name="colorBackground">#EBEBEB</color>
+    <color name="colorTrendingStart">#00B09B</color>
+    <color name="colorTrendingEnd">#96C93D</color>
+    <color name="colorDivider">#D6D6D6</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorYellow">#FFAE42</color>
+    <color name="colorTextInputBackground">#F7F7F7</color>
+    <color name="colorAccent">#333333</color>
 </resources>
