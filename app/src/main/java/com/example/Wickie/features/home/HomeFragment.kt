@@ -45,6 +45,7 @@ class HomeFragment:Fragment() {
     private lateinit var viewModel: HomeViewModel
     var dialogBuilder: AlertDialog.Builder? = null
     var alertDialog: AlertDialog? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -120,6 +121,7 @@ class HomeFragment:Fragment() {
 
             if (actionId == EditorInfo.IME_ACTION_SEND) {
                 Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show()
+
                 return@OnEditorActionListener true
             }
             false
