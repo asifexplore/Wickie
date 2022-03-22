@@ -52,7 +52,7 @@
 
         </activity>
         <activity
-            android:name=".features.claims.ViewClaimsActivity"
+            android:name=".features.claims.ClaimsDetailsActivity"
             android:exported="true">
 
 
