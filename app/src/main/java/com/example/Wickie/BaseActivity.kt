@@ -30,10 +30,12 @@ open class BaseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+
     protected fun openActivityWithIntent(classProv: Class<*>?, argument1: String?){
         val intent = Intent(this,classProv)
         startActivity(intent.putExtra("username",argument1))
     }
+
 
     protected fun show(message: String?){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
