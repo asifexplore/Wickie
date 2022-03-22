@@ -65,9 +65,4 @@ class AuthRepository {
         }
         return mLiveData
     }
-
-
-
-
-
 }
