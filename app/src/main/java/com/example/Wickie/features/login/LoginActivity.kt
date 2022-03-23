@@ -10,10 +10,11 @@ import androidx.activity.viewModels
 import androidx.biometric.BiometricPrompt
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.Wickie.databinding.ActivityLoginBinding
+
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
+import com.example.Wickie.databinding.ActivityLoginBinding
 import com.example.Wickie.features.home.MainActivity
 
 
