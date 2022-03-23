@@ -1,6 +1,7 @@
 package com.example.Wickie.features.login
 
 import android.content.*
+import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,10 +10,11 @@ import androidx.activity.viewModels
 import androidx.biometric.BiometricPrompt
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.example.Wickie.databinding.ActivityLoginBinding
+
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
+import com.example.Wickie.databinding.ActivityLoginBinding
 import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.services.NetworkService
 import android.os.Handler
@@ -110,13 +112,6 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.imageButtonFingerprintScan.setOnClickListener {
-            //var supported
-            val intent = Intent(this, MainActivity::class.java)
-//            val biometricLibrary = BiometricLibrary(this,)
-//            if (biometricLibrary.useBiometric()) {
-//                Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show()
-//                login(2)
-//            }
             biometricLibrary.useBiometric()
 
             binding.buttonForgotPassword.setOnClickListener()
