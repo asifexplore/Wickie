@@ -32,7 +32,7 @@ import kotlinx.coroutines.SupervisorJob
 open class BaseActivity : AppCompatActivity() {
     val sharedPrefRepo by lazy { SharedPrefRepo.getInstance(this) }
     val userRepository by lazy { UserRepository.getInstance(this) }
-
+    val authRepository by lazy { AuthRepository.getInstance(this) }
     protected fun openActivity(classProv: Class<*>?)
     {
         val intent = Intent(this, classProv)

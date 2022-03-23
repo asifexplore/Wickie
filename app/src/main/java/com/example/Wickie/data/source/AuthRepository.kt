@@ -7,12 +7,14 @@ import android.util.Log
 //import androidx.datastore.preferences.core.stringPreferencesKey
 //import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.MutableLiveData
+import com.example.Wickie.data.source.UserRepository
 import com.example.Wickie.data.source.data.RequestAuthCall
 import com.example.Wickie.data.source.data.User
 import com.google.firebase.database.*
 import com.google.firebase.database.DatabaseReference
 
 class AuthRepository {
+
 
 
     fun login(username:String, password: String) : MutableLiveData<RequestAuthCall>
@@ -64,5 +66,26 @@ class AuthRepository {
             mLiveData.postValue(requestCall)
         }
         return mLiveData
+    }
+
+    companion object {
+        // The usual for debugging
+        private val TAG: String = "AuthPreferencesRepository"
+
+        // Boilerplate-y code for singleton: the private reference to this self
+        @Volatile
+        private var INSTANCE: AuthRepository? = null
+
+        fun getInstance(context: Context): AuthRepository {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE?.let {
+                    return it
+                }
+
+                val instance = AuthRepository()
+                INSTANCE = instance
+                instance
+            }
+        }
     }
 }
