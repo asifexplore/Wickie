@@ -1,14 +1,12 @@
 package com.example.Wickie.features.login
 
-import android.app.Activity
 import android.content.Context
-import android.content.SharedPreferences
+import android.content.Intent
 import androidx.lifecycle.*
 import com.example.Wickie.AuthRepository
 import com.example.Wickie.data.source.SharedPrefRepo
-import com.example.Wickie.data.source.UserRepository
 import com.example.Wickie.data.source.data.RequestAuthCall
-import com.example.Wickie.features.profile.ProfileViewModel
+import com.example.Wickie.services.NetworkService
 
 
 class LoginViewModel(private val authRepository: AuthRepository, private val prefRepo: SharedPrefRepo)  : ViewModel() {

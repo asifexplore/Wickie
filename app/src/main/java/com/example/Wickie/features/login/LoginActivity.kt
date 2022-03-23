@@ -1,8 +1,6 @@
 package com.example.Wickie.features.login
 
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -16,9 +14,40 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
 import com.example.Wickie.features.home.MainActivity
+import com.example.Wickie.services.NetworkService
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
+import com.example.Wickie.features.home.HomeViewModel
 
 
 class LoginActivity : BaseActivity() {
+
+    private lateinit var viewModel: HomeViewModel
+
+    //Call NetworkService Class
+    private lateinit var  networkService: NetworkService
+    private var Bound : Boolean = false
+    private var check: Boolean = false
+    private var runnable : Runnable? = null
+    //Set Handler to call functions
+    private val handler = Handler(Looper.getMainLooper())
+
+
+    //Create connection, callback for service binding, will be passed to bindService()
+    private val connection = object : ServiceConnection {
+
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            val binder = service as NetworkService.LocalBinder
+            networkService = binder.getService()
+            Bound = true
+        }
+
+        override fun onServiceDisconnected(argument: ComponentName) {
+            Bound = false
+            Log.d("ServiceActivity: ", "Service Disconnected")
+        }
+    }
 
     private lateinit var binding : ActivityLoginBinding
     private lateinit var biometricLibrary: BiometricLibrary
@@ -28,6 +57,15 @@ class LoginActivity : BaseActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        handler.postDelayed(Runnable {
+            check = networkService.checkForInternet(this)
+            if(!check){
+                Toast.makeText(this, "Please connect to a network", Toast.LENGTH_LONG).show()
+            }
+            Log.d("Service Activity", "NetworkService: $check added")
+            handler.postDelayed(runnable!!, 10000)
+        }.also { runnable = it }, 10000)
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -141,5 +179,14 @@ class LoginActivity : BaseActivity() {
 
     }
 
-
+    override fun onStart(){
+        super.onStart()
+        Intent(this, NetworkService::class.java).also { intent -> bindService(intent,connection,
+            Context.BIND_AUTO_CREATE)}
+    }
+    override fun onStop(){
+        super.onStop()
+        unbindService(connection)
+        Bound = false
+    }
 }
