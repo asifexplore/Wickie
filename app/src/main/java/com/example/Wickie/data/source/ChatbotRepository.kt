@@ -17,7 +17,7 @@ class ChatbotRepository {
 
     fun connect(): APIService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.2.186:5000/")
+            .baseUrl("https://chat-bot-heroku-danial.herokuapp.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
