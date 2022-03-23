@@ -1,5 +1,6 @@
 package com.example.Wickie.data.source
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.RequestAuthCall
@@ -62,4 +63,29 @@ class UserRepository {
         }
         return mLiveData
     }
+
+    companion object {
+        // Constant for naming our DataStore - you can change this if you want
+        private const val USER_PREFERENCES_NAME = "user_preferences"
+
+        // The usual for debugging
+        private val TAG: String = "UserPreferencesRepository"
+
+        // Boilerplate-y code for singleton: the private reference to this self
+        @Volatile
+        private var INSTANCE: UserRepository? = null
+
+        fun getInstance(context: Context): UserRepository {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE?.let {
+                    return it
+                }
+
+                val instance = UserRepository()
+                INSTANCE = instance
+                instance
+            }
+        }
+    }
+
 }

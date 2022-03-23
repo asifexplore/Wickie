@@ -163,6 +163,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:id="@+id/attendanceStatus"
                     android:text="Status: Checked-In"
                     android:textColor="@color/black"
                     android:textSize="15sp"

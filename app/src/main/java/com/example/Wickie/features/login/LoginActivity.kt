@@ -5,9 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.biometric.BiometricPrompt
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
@@ -23,8 +21,6 @@ class LoginActivity : BaseActivity() {
     public lateinit var viewModel: LoginViewModel
     public lateinit var sharedPref : SharedPreferences
     public lateinit var editor : SharedPreferences.Editor
-    public lateinit var biometricLibrary : BiometricLibrary
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -110,6 +106,9 @@ class LoginActivity : BaseActivity() {
 //            }
             biometricLibrary.useBiometric()
 
+        binding.buttonForgotPassword.setOnClickListener()
+        {
+            forgotPw()
         }
     }
     /*
@@ -158,6 +157,9 @@ class LoginActivity : BaseActivity() {
         })
     }
 
+    private fun forgotPw()
+    {
+        show("HR has been notified")
 
 //    fingerprint feature with (shared preferences function, not sure how to update)
     private fun enableFingerprint(){
