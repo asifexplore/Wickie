@@ -40,13 +40,13 @@ import java.util.*
 
  */
 
-class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, imageView: ImageView?, fileName : String?) {
+class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, imageView: ImageView?) {
     private val REQUEST_IMAGE_GALLERY = 132
     private val REQUEST_IMAGE_CAMERA = 142
     private var activity : Activity = activity
     private var packageManager : PackageManager = packageManager;
     private var imageView : ImageView? = imageView
-    private var fileName : String? = fileName
+//    private var fileName : String? = fileName
 
     public fun useCamera() {
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePhoto ->
@@ -71,7 +71,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         this.activity.startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
     }
 
-    fun uploadImg(imageURI : Uri)
+    fun uploadImg(imageURI : Uri) : String
     {
         val progressDialog = ProgressDialog(activity)
         progressDialog.setMessage("Uploading Files...")
@@ -80,7 +80,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
 
         val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
         val now = Date()
-        fileName = formatter.format(now)
+        val fileName = formatter.format(now).toString()
         // Need Username
         var storageReference = FirebaseStorage.getInstance().getReference("images/asif/$fileName")
         storageReference.putFile(imageURI).addOnSuccessListener {
@@ -90,6 +90,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
             //show("Image Not Uploaded Successfully. Please try again later. ")
             if(progressDialog.isShowing) progressDialog.dismiss()
         }
+        return fileName
     }
 
     fun downloadImg(resources: Resources, imgUrl : String) : Bitmap

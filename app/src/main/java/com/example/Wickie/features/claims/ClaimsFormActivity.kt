@@ -76,7 +76,9 @@ class ClaimsFormActivity:BaseActivity() {
 
         fileName = ""
 
-        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload, fileName)
+//        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload, fileName)
+        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload)
+
         val claimObj : Claim?
         if (getIntent().getExtras()?.getSerializable("claimObj") as? Claim != null)
         {
@@ -172,9 +174,10 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.incrementPageStatus()
             } else {
                 // Upload Image
-                imageURI?.let { it1 -> imageLibrary.uploadImg(it1) }
+                    var filename = ""
+                imageURI?.let { it1 -> filename = imageLibrary.uploadImg(it1) }
                 // Update File Name
-                claimFormViewModel.currClaimObj.imageUrl = fileName
+                claimFormViewModel.currClaimObj.imageUrl = filename
 
                 if (status.toInt() == 0) {
                     claimFormViewModel.create()

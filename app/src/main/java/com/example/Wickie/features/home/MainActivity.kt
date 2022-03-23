@@ -25,7 +25,9 @@ class MainActivity : BaseActivity() {
 
 
         //initialise ImageLibrary
-        imageLibrary = ImageLibrary(this, this.packageManager,null, "")
+        imageLibrary = ImageLibrary(this, this.packageManager,null)
+//        imageLibrary = ImageLibrary(this, this.packageManager,null, "")
+
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)
         val homeFragment=HomeFragment()
