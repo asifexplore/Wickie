@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.biometric.BiometricPrompt
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.example.Wickie.databinding.ActivityLoginBinding
@@ -21,6 +23,8 @@ class LoginActivity : BaseActivity() {
     public lateinit var viewModel: LoginViewModel
     public lateinit var sharedPref : SharedPreferences
     public lateinit var editor : SharedPreferences.Editor
+    public lateinit var biometricLibrary : BiometricLibrary
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,11 +34,65 @@ class LoginActivity : BaseActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                editor.putBoolean("supported", false)
+                editor.commit()
+                Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
+                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+
+            }
+
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                editor.putBoolean("supported", true)
+                editor.commit()
+                Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_SHORT).show()
+                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
+                login(2)
+
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                //Log.d(TAG, errString as String)
+                editor.putBoolean("supported", false)
+                editor.commit()
+                Toast.makeText(this@LoginActivity, errString, Toast.LENGTH_SHORT).show()
+                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+
+            }
+
+        }
+
+        biometricLibrary = BiometricLibrary(this, authCallBack)
+
         //viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         //viewModel.setContext(new MutableLiveData<>(this))
 
-        enableFingerprint()
+        /*
+        if (biometricLibrary.hasBiometric()) {
+            binding.imageButtonFingerprintScan.visibility = View.VISIBLE
+        }
+        else {
+            if (sharedPref.getBoolean("supported", false).toString().toBoolean()) {
+                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
+            }
+            else {
+                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+            }
+        }
+    */
+
+        if (sharedPref.getBoolean("supported",false)) {
+            binding.imageButtonFingerprintScan.visibility = View.VISIBLE
+
+        }
+        else {
+            binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+        }
 
 
         binding.buttonSignIn.setOnClickListener()
@@ -45,11 +103,12 @@ class LoginActivity : BaseActivity() {
         binding.imageButtonFingerprintScan.setOnClickListener {
             //var supported
             val intent = Intent(this, MainActivity::class.java)
-            val biometricLibrary = BiometricLibrary(this)
-            if (biometricLibrary.useBiometric() == true) {
-                Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show()
-                login(2)
-            }
+            //val biometricLibrary = BiometricLibrary(this,)
+//            if (biometricLibrary.useBiometric()) {
+//                Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show()
+//                login(2)
+//            }
+            biometricLibrary.useBiometric()
 
         }
     }
@@ -102,17 +161,27 @@ class LoginActivity : BaseActivity() {
 
 //    fingerprint feature with (shared preferences function, not sure how to update)
     private fun enableFingerprint(){
+        if (biometricLibrary.hasBiometric()) {
+            binding.imageButtonFingerprintScan.visibility = View.VISIBLE
+        }
+        else {
+            binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+        }
+    /*
         val sharedBoolean = sharedPref.getBoolean("supported", false)
         if(sharedBoolean) {
             var check = binding.imageButtonFingerprintScan.isVisible
-            binding.imageButtonFingerprintScan.isVisible = !check
+            binding.imageButtonFingerprintScan.visibility = View.VISIBLE
         }
         else {
-            binding.imageButtonFingerprintScan.isVisible = false
+            binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
 
         }
 
+     */
+
     }
+
 
     private fun biometricLogin() {
         /*
