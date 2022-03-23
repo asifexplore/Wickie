@@ -1,7 +1,6 @@
 package com.example.Wickie.features.login
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
@@ -75,13 +74,6 @@ class LoginActivity : BaseActivity() {
         }
 
         binding.imageButtonFingerprintScan.setOnClickListener {
-            //var supported
-            val intent = Intent(this, MainActivity::class.java)
-//            val biometricLibrary = BiometricLibrary(this,)
-//            if (biometricLibrary.useBiometric()) {
-//                Toast.makeText(this, "Logging in", Toast.LENGTH_SHORT).show()
-//                login(2)
-//            }
             biometricLibrary.useBiometric()
 
             binding.buttonForgotPassword.setOnClickListener()
