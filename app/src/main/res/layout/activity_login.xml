@@ -71,6 +71,7 @@
                         android:drawablePadding="12dp"
                         android:hint="username"
                         android:imeOptions="actionNext"
+                        android:text="asif"
                         android:minWidth="320dp"
                         android:minHeight="50dp"
                         android:singleLine="true" />
@@ -108,6 +109,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="textPassword"
                         android:minWidth="320dp"
+                        android:text="123"
                         android:minHeight="50dp" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.cardview.widget.CardView>
@@ -138,44 +140,9 @@
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center"
-                android:visibility="invisible"
+                android:visibility="gone"
                 app:srcCompat="@drawable/fingerprintscan" />
 
-
-
-            <LinearLayout
-                android:id="@+id/social_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Or Sign In using Social Media"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_margin="8dp"
-                        app:srcCompat="@drawable/ic_facebook" />
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_margin="8dp"
-                        app:srcCompat="@drawable/ic_twitter" />
-                </LinearLayout>
-            </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

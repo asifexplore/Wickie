@@ -3,15 +3,22 @@ package com.example.Wickie.features.profile
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.CompoundButton
+import android.widget.Switch
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.databinding.ActivityProfileBinding
 import com.example.Wickie.features.login.LoginActivity
 
+
 class ProfileActivity : BaseActivity() {
     private lateinit var binding : ActivityProfileBinding
-    private lateinit var viewModel: ProfileViewModel
+
+    private val profileViewModel: ProfileViewModel by viewModels {
+        ProfileViewModelFactory(( this as BaseActivity).userRepository ,(this as BaseActivity).sharedPrefRepo)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,22 +26,25 @@ class ProfileActivity : BaseActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-
         displayUser()
         //Logout Button
         binding.LogoutLayout.setOnClickListener {
+            // Destroy Shared Pref
+            profileViewModel.logout()
             openActivity(LoginActivity::class.java)
         }
         binding.EditProfileLayout.setOnClickListener {
-            displayUser()
-            val username = binding.textViewName.text.toString()
-            openActivityWithIntent(EditProfileActivity::class.java,username)
+            show("Coming Soon")
         }
+
+        binding.EnableFingerprint.setOnCheckedChangeListener { _, isChecked ->
+            profileViewModel.setFingerPrintStatus(isChecked)
+        }
+
     }
     private fun displayUser(){
         val username = this.intent.getStringExtra("username").toString()
-        viewModel.retrieve(username).observe(this, Observer {
+        profileViewModel.retrieve(username).observe(this, Observer {
             if (it.status == 2){
                 // Intent to next screen
                 Log.d("ProfileActivity", it.message)

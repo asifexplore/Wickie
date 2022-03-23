@@ -62,7 +62,6 @@ class BiometricLibrary (currentActivity: BaseActivity)
             Toast.makeText(currentActivity,"Please enable fingerprint",Toast.LENGTH_SHORT).show()
             editor.putBoolean("supported", false)
             return false
-            editor.putBoolean("supported", false)
         }
 
 
@@ -93,22 +92,17 @@ class BiometricLibrary (currentActivity: BaseActivity)
                     ).show()
 
                 }
-
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     supported = true
                     Toast.makeText(currentActivity, "Login Success", Toast.LENGTH_SHORT).show()
-
                 }
-
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     //Log.d(TAG, errString as String)
                     supported = false
                     Toast.makeText(currentActivity, errString, Toast.LENGTH_SHORT).show()
-
                 }
-
             }
 
             val activity: FragmentActivity = currentActivity as FragmentActivity
