@@ -1,5 +1,6 @@
 package com.example.Wickie.data.source
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.Quote
@@ -36,5 +37,25 @@ class QuoteRepository {
             mLiveData.postValue(requestCall)
         }
         return mLiveData
+    }
+    companion object {
+        // The usual for debugging
+        private val TAG: String = "QuoteRepository"
+
+        // Boilerplate-y code for singleton: the private reference to this self
+        @Volatile
+        private var INSTANCE: QuoteRepository? = null
+
+        fun getInstance(context: Context): QuoteRepository {
+            return INSTANCE ?: synchronized(this) {
+                INSTANCE?.let {
+                    return it
+                }
+
+                val instance = QuoteRepository()
+                INSTANCE = instance
+                instance
+            }
+        }
     }
 }

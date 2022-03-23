@@ -6,9 +6,12 @@ import android.content.SharedPreferences
 /*
 * Const values used for shared preference throughout the application
 * */
+
+const val PREFERENCE_NAME = "PREFERENCE_NAME"
 const val PREF_LOGGED_IN = "PREF_LOGGED_IN"
 const val PREF_USERNAME = "PREF_USERNAME"
 const val PREF_FINGERPRINT_STATUS = "PREF_FINGERPRINT_STATUS"
+const val PREF_ATTENDANCE_STATUS = "PREF_ATTENDANCE_STATUS"
 
 class SharedPrefRepo(val context: Context) {
     // ========================================= START OF BOILER CODE FOR SHARED PREFERENCE REPO ============================================
@@ -63,6 +66,12 @@ class SharedPrefRepo(val context: Context) {
         PREF_FINGERPRINT_STATUS.put(status)
     }
     fun getFingerPrintStatus() = PREF_FINGERPRINT_STATUS.getBoolean()
+
+    fun getAttendanceStatus() = PREF_ATTENDANCE_STATUS.getInt()
+
+    // 0 = Checked Out
+    // 1 = Checked In
+    fun setAttendance(status : Int) = PREF_ATTENDANCE_STATUS.put(status)
 
     companion object {
         // Constant for naming our DataStore - you can change this if you want

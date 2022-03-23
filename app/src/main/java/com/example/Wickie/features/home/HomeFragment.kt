@@ -30,11 +30,14 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.viewModels
+import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.profile.ProfileViewModel
+import com.example.Wickie.features.profile.ProfileViewModelFactory
 import com.example.Wickie.hardware.CameraLibrary
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
-
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -51,16 +54,18 @@ import com.google.android.gms.tasks.Task
 *---------------------------------------------------
 */
 
-
 class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
-    private lateinit var viewModel: HomeViewModel
+//    private lateinit var viewModel: HomeViewModel
     var dialogBuilder: AlertDialog.Builder? = null
     var alertDialog: AlertDialog? = null
     var attendanceState: Boolean = false
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private val homeViewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory(( this.requireContext() as BaseActivity).quoteRepository,( this.requireContext() as BaseActivity).attendanceRepository ,(this.requireContext() as BaseActivity).sharedPrefRepo)
+    }
 
     @SuppressLint("MissingPermission")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -72,55 +77,56 @@ class HomeFragment:Fragment() {
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
         }
-
-        var username = this.requireActivity().intent.getStringExtra("username")
-        binding.textUsername.text = username
-        //Initiate ViewModel
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        //All Buttons on Home Fragment
+        Log.d("HomeFrag", homeViewModel.getUsername())
+        binding.textUsername.text = homeViewModel.getUsername()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
 
         //Profile Button Activity
         binding.layoutProfile.setOnClickListener {
             val intent = Intent(this.activity,ProfileActivity::class.java)
-            startActivity(intent.putExtra("username",username))
+            startActivity(intent)
         }
 
-        viewModel.currStatus.observe(viewLifecycleOwner){
+        homeViewModel.currStatus.observe(viewLifecycleOwner){
             if (it == true)
             {
                 binding.attendanceStatus.text = "Checked-In!"
+                binding.attendanceStatusImg.setImageResource(R.drawable.attendance_icon)
             }
             else
             {
                 binding.attendanceStatus.text = "Checked-Out!"
+                binding.attendanceStatusImg.setImageResource(R.drawable.attendance_out)
             }
         }
 
         LocationUtils.getInstance(this.requireContext())
         LocationUtils.getCurrLocation()
         binding.layoutAttendance.setOnClickListener {
-            var tst = viewModel.checkLocation()
-            Log.d("HomeFragment",tst.toString())
             LocationUtils.getCurrLocation()
             LocationUtils.location.let {
                 Log.d("HomeFrag123", it.value?.latitude.toString())
                 it.value?.longitude?.let { it1 -> it.value?.latitude?.let { it2 ->
-                    viewModel.addLocation(it1.toDouble(),
+                    homeViewModel.addLocation(it1.toDouble(),
                         it2.toDouble())
                 } }
             }
 
-            val attendanceStatus = viewModel.checkLocation()
+            val attendanceStatus = homeViewModel.setAttendance()
             // Error
             when (attendanceStatus) {
                 0 -> {
-                    Toast.makeText(context, "Please try again later", Toast.LENGTH_SHORT).show()
+                    Log.d("HomeFragment","Still Loading")
+//                    Toast.makeText(context, "Please try again later", Toast.LENGTH_SHORT).show()
                 }
                 1 -> {
                     // Not Right Place
                     Toast.makeText(context, "Please stay within your work premises.", Toast.LENGTH_SHORT).show()
+                }
+                2 ->{
+                    // Logging Out
+                    Toast.makeText(context, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     // Right Location
@@ -152,7 +158,7 @@ class HomeFragment:Fragment() {
 
     //Function to show quotes each day
     private fun showQuote(){
-        viewModel.showQuote().observe(this.viewLifecycleOwner, Observer {
+        homeViewModel.showQuote().observe(this.viewLifecycleOwner, Observer {
             binding.TextQuote.text = it.quoteDetail.mon_quote.toString()
         })
     }

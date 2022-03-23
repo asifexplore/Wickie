@@ -63,12 +63,12 @@ class ClaimsFormViewModel(val pageType: Int = 0, val claimObj : Claim?) : ViewMo
     {
         val date = getCurrentDateTime()
         val dateInString = date.toString()
-        return claimRepository.create(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imgUrl.toString(), dateInString,currClaimObj.claimDate.toString())
+        return claimRepository.create(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imageUrl.toString(), dateInString,currClaimObj.claimDate.toString())
     }
     //title : String,reason : String,amount : String,type : String, imgUrl: String,claimDate : String
     fun update()  : MutableLiveData<RequestClaimCall>
     {
-        return claimRepository.update(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imgUrl.toString(), currClaimObj.createdDate.toString(),currClaimObj.claimDate.toString(), currClaimObj.claimID.toString())
+        return claimRepository.update(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imageUrl.toString(), currClaimObj.createdDate.toString(),currClaimObj.claimDate.toString(), currClaimObj.claimID.toString())
     }
 
 }

@@ -52,7 +52,8 @@ class LoginActivity : BaseActivity() {
                 // Intent to next screen
                 Log.d("LoginActivity", it.message.toString())
                 Log.d("LoginActivitys", it.userDetail.user_email.toString())
-                openActivityWithIntent(MainActivity::class.java,username)
+//                openActivityWithIntent(MainActivity::class.java,username)
+                openActivity(MainActivity::class.java)
             }else{
                 if (it.message == "NO DATA FOUND")
                 {

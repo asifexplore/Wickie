@@ -10,8 +10,6 @@ import com.example.Wickie.features.claims.claimDetailsViewModel
 
 class ProfileViewModel(private val userRepository : UserRepository, private val prefRepo: SharedPrefRepo )  : ViewModel() {
 
-//    private val userRepository: UserRepository = UserRepository()
-
     fun retrieve(username:String) : MutableLiveData<RequestAuthCall>
     {
         return userRepository.retrieve(username)
@@ -27,6 +25,10 @@ class ProfileViewModel(private val userRepository : UserRepository, private val 
         prefRepo.clearData()
     }
 
+    fun getUsername() : String
+    {
+        return prefRepo.getUsername()
+    }
 }
 class ProfileViewModelFactory(private val userRepository : UserRepository, private val prefRepo: SharedPrefRepo ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

@@ -41,9 +41,12 @@ class ProfileActivity : BaseActivity() {
             profileViewModel.setFingerPrintStatus(isChecked)
         }
 
+
+
     }
     private fun displayUser(){
-        val username = this.intent.getStringExtra("username").toString()
+//        val username = this.intent.getStringExtra("username").toString()
+        val username = profileViewModel.getUsername()
         profileViewModel.retrieve(username).observe(this, Observer {
             if (it.status == 2){
                 // Intent to next screen
@@ -56,7 +59,6 @@ class ProfileActivity : BaseActivity() {
                 binding.textViewDOBValue.text = it.userDetail.user_dob.toString()
                 binding.textViewAddressValue.text = it.userDetail.user_address.toString()
                 binding.textViewDepartmentValue.text = it.userDetail.user_department.toString()
-//                binding.EnableFingerprint.isChecked = it.userDetail.fingerprint
 
             }else{
                 if (it.message == "NO DATA FOUND")

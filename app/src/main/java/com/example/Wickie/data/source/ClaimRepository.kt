@@ -3,7 +3,6 @@ package com.example.Wickie.data.source
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.Claim
-import com.example.Wickie.data.source.data.RequestAuthCall
 import com.example.Wickie.data.source.data.RequestClaimCall
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -14,7 +13,7 @@ class ClaimRepository {
     // Create
 //    var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
 //    var imgUrl : String?, var createdDate : String?, var claimDate : String?
-    fun create(title : String,reason : String,amount : String,type : String, imgUrl: String, createdDate : String,claimDate : String) :
+    fun create(title : String, reason : String, amount : String, type : String, imageUrl: String, createdDate : String, claimDate : String) :
             MutableLiveData<RequestClaimCall>
     {
         val status = "Pending"
@@ -36,7 +35,7 @@ class ClaimRepository {
                 claimID = it.child("users").child("asif").child("no_of_claims").value.toString()
                 Log.d("ClaimRepoNew",claimID)
                 // Add onto Firebase
-                val claim = Claim(title, reason, amount, status,type,imgUrl, createdDate,claimDate, claimID.toString())
+                val claim = Claim(title, reason, amount, status,type,imageUrl, createdDate,claimDate, claimID.toString())
                 database.child("claims").child("asif").child(claimID.toString()).setValue(claim).addOnSuccessListener {
                     requestCall.status = 2
                     requestCall.message = "Add Success"
@@ -48,6 +47,8 @@ class ClaimRepository {
                     mLiveData.postValue(requestCall)
                 }
 
+                // Adding to User - no_of_claims (Stores total number of claims)
+
             }else
             {
                 Log.d("ClaimRepoID","Inside Else")
@@ -57,7 +58,7 @@ class ClaimRepository {
     }
     //    var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
 //    var imgUrl : String?, var createdDate : String?, var claimDate : String?
-    fun update(title : String,reason : String,amount : String,type : String, imgUrl: String, createdDate : String,claimDate : String, claimID : String ) : MutableLiveData<RequestClaimCall>
+    fun update(title : String, reason : String, amount : String, type : String, imageUrl: String, createdDate : String, claimDate : String, claimID : String ) : MutableLiveData<RequestClaimCall>
     {
         val mLiveData = MutableLiveData<RequestClaimCall>()
         // In Progress
@@ -67,7 +68,7 @@ class ClaimRepository {
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
         // Add onto Firebase
-        val claim = Claim(title, reason, amount, "Pending" ,type,imgUrl, createdDate,claimDate, claimID)
+        val claim = Claim(title, reason, amount, "Pending" ,type,imageUrl, createdDate,claimDate, claimID)
 
         database.child("asif").child(claimID).setValue(claim).addOnSuccessListener {
             requestCall.status = 2

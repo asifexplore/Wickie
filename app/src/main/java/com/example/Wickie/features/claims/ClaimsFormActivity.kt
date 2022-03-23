@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import androidx.lifecycle.Observer
 import com.example.Wickie.data.source.data.Claim
+import com.example.Wickie.features.home.MainActivity
 
 /*
 *   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
@@ -99,14 +100,14 @@ class ClaimsFormActivity:BaseActivity() {
             // Set edit txt field values
               // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
             if (claimFormViewModel.currClaimObj != null) {
-                Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imgUrl.toString())
-                downloadImg(claimFormViewModel.currClaimObj.imgUrl.toString())
+                Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imageUrl.toString())
+                downloadImg(claimFormViewModel.currClaimObj.imageUrl.toString())
                 binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
                 binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
                 binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
                 binding.editTextReason.setText(claimFormViewModel.currClaimObj.reason)
                 binding.autoCompleteType.setText(claimFormViewModel.currClaimObj.type)
-                Log.d("Tst",claimFormViewModel.currClaimObj.imgUrl.toString())
+                Log.d("Tst",claimFormViewModel.currClaimObj.imageUrl.toString())
             }
         }
         else{
@@ -163,7 +164,7 @@ class ClaimsFormActivity:BaseActivity() {
                 // Upload Image
                 uploadImg()
                 // Update File Name
-                claimFormViewModel.currClaimObj.imgUrl = fileName
+                claimFormViewModel.currClaimObj.imageUrl = fileName
 
                 if (status.toInt() == 0) {
                     claimFormViewModel.create()
@@ -214,6 +215,7 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnHome.setOnClickListener()
             {
                 // Intent to MainActivity and call the Claim Fragment
+                openActivityWithIntent(MainActivity::class.java,"claimCompleted", "true")
             }
         }
     }

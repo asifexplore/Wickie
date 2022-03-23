@@ -9,6 +9,8 @@ import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.Wickie.data.source.AttendanceRepository
+import com.example.Wickie.data.source.QuoteRepository
 import com.example.Wickie.data.source.SharedPrefRepo
 import com.example.Wickie.data.source.UserRepository
 import com.example.Wickie.features.login.PreferenceUtil.Companion.getInstance
@@ -32,6 +34,8 @@ import kotlinx.coroutines.SupervisorJob
 open class BaseActivity : AppCompatActivity() {
     val sharedPrefRepo by lazy { SharedPrefRepo.getInstance(this) }
     val userRepository by lazy { UserRepository.getInstance(this) }
+    val quoteRepository by lazy { QuoteRepository.getInstance(this)  }
+    val attendanceRepository by lazy { AttendanceRepository.getInstance(this)  }
 
     protected fun openActivity(classProv: Class<*>?)
     {
@@ -39,9 +43,9 @@ open class BaseActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    protected fun openActivityWithIntent(classProv: Class<*>?, argument1: String?){
+    protected fun openActivityWithIntent(classProv: Class<*>?, argument1: String?, argument2 : String?){
         val intent = Intent(this,classProv)
-        startActivity(intent.putExtra("username",argument1))
+        startActivity(intent.putExtra(argument1, argument2))
     }
 
 

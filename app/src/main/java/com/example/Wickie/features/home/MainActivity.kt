@@ -25,6 +25,12 @@ class MainActivity : BaseActivity() {
         val wickieFragment=WickieFragment()
         setCurrentFragment(homeFragment)
 
+        val claimCompleted = intent.getStringExtra("claimCompleted")
+        if ( claimCompleted == "true")
+        {
+            setCurrentFragment(claimFragment)
+        }
+
         //If Claims has been created, redirect back to claims fragment (logic to check)
         val check = intent.getBooleanExtra("exist",false)
         if(check){

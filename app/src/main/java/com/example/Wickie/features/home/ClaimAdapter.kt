@@ -52,11 +52,11 @@ class ClaimAdapter(
                     .putExtra("amount",claimList[position].amount.toString())
                     .putExtra("type",claimList[position].type.toString())
                     .putExtra("status",claimList[position].status.toString())
-                    .putExtra("imgUrl",claimList[position].imgUrl)
+                    .putExtra("imgUrl",claimList[position].imageUrl)
                     .putExtra("claimID",claimList[position].claimID)
                     .putExtra("claimObj",claimList[position])
 
-                Log.d("ClaimAdapter", claimList[position].imgUrl.toString())
+                Log.d("ClaimAdapter", claimList[position].imageUrl.toString())
                 v.context.startActivity(intent2)
 
             }

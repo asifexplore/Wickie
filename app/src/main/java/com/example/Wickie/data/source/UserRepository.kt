@@ -51,7 +51,6 @@ class UserRepository {
                 Log.d("AuthRepo", "user does not exist ")
             }
 
-
             mLiveData.postValue(requestCall)
 
         }.addOnFailureListener()
@@ -65,9 +64,6 @@ class UserRepository {
     }
 
     companion object {
-        // Constant for naming our DataStore - you can change this if you want
-        private const val USER_PREFERENCES_NAME = "user_preferences"
-
         // The usual for debugging
         private val TAG: String = "UserPreferencesRepository"
 

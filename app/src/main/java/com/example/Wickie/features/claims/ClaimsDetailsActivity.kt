@@ -30,7 +30,7 @@ class ClaimsDetailsActivity : BaseActivity() {
 
         val claimObj  = intent.getSerializableExtra("claimObj") as? Claim
         if (claimObj != null) {
-            Log.d("claimdetail",claimObj.imgUrl.toString())
+            Log.d("claimdetail",claimObj.imageUrl.toString())
         }
         val claimDetailViewModel: claimDetailsViewModel by viewModels {
             ClaimDetailsModelFactory(claimObj)
@@ -50,9 +50,15 @@ class ClaimsDetailsActivity : BaseActivity() {
             } else {
                 binding.imageItem.setImageResource(R.drawable.meal_icon)
             }
-            Log.d("claimDetailsAct",claimDetailViewModel.claimObj.imgUrl.toString())
-            val tst = downloadImg(claimDetailViewModel.claimObj.imgUrl.toString())
-            setImageResource(tst)
+            Log.d("claimDetailsAct",claimDetailViewModel.claimObj.imageUrl.toString())
+            var tst123 = downloadImg(claimDetailViewModel.claimObj.imageUrl.toString())
+            setImageResource(tst123)
+//            var tst123 = downloadImg(claimDetailViewModel.claimObj.imgUrl.toString()).let {
+//                setImageResource(it)
+//                Log.d("ClaimsDetailAct",it.toString())
+//            }
+//            Log.d("ClaimDetailsAct",claimDetailViewModel.claimObj.imgUrl.toString())
+//            setImageResource(tst123)
         }
         else
         {
@@ -75,7 +81,7 @@ class ClaimsDetailsActivity : BaseActivity() {
                 if (it.status == 2)
                 {
                     // Success --> Intent
-                    openActivityWithIntent(MainActivity::class.java,"exists")
+                    openActivityWithIntent(MainActivity::class.java,"claimCompleted", "true")
                 }else if (it.status == 1)
                 {
 //                    show(it.message)
@@ -95,7 +101,7 @@ class ClaimsDetailsActivity : BaseActivity() {
         }
         var storageReference = FirebaseStorage.getInstance().reference.child("images").child("asif").child(imgUrl)
         val localfile = File.createTempFile("tempImage","png")
-        show(storageReference.toString())
+//        show(storageReference.toString())
 
         Log.d("ClaimsFormAct",storageReference.toString())
         Toast.makeText(this, storageReference.toString(), Toast.LENGTH_LONG)
@@ -115,7 +121,7 @@ class ClaimsDetailsActivity : BaseActivity() {
         Log.d("ClaimFormsActivity","Before Return")
         return bitmap
     }
-
+    @Override
     fun setImageResource(imageBitMap : Bitmap)
     {
         binding.ImageViewAttachment.setImageBitmap(imageBitMap)
