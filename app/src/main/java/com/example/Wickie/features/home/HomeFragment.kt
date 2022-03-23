@@ -14,22 +14,18 @@ import com.example.Wickie.R
 import com.example.Wickie.databinding.FragmentHomeBinding
 import com.example.Wickie.features.profile.ProfileActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.Wickie.features.login.LoginViewModel
 import androidx.lifecycle.Observer
-import com.example.Wickie.databinding.ActivityLoginBinding
 import android.app.AlertDialog
+import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.location.Location
-import android.location.LocationManager
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.features.profile.ProfileViewModel
@@ -38,6 +34,8 @@ import com.example.Wickie.hardware.CameraLibrary
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
+
+
 
 /*
 *  Home Fragment will be the Activity for the Home Menu Screen
@@ -57,6 +55,8 @@ import com.google.android.gms.tasks.Task
 class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
 //    private lateinit var viewModel: HomeViewModel
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var notificationUtils: NotificationUtils
     var dialogBuilder: AlertDialog.Builder? = null
     var alertDialog: AlertDialog? = null
     var attendanceState: Boolean = false
@@ -81,6 +81,11 @@ class HomeFragment:Fragment() {
         binding.textUsername.text = homeViewModel.getUsername()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
+
+        notificationUtils = NotificationUtils(this)
+        notificationUtils.createNotificationChannel()
+
+
 
         //Profile Button Activity
         binding.layoutProfile.setOnClickListener {
@@ -176,10 +181,12 @@ class HomeFragment:Fragment() {
         alertDialog?.show()
         happy.setOnClickListener {
                 binding.imageMoodie.setImageResource(R.drawable.slimeball_happy)
+                notificationUtils.sendNotification(resources)
                 alertDialog?.cancel()
             }
         tired.setOnClickListener {
                 binding.imageMoodie.setImageResource(R.drawable.slimeball_tired)
+                notificationUtils.sendNotification(resources)
                 alertDialog?.cancel()
         }
     }

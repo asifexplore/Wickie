@@ -61,6 +61,7 @@ class FingerprintLibrary (currentActivity: LoginActivity, intent: Intent, view: 
         val keyguard = currentActivity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
         if (!keyguard.isKeyguardSecure) {
+
             //informStatus("Please enable fingerprint authentication in the settings")
             Toast.makeText(currentActivity,"Please enable fingerprint",Toast.LENGTH_SHORT).show()
             return false

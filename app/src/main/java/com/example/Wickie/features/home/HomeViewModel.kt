@@ -2,7 +2,15 @@ package com.example.Wickie.features.home
 
 import LocationUtils
 import android.app.Application
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.Wickie.data.source.AttendanceRepository
 import com.example.Wickie.data.source.QuoteRepository
@@ -10,7 +18,14 @@ import com.example.Wickie.data.source.SharedPrefRepo
 import com.example.Wickie.data.source.UserRepository
 import com.example.Wickie.data.source.data.*
 import com.example.Wickie.features.profile.ProfileViewModel
+import com.example.Wickie.data.source.data.Attendance
+import com.example.Wickie.data.source.data.Location
+import com.example.Wickie.data.source.data.Quote
+import com.example.Wickie.data.source.data.RequestQuoteCall
+import com.example.Wickie.services.NetworkService
+
 class HomeViewModel(private val quoteRepository : QuoteRepository, private val attendanceRepository: AttendanceRepository  ,private val prefRepo: SharedPrefRepo)  : ViewModel() {
+
 
     var location : LocationClass = LocationClass(0.0,0.0)
     var currStatus : MutableLiveData<Boolean> = MutableLiveData()
