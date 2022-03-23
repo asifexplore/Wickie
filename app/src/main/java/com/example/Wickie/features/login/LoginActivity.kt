@@ -149,10 +149,10 @@ class LoginActivity : BaseActivity() {
                 openActivity(MainActivity::class.java)
             } else {
                 if (it.message == "NO DATA FOUND") {
-//                    show("Incorrect Username or Password, Please Try Again!")
+                    show("Incorrect Username or Password, Please Try Again!")
                     Log.d("LoginActivitys", it.userDetail.user_email.toString())
 //                openActivityWithIntent(MainActivity::class.java,username)
-                    openActivity(MainActivity::class.java)
+//                    openActivity(MainActivity::class.java)
                 } else {
                     if (it.message == "NO DATA FOUND") {
                         Log.d("LoginActivity", it.status.toString())
