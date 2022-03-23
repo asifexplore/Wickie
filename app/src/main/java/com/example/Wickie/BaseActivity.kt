@@ -46,5 +46,4 @@ open class BaseActivity : AppCompatActivity() {
             replace(R.id.flFragment,fragment)
             commit()
         }
-
 }

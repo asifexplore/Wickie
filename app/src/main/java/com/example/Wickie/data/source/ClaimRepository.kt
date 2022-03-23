@@ -14,33 +14,45 @@ class ClaimRepository {
     // Create
 //    var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
 //    var imgUrl : String?, var createdDate : String?, var claimDate : String?
-    fun create(title : String,reason : String,amount : String,type : String, imgUrl: String, createdDate : String,claimDate : String ) :
+    fun create(title : String,reason : String,amount : String,type : String, imgUrl: String, createdDate : String,claimDate : String) :
             MutableLiveData<RequestClaimCall>
     {
         val status = "Pending"
         val mLiveData = MutableLiveData<RequestClaimCall>()
-        // In Progress
+//        // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
         mLiveData.value = requestCall
 
-        var claimID = "16"
+        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").reference
+        var claimID : String = ""
 
-        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
-        // Add onto Firebase
-        val claim = Claim(title, reason, amount, status,type,imgUrl, createdDate,claimDate, claimID)
+        database.get().addOnSuccessListener {
+            Log.d("ClaimRepoID",it.toString())
 
-        database.child("asif").child(claimID).setValue(claim).addOnSuccessListener {
-            requestCall.status = 2
-            requestCall.message = "Add Success"
-            mLiveData.postValue(requestCall)
-        }.addOnFailureListener(){
-            Log.d("ClaimRepo", "Failed")
-            requestCall.status = 1
-            requestCall.message = "Add Failed"
-            mLiveData.postValue(requestCall)
+            if (it.exists() && it.child("users").child("asif").exists())
+            {
+                Log.d("ClaimRepoID",it.child("users").child("asif").toString())
+                claimID = it.child("users").child("asif").child("no_of_claims").value.toString()
+                Log.d("ClaimRepoNew",claimID)
+                // Add onto Firebase
+                val claim = Claim(title, reason, amount, status,type,imgUrl, createdDate,claimDate, claimID.toString())
+                database.child("claims").child("asif").child(claimID.toString()).setValue(claim).addOnSuccessListener {
+                    requestCall.status = 2
+                    requestCall.message = "Add Success"
+                    mLiveData.postValue(requestCall)
+                }.addOnFailureListener(){
+                    Log.d("ClaimRepo", "Failed")
+                    requestCall.status = 1
+                    requestCall.message = "Add Failed"
+                    mLiveData.postValue(requestCall)
+                }
+
+            }else
+            {
+                Log.d("ClaimRepoID","Inside Else")
+            }
         }
-
         return mLiveData
     }
     //    var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
@@ -70,49 +82,53 @@ class ClaimRepository {
 
         return mLiveData
     }
-/*
-    fun retrieve(username:String, password: String) : MutableLiveData<RequestAuthCall>
+    fun delete(claimID : String) : MutableLiveData<RequestClaimCall>
     {
         val mLiveData = MutableLiveData<RequestClaimCall>()
-        val requestCall = RequestClaimCall()
-
         // In Progress
-        requestCall.status = 1
+        requestCall.status = 0
         requestCall.message = "Fetching Data"
         mLiveData.value = requestCall
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
-
-        database.get().addOnSuccessListener {
-//            Log.d("ClaimRepo",it.toString())
-            if (it.exists() && it.child(username).exists() )
-            {
-//                Log.d("AuthRepo","Inside exists")
-//                Log.d("AuthRepo",it.child(username).child("user_pw").value.toString())
-                requestCall.status = 2
-                requestCall.message = " DATA FOUND"
-                requestCall.userDetail = it.child(username)
-            }else{
-//                Log.d("ClaimsRepo",it.child(username).toString())
-                // Data does not exits
-                requestCall.status = 1
-                requestCall.message = "NO DATA FOUND"
-//                Log.d("AuthRepo", "user does not exist ")
-            }
-
-            requestCall.userDetail
+        database.child("asif").child(claimID).child("deleted").setValue("true").addOnSuccessListener {
+            requestCall.status = 2
+            requestCall.message = "Delete Success"
             mLiveData.postValue(requestCall)
-
-        }.addOnFailureListener()
-        {
-//            Log.d("AuthRepo", "Failed")
+        }.addOnFailureListener(){
+            Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
-            requestCall.message = "NO DATA FOUND"
+            requestCall.message = "Delete Failed"
             mLiveData.postValue(requestCall)
         }
         return mLiveData
     }
-*/
+
+    fun retrieveLatestID() : MutableLiveData<String?>
+    {
+        val mLiveData = MutableLiveData<String?>()
+
+        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+        var id : String = ""
+
+        database.get().addOnSuccessListener {
+            Log.d("ClaimRepoID",it.toString())
+
+            if (it.exists() && it.child("asif").exists())
+            {
+                Log.d("ClaimRepoID",it.child("asif").toString())
+                id = it.child("asif").child("no_of_claims").value.toString()
+                Log.d("ClaimRepoIDs",it.child("asif").child("no_of_claims").value.toString())
+                Log.d("ClaimRepoIDs",id.toString())
+                mLiveData.postValue(id)
+            }else
+            {
+                Log.d("ClaimRepoID","Inside Else")
+            }
+        }
+
+        return mLiveData
+    }
 
     fun retrieve() : MutableLiveData<RequestClaimCall>
     {
@@ -145,7 +161,7 @@ class ClaimRepository {
                     // var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
                     //            var imgUrl : String?, var createdDate : String?, var claimDate : String?
                     val l = Claim(i["title"].toString(), i["reason"].toString(), i["amount"].toString(), i["status"].toString(),
-                        i["type"].toString(), i["imgUrl"].toString(), i["createdDate"].toString(), i["claimDate"].toString(),i["claimID"].toString())
+                        i["type"].toString(), i["imageUrl"].toString(), i["createdDate"].toString(), i["claimDate"].toString(),i["claimID"].toString())
                     Log.d("ClaimRepos",l.type.toString())
                     claimList.add(l)
                     val x: String = i["amount"].toString()

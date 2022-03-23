@@ -17,7 +17,11 @@ import com.example.Wickie.databinding.ActivityLoginBinding
 import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.view.inputmethod.EditorInfo
 import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import com.example.Wickie.hardware.CameraLibrary
 
 
@@ -56,7 +60,7 @@ class HomeFragment:Fragment() {
         //Profile Button Activity
         binding.layoutProfile.setOnClickListener {
             val intent = Intent(this.activity,ProfileActivity::class.java)
-            startActivity(intent)
+            startActivity(intent.putExtra("username",username))
         }
 
         //Attendance Button Activity
@@ -78,6 +82,8 @@ class HomeFragment:Fragment() {
             //TODO
             launchCustomDialog()
         }
+
+        sendMessage(binding.chatMessageText)
 
         val root: View = binding.root
         showQuote()
@@ -110,6 +116,19 @@ class HomeFragment:Fragment() {
                 binding.imageMoodie.setImageResource(R.drawable.slimeball_tired)
                 alertDialog?.cancel()
         }
+    }
+
+    //Send Chat Message
+    private fun sendMessage(search: EditText){
+        search.setOnEditorActionListener(TextView.OnEditorActionListener{ _, actionId, _ ->
+
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show()
+
+                return@OnEditorActionListener true
+            }
+            false
+        })
     }
 
 
