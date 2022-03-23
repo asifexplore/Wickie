@@ -1,31 +1,25 @@
 package com.example.Wickie.features.claims
 
-import android.Manifest
 import android.app.*
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
+import com.example.Wickie.Utils.ImageLibrary
+import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.ActivityClaimsformBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.storage.FirebaseStorage
 import com.kofigyan.stateprogressbar.StateProgressBar
-import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.lifecycle.Observer
-import com.example.Wickie.data.source.data.Claim
 
 /*
 *   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
@@ -60,15 +54,19 @@ class ClaimsFormActivity:BaseActivity() {
     private lateinit var binding : ActivityClaimsformBinding
     private val REQUEST_IMAGE_GALLERY = 132
     private val REQUEST_IMAGE_CAMERA = 142
+    private lateinit var imageLibrary: ImageLibrary
 
     lateinit var imageURI : Uri
     // Name of File when Uploading
-    lateinit var fileName : String
+    private lateinit var fileName : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimsformBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        fileName = ""
+        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload, fileName)
         val claimObj : Claim?
         if (getIntent().getExtras()?.getSerializable("claimObj") as? Claim != null)
         {
@@ -77,6 +75,9 @@ class ClaimsFormActivity:BaseActivity() {
         {
             claimObj = Claim("","","","","","","","","")
         }
+
+        imageLibrary.receiveImage(binding.imgViewUpload)
+
         // 0 = Add
         // 1 = Update
         val status : String
@@ -100,7 +101,7 @@ class ClaimsFormActivity:BaseActivity() {
               // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
             if (claimFormViewModel.currClaimObj != null) {
                 Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imgUrl.toString())
-                downloadImg(claimFormViewModel.currClaimObj.imgUrl.toString())
+                imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imgUrl.toString())
                 binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
                 binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
                 binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
@@ -161,7 +162,7 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.incrementPageStatus()
             } else {
                 // Upload Image
-                uploadImg()
+                imageLibrary.uploadImg(imageURI)
                 // Update File Name
                 claimFormViewModel.currClaimObj.imgUrl = fileName
 
@@ -307,25 +308,6 @@ class ClaimsFormActivity:BaseActivity() {
         }
     }
 
-    private fun downloadImg(imgUrl : String )
-    {
-        var storageReference = FirebaseStorage.getInstance().reference.child("images").child("asif").child(imgUrl)
-        val localfile = File.createTempFile("tempImage","png")
-        show(storageReference.toString())
-
-        Log.d("ClaimsFormAct",storageReference.toString())
-        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
-
-        storageReference.getFile(localfile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            binding.imgViewUpload.setImageBitmap(bitmap)
-
-        }.addOnFailureListener(){
-            show("Image not downloaded successfully")
-            Log.d("ClaimFormsActivity",it.toString())
-        }
-    }
-
     fun galleryAlertBuilder()
     {
         val builder = AlertDialog.Builder(this)
@@ -337,26 +319,13 @@ class ClaimsFormActivity:BaseActivity() {
         //performing positive action
         builder.setPositiveButton("Gallery") { dialog, which ->
             dialog.dismiss()
-
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
+            imageLibrary.useGallery()
         }
         //performing negative action
         builder.setNegativeButton("Camera"){dialog, which ->
             dialog.dismiss()
 
-            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also {takePictureIntent ->
-                takePictureIntent.resolveActivity(packageManager)?.also {
-                    val permission = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA)
-                    if (permission != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
-                    }
-                    else {
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAMERA)
-                    }
-                }
-            }
+            imageLibrary.useCamera()
         }
         // Create the AlertDialog
         val dialog: AlertDialog = builder.create()

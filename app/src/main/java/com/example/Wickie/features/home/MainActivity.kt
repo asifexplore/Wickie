@@ -1,16 +1,17 @@
 package com.example.Wickie.features.home
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Bundle
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
+import com.example.Wickie.Utils.ImageLibrary
 import com.example.Wickie.databinding.ActivityMainBinding
 import com.example.Wickie.features.claims.ClaimsFormActivity
 
 class MainActivity : BaseActivity() {
     private val REQUEST_IMAGE_CAMERA = 142
     private lateinit var binding: ActivityMainBinding
+    private lateinit var imageLibrary: ImageLibrary
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -18,6 +19,9 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.bottomNavigationView.itemIconTintList = null
         setContentView(binding.root)
+
+        //initialise ImageLibrary
+        imageLibrary = ImageLibrary(this, this.packageManager,null, "")
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)
         val homeFragment=HomeFragment()
@@ -47,16 +51,8 @@ class MainActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
-
-            //binding.imageCamera.setImageBitmap(data.extras?.get("data") as Bitmap)
-            val intent = Intent(this, ClaimsFormActivity::class.java)
-            //intent.putExtra()
-            val bitMapImage = data.extras?.get("data") as Bitmap
-            intent.putExtra("BitmapImage", bitMapImage)
-            startActivity(intent)
-        }
-
-
+        val intent = Intent(this, ClaimsFormActivity::class.java)
+        imageLibrary.sendImage(intent, requestCode, resultCode, data)
     }
+
 }

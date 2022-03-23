@@ -289,14 +289,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnDelete"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
                 android:layout_gravity="right"
+                android:background="@drawable/custom_button"
                 android:text="Delete" />
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnUpdate"
+                android:backgroundTint="@color/colorPrimary"
+                android:background="@drawable/custom_button"
+                android:bottomRightRadius="50dp"
+                android:bottomLeftRadius="50dp"
+                android:topLeftRadius="50dp"
+                android:topRightRadius="50dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginLeft="150dp"
                 android:layout_gravity="left"
                 android:text="Update"/>
            </LinearLayout>
