@@ -6,8 +6,8 @@ import android.content.SharedPreferences
 /*
 * Const values used for shared preference throughout the application
 * */
-const val PREF_LOGGED_IN = "PREF_LOGGED_IN"
 const val PREF_USERNAME = "PREF_USERNAME"
+const val PREF_PASSWORD = "PREF_PASSWORD"
 const val PREF_FINGERPRINT_STATUS = "PREF_FINGERPRINT_STATUS"
 
 class SharedPrefRepo(val context: Context) {
@@ -49,15 +49,15 @@ class SharedPrefRepo(val context: Context) {
     }
     // ========================================= END OF BOILER CODE FOR SHARED PREFERENCE REPO ============================================
 
-    fun setLoggedIn(isLoggedIn: Boolean) {
-        PREF_LOGGED_IN.put(isLoggedIn)
-    }
-    fun getLoggedIn() = PREF_LOGGED_IN.getBoolean()
-
     fun setUsername(username: String) {
         PREF_USERNAME.put(username)
     }
     fun getUsername() = PREF_USERNAME.getString()
+
+    fun setPassword(password: String) {
+        PREF_PASSWORD.put(password)
+    }
+    fun getPassword() = PREF_PASSWORD.getString()
 
     fun setFingerPrintStatus(status: Boolean) {
         PREF_FINGERPRINT_STATUS.put(status)

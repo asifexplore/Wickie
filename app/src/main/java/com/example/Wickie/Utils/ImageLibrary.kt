@@ -17,7 +17,7 @@ import com.example.Wickie.BaseActivity
 * Function Name: useCamera
 * Function Purpose: ask for permission to use the camera and start the camera intent
 * Function Arguments:
-* Results:
+ Results:
 *         Success: Proceed to camera intent
 *         Failed: Toast to indicate cannot access camera
 *---------------------------------------------------

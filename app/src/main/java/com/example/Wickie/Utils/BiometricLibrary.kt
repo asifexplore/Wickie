@@ -37,31 +37,36 @@ import com.example.Wickie.features.login.LoginViewModel
 import java.util.concurrent.Executor
 
 
-class BiometricLibrary (currentActivity: BaseActivity)
+class BiometricLibrary (currentActivity: BaseActivity, authCallBack : BiometricPrompt.AuthenticationCallback)
 {
-    var currentActivity: BaseActivity;
-
+    private lateinit var currentActivity: BaseActivity;
     private lateinit var executor: Executor;
     private lateinit var biometricPrompt: BiometricPrompt;
     private lateinit var promptInfo: androidx.biometric.BiometricPrompt.PromptInfo;
     private lateinit var sharedPref: SharedPreferences;
     private lateinit var editor: SharedPreferences.Editor;
+    private lateinit var authCallBack: BiometricPrompt.AuthenticationCallback;
+
+
 
     init {
         this.currentActivity = currentActivity
         this.executor = ContextCompat.getMainExecutor(currentActivity)
         this.sharedPref = currentActivity.getSharedPreferences("biometric", Context.MODE_PRIVATE)
         this.editor = sharedPref.edit()
+        this.authCallBack = authCallBack
     }
 
-    private fun hasBiometric(): Boolean {
+    public fun hasBiometric(): Boolean {
         val keyguard = currentActivity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
         if (!keyguard.isKeyguardSecure) {
             //informStatus("Please enable fingerprint authentication in the settings")
             Toast.makeText(currentActivity,"Please enable fingerprint",Toast.LENGTH_SHORT).show()
             editor.putBoolean("supported", false)
+            editor.commit()
             return false
+            //editor.putBoolean("supported", false)
         }
 
 
@@ -69,6 +74,7 @@ class BiometricLibrary (currentActivity: BaseActivity)
             //informStatus("Please enable fingerprint authentication")
             //return false
             editor.putBoolean("supported", false)
+            editor.commit()
         }
 
         return if (currentActivity.packageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT)) {
@@ -78,33 +84,48 @@ class BiometricLibrary (currentActivity: BaseActivity)
 
 
     fun useBiometric() : Boolean {
-        var supported: Boolean = true ;
+        var supported: Boolean = true;
 
         if (hasBiometric()) {
+            /*
             val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
+                    var editor = currentActivity.getSharedPreferences("biometric", Context.MODE_PRIVATE).edit()
+                    editor.putBoolean("supported", false)
+                    editor.commit()
                     supported = false
                     Toast.makeText(
                         currentActivity,
                         "Fingerprint feature not available",
                         Toast.LENGTH_SHORT
                     ).show()
+                    imageView.visibility = View.INVISIBLE
 
                 }
+
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
                     supported = true
                     Toast.makeText(currentActivity, "Login Success", Toast.LENGTH_SHORT).show()
+                    imageView.visibility = View.VISIBLE
+
                 }
+
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     //Log.d(TAG, errString as String)
                     supported = false
+                    var editor = currentActivity.getSharedPreferences("biometric", Context.MODE_PRIVATE).edit()
+                    editor.putBoolean("supported", false)
+                    editor.commit()
                     Toast.makeText(currentActivity, errString, Toast.LENGTH_SHORT).show()
-                }
-            }
+                    imageView.visibility = View.INVISIBLE
 
+                }
+
+            }
+            */
             val activity: FragmentActivity = currentActivity as FragmentActivity
             biometricPrompt = BiometricPrompt(
                 activity, executor,
