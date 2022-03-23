@@ -31,6 +31,7 @@ import com.example.Wickie.BaseActivity
 import com.example.Wickie.features.profile.ProfileViewModel
 import com.example.Wickie.features.profile.ProfileViewModelFactory
 import com.example.Wickie.hardware.CameraLibrary
+import com.example.quiz2_prep.NotificationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.Task
@@ -84,8 +85,6 @@ class HomeFragment:Fragment() {
 
         notificationUtils = NotificationUtils(this)
         notificationUtils.createNotificationChannel()
-
-
 
         //Profile Button Activity
         binding.layoutProfile.setOnClickListener {

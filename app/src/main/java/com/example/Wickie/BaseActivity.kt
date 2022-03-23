@@ -36,6 +36,7 @@ open class BaseActivity : AppCompatActivity() {
     val userRepository by lazy { UserRepository.getInstance(this) }
     val quoteRepository by lazy { QuoteRepository.getInstance(this)  }
     val attendanceRepository by lazy { AttendanceRepository.getInstance(this)  }
+    val authRepository by lazy { AuthRepository.getInstance(this)  }
 
     protected fun openActivity(classProv: Class<*>?)
     {
@@ -50,7 +51,7 @@ open class BaseActivity : AppCompatActivity() {
 
 
     protected fun show(message: String?){
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
     protected fun setCurrentFragment(fragment: Fragment) =

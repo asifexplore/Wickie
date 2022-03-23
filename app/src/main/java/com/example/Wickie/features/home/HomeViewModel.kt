@@ -19,7 +19,7 @@ import com.example.Wickie.data.source.UserRepository
 import com.example.Wickie.data.source.data.*
 import com.example.Wickie.features.profile.ProfileViewModel
 import com.example.Wickie.data.source.data.Attendance
-import com.example.Wickie.data.source.data.Location
+import com.example.Wickie.data.source.data.LocationClass
 import com.example.Wickie.data.source.data.Quote
 import com.example.Wickie.data.source.data.RequestQuoteCall
 import com.example.Wickie.services.NetworkService
@@ -86,11 +86,6 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
                 return 1
             }
         }
-    }
-
-    fun getAttendanceStatus() : Int
-    {
-       return prefRepo.getAttendanceStatus()
     }
 }
 class HomeViewModelFactory(private val quoteRepository: QuoteRepository, private val attendanceRepository: AttendanceRepository ,private val prefRepo: SharedPrefRepo) : ViewModelProvider.Factory {

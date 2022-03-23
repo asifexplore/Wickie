@@ -24,7 +24,6 @@ import com.example.Wickie.features.home.HomeViewModel
 class LoginActivity : BaseActivity() {
 
     private lateinit var viewModel: HomeViewModel
-
     //Call NetworkService Class
     private lateinit var  networkService: NetworkService
     private var Bound : Boolean = false
@@ -32,7 +31,6 @@ class LoginActivity : BaseActivity() {
     private var runnable : Runnable? = null
     //Set Handler to call functions
     private val handler = Handler(Looper.getMainLooper())
-
 
     //Create connection, callback for service binding, will be passed to bindService()
     private val connection = object : ServiceConnection {
@@ -48,27 +46,27 @@ class LoginActivity : BaseActivity() {
             Log.d("ServiceActivity: ", "Service Disconnected")
         }
     }
-
     private lateinit var binding : ActivityLoginBinding
     private lateinit var biometricLibrary: BiometricLibrary
 
     private val loginViewModel: LoginViewModel by viewModels {
         LoginViewModelFactory(( this as BaseActivity).authRepository ,(this as BaseActivity).sharedPrefRepo)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         handler.postDelayed(Runnable {
             check = networkService.checkForInternet(this)
-            if(!check){
+            if (!check) {
                 Toast.makeText(this, "Please connect to a network", Toast.LENGTH_LONG).show()
             }
             Log.d("Service Activity", "NetworkService: $check added")
             handler.postDelayed(runnable!!, 10000)
         }.also { runnable = it }, 10000)
-
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         loginViewModel.fingerprintStatus.observe(this, Observer {
             if (it == true)
@@ -80,7 +78,6 @@ class LoginActivity : BaseActivity() {
                 binding.imageButtonFingerprintScan.visibility = View.GONE
             }
         })
-
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
@@ -127,12 +124,14 @@ class LoginActivity : BaseActivity() {
                 forgotPw()
             }
         }
-        /*
+
+    } // Oncreate()
+    /*
     * Gets Username & Password. Observes for mutable live data from login function in view model class.
     * Success: Intent to HomeActivity
     * Failed: Display Error Message
     */
-    }
+
     private fun login(choice: Int) {
         var username = ""
         var password = ""
@@ -145,7 +144,6 @@ class LoginActivity : BaseActivity() {
             Log.d("LoginAct",password)
             password = loginViewModel.getPassword()
         }
-
         loginViewModel.login(username, password).observe(this, Observer {
             if (it.status == 2) {
                 // Intent to next screen
@@ -153,23 +151,23 @@ class LoginActivity : BaseActivity() {
                 Log.d("LoginActivity", it.userDetail.user_email.toString())
                 loginViewModel.setUsername(username)
                 loginViewModel.setPassword(password)
-                openActivityWithIntent(MainActivity::class.java, username)
+                openActivity(MainActivity::class.java)
             } else {
                 if (it.message == "NO DATA FOUND") {
 //                    show("Incorrect Username or Password, Please Try Again!")
-                Log.d("LoginActivitys", it.userDetail.user_email.toString())
+                    Log.d("LoginActivitys", it.userDetail.user_email.toString())
 //                openActivityWithIntent(MainActivity::class.java,username)
-                openActivity(MainActivity::class.java)
-            }else{
-                if (it.message == "NO DATA FOUND")
-                {
-                    Log.d("LoginActivity", it.status.toString())
-                    Log.d("LoginActivity", it.message.toString())
+                    openActivity(MainActivity::class.java)
+                } else {
+                    if (it.message == "NO DATA FOUND") {
+                        Log.d("LoginActivity", it.status.toString())
+                        Log.d("LoginActivity", it.message.toString())
 
+                    }
                 }
             }
         })
-    }
+    } // Login
 
     private fun forgotPw() {
         show("HR has been notified")
@@ -182,9 +180,7 @@ class LoginActivity : BaseActivity() {
         } else {
             binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
         }
-
     }
-
     override fun onStart(){
         super.onStart()
         Intent(this, NetworkService::class.java).also { intent -> bindService(intent,connection,
@@ -195,4 +191,5 @@ class LoginActivity : BaseActivity() {
         unbindService(connection)
         Bound = false
     }
-}
+
+} // LoginAc
