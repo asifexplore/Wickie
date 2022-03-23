@@ -73,7 +73,6 @@
                         android:imeOptions="actionNext"
                         android:minWidth="320dp"
                         android:minHeight="50dp"
-                        android:text="asif"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>
             </androidx.cardview.widget.CardView>
@@ -107,7 +106,6 @@
                         android:drawablePadding="12dp"
                         android:hint="password"
                         android:imeOptions="actionDone"
-                        android:text="123"
                         android:inputType="textPassword"
                         android:minWidth="320dp"
                         android:minHeight="50dp" />
@@ -140,6 +138,7 @@
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:layout_gravity="center"
+                android:visibility="invisible"
                 app:srcCompat="@drawable/fingerprintscan" />
 
 

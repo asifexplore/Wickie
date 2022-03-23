@@ -1,5 +1,6 @@
 package com.example.Wickie.features.claims
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.Wickie.data.source.ClaimRepository
@@ -10,6 +11,7 @@ import com.example.Wickie.data.source.data.Claim
 class ClaimViewModel : ViewModel() {
 
     private val claimRepository: ClaimRepository = ClaimRepository()
+    private var chosenClaimID = MutableLiveData<Int>()
 
     // 0 = Adding
     // 1 = Updating
@@ -26,6 +28,7 @@ class ClaimViewModel : ViewModel() {
     init {
         pageStatus.value = 1
         pageType.value = 0 // Hardcoded to 0 for testing Update Feature
+        chosenClaimID.value = -1
     }
 
     fun retrieve() : MutableLiveData<RequestClaimCall>
@@ -33,33 +36,43 @@ class ClaimViewModel : ViewModel() {
         return claimRepository.retrieve()
     }
 
-    fun incrementPageStatus()
+//    fun incrementPageStatus()
+//    {
+//        if (pageStatus.value != 3)
+//        {
+//            pageStatus.value = (pageStatus.value)?.plus(1)
+//        }
+//    }
+//    fun decrementPageStatus()
+//    {
+//        if (pageStatus.value != 1)
+//        {
+//            pageStatus.value = (pageStatus.value)?.minus(1)
+//        }
+//    }
+//
+//    // Create Repo
+//    // Create Functions
+//    fun create(title:  String,reason : String,amount : String,type : String, imgUrl : String,claimDate : String)  :
+//            MutableLiveData<RequestClaimCall>
+//    {
+//        val date = getCurrentDateTime()
+//        val dateInString = date.toString()
+//        return claimRepository.create(title,reason,amount,type, imgUrl, dateInString,claimDate)
+//    }
+//
+//    fun update(title : String,reason : String,amount : String,type : String, imgUrl: String,claimDate : String)  : MutableLiveData<RequestClaimCall>
+//    {
+//        return claimRepository.update(title,reason,amount,type, imgUrl, chosenClaim.createdDate.toString(),claimDate, chosenClaim.claimID.toString())
+//    }
+
+    fun setChosenClaim(num : Int)
     {
-        if (pageStatus.value != 3)
-        {
-            pageStatus.value = (pageStatus.value)?.plus(1)
-        }
-    }
-    fun decrementPageStatus()
-    {
-        if (pageStatus.value != 1)
-        {
-            pageStatus.value = (pageStatus.value)?.minus(1)
-        }
+        chosenClaimID.value = num
     }
 
-    // Create Repo
-    // Create Functions
-    fun create(title:  String,reason : String,amount : String,type : String, imgUrl : String,claimDate : String)  :
-            MutableLiveData<RequestClaimCall>
-    {
-        val date = getCurrentDateTime()
-        val dateInString = date.toString()
-        return claimRepository.create(title,reason,amount,type, imgUrl, dateInString,claimDate)
+    fun getChosenClaimID(): Int? {
+        return chosenClaimID.value
     }
 
-    fun update(title : String,reason : String,amount : String,type : String, imgUrl: String,claimDate : String)  : MutableLiveData<RequestClaimCall>
-    {
-        return claimRepository.update(title,reason,amount,type, imgUrl, chosenClaim.createdDate.toString(),claimDate, chosenClaim.claimID.toString())
-    }
 }

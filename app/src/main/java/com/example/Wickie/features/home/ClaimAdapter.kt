@@ -1,24 +1,30 @@
 package com.example.Wickie.features.home
 
 //code cleanup
+import android.app.ProgressDialog.show
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.R
 import com.example.Wickie.data.source.data.Claim
+import com.example.Wickie.features.claims.ClaimViewModel
+import com.example.Wickie.features.claims.ClaimsDetailsActivity
 
 class ClaimAdapter(
-    private val claimList:ArrayList<Claim>,
-    private val onClaimsClickListener: OnClaimsClickListener
-
+    private val claimList:ArrayList<Claim>
     ) : RecyclerView.Adapter<ClaimAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.claims_fragment_cell,parent,false)
         return ViewHolder(view)
     }
+
+    var viewModel: ClaimViewModel = ClaimViewModel()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.titleTxtView.text = claimList[position].title
@@ -37,9 +43,24 @@ class ClaimAdapter(
         }
 
         holder.itemView.setOnClickListener{
-            onClaimsClickListener.onClaimsClickListener(position)
-        }
+            viewModel.setChosenClaim(position)
+            // Intent
+            holder.itemView.setOnClickListener { v ->
+                val intent2 = Intent(v.context, ClaimsDetailsActivity::class.java)
+                    .putExtra("title",claimList[position].title)
+                    .putExtra("claimDate",claimList[position].claimDate.toString())
+                    .putExtra("amount",claimList[position].amount.toString())
+                    .putExtra("type",claimList[position].type.toString())
+                    .putExtra("status",claimList[position].status.toString())
+                    .putExtra("imgUrl",claimList[position].imgUrl)
+                    .putExtra("claimID",claimList[position].claimID)
+                    .putExtra("claimObj",claimList[position])
 
+                Log.d("ClaimAdapter", claimList[position].imgUrl.toString())
+                v.context.startActivity(intent2)
+
+            }
+        }
     }
 
     override fun getItemCount() = claimList.size

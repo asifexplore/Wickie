@@ -1,5 +1,6 @@
 package com.example.Wickie.hardware
 
+
 import android.app.Activity
 import android.app.KeyguardManager
 import android.content.ContentValues.TAG
@@ -28,10 +29,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
+import com.example.Wickie.features.home.MainActivity
+import com.example.Wickie.features.login.LoginActivity
+import com.example.Wickie.features.login.LoginViewModel
 import java.util.concurrent.Executor
 
-class FingerprintLibrary (currentActivity: Activity, intent: Intent, view: View)
+
+class FingerprintLibrary (currentActivity: LoginActivity, intent: Intent, view: View, viewModel: LoginViewModel)
 {
     var currentActivity: Activity;
     private lateinit var intent: Intent;
@@ -39,19 +45,23 @@ class FingerprintLibrary (currentActivity: Activity, intent: Intent, view: View)
     private lateinit var view: View;
     private lateinit var executor: Executor;
     private lateinit var biometricPrompt: BiometricPrompt;
-    private lateinit var promptInfo: androidx.biometric.BiometricPrompt.PromptInfo
+    private lateinit var promptInfo: androidx.biometric.BiometricPrompt.PromptInfo;
+    private lateinit var viewModel: LoginViewModel;
 
     init {
         this.currentActivity = currentActivity
         this.executor = ContextCompat.getMainExecutor(currentActivity)
         this.intent = intent
         this.view = view
+        this.viewModel = viewModel
+
     }
 
     private fun hasBiometric(): Boolean {
         val keyguard = currentActivity.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
         if (!keyguard.isKeyguardSecure) {
+
             //informStatus("Please enable fingerprint authentication in the settings")
             Toast.makeText(currentActivity,"Please enable fingerprint",Toast.LENGTH_SHORT).show()
             return false
@@ -69,40 +79,85 @@ class FingerprintLibrary (currentActivity: Activity, intent: Intent, view: View)
     }
 
 
-    fun useBiometric() {
+    fun useBiometric() : Boolean {
+        var supported: Boolean = true
 
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                Toast.makeText(currentActivity, "Fingerprint feature not available", Toast.LENGTH_SHORT).show()
+                supported = false
+                Toast.makeText(
+                    currentActivity,
+                    "Fingerprint feature not available",
+                    Toast.LENGTH_SHORT
+                ).show()
+
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                currentActivity.startActivity(intent)
+                supported = true
+                Toast.makeText(currentActivity, "Login Success", Toast.LENGTH_SHORT).show()
+                //currentActivity.startActivity(intent)\
+                //val supported : Boolean = true
+                //intent.putExtra("supported", true)
+                //Toast.makeText(currentActivity, result.toString(), Toast.LENGTH_LONG).show()
+                //val intent1 : Intent = currentActivity.intent
+                //val sharedPref = currentActivity.getSharedPreferences("biometric", Context.MODE_PRIVATE)
+                //val username = sharedPref.getString("username", null).toString()
+                //currentActivity.login
+                //currentActivity.startActivity(intent.putExtra("username", username))
+                /*
+                viewModel.login("asif", "123").observe(currentActivity, Observer {
+                    if (it.status == 2){
+                        // Intent to next screen
+                        Log.d("LoginActivity", it.message.toString())
+                        Log.d("LoginActivity", it.userDetail.user_email.toString())
+                        currentActivity.openActivityWithIntent(MainActivity::class.java,username)
+                    }else{
+                        if (it.message == "NO DATA FOUND")
+                        {
+                            Log.d("LoginActivity", it.status.toString())
+                            Log.d("LoginActivity", it.message.toString())
+
+                        }
+                    }
+                })
+
+                 */
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
                 //Log.d(TAG, errString as String)
+                supported = false
                 Toast.makeText(currentActivity, errString, Toast.LENGTH_SHORT).show()
+
             }
+
         }
 
         val activity: FragmentActivity = currentActivity as FragmentActivity
-        biometricPrompt = BiometricPrompt(activity, executor,
-            authCallBack)
+        biometricPrompt = BiometricPrompt(
+            activity, executor,
+            authCallBack
+        )
         this.promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle("Fingerprint Required")
             .setSubtitle("Please place your finger below the scanner")
             .setNegativeButtonText("Cancel")
             .build()
-
+        /*
         this.view.setOnClickListener {
             biometricPrompt.authenticate(promptInfo)
+            //return supported
         }
-    }
+        */
+        biometricPrompt.authenticate(promptInfo)
+        return supported
 
+
+    }
 
 
 }
