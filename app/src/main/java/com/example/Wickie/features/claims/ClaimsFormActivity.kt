@@ -27,8 +27,6 @@ import com.kofigyan.stateprogressbar.StateProgressBar
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
-import androidx.lifecycle.Observer
-import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.features.home.MainActivity
 
 /*
@@ -66,7 +64,8 @@ class ClaimsFormActivity:BaseActivity() {
     private val REQUEST_IMAGE_CAMERA = 142
     private lateinit var imageLibrary: ImageLibrary
 
-    lateinit var imageURI : Uri
+//    lateinit var imageURI : Uri
+    private var imageURI: Uri? = null
     // Name of File when Uploading
     private lateinit var fileName : String
 
@@ -76,6 +75,7 @@ class ClaimsFormActivity:BaseActivity() {
         setContentView(binding.root)
 
         fileName = ""
+
         imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload, fileName)
         val claimObj : Claim?
         if (getIntent().getExtras()?.getSerializable("claimObj") as? Claim != null)
@@ -110,8 +110,8 @@ class ClaimsFormActivity:BaseActivity() {
             // Set edit txt field values
               // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
             if (claimFormViewModel.currClaimObj != null) {
-                Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imgUrl.toString())
-                imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imgUrl.toString())
+                Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imageUrl.toString())
+                imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imageUrl.toString())
                 binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
                 binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
                 binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
@@ -172,7 +172,7 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.incrementPageStatus()
             } else {
                 // Upload Image
-                imageLibrary.uploadImg(imageURI)
+                imageURI?.let { it1 -> imageLibrary.uploadImg(it1) }
                 // Update File Name
                 claimFormViewModel.currClaimObj.imageUrl = fileName
 
@@ -347,12 +347,18 @@ class ClaimsFormActivity:BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+            Log.d("ClaimsFormAct",data.data.toString())
            binding.imgViewUpload.setImageURI(data.data)
             imageURI = data.data!!
             Log.d("ClaimsFormActivity",imageURI.toString())
 //            uploadImg()
         }
         else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+            Log.d("URI","HERE")
+
+            imageURI = data.data
+
+            Log.d("URI",imageURI.toString())
             binding.imgViewUpload.setImageBitmap(data.extras?.get("data") as Bitmap)
         }
         else {
