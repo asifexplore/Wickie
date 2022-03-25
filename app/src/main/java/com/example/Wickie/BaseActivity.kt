@@ -9,10 +9,7 @@ import android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.Wickie.data.source.AttendanceRepository
-import com.example.Wickie.data.source.QuoteRepository
-import com.example.Wickie.data.source.SharedPrefRepo
-import com.example.Wickie.data.source.UserRepository
+import com.example.Wickie.data.source.*
 import com.example.Wickie.features.login.PreferenceUtil.Companion.getInstance
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -37,6 +34,7 @@ open class BaseActivity : AppCompatActivity() {
     val quoteRepository by lazy { QuoteRepository.getInstance(this)  }
     val attendanceRepository by lazy { AttendanceRepository.getInstance(this)  }
     val authRepository by lazy { AuthRepository.getInstance(this)  }
+    val claimRepository by lazy { ClaimRepository.getInstance(this) }
 
     protected fun openActivity(classProv: Class<*>?)
     {

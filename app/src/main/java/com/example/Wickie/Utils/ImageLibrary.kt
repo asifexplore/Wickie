@@ -105,7 +105,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         //activity.show(storageReference.toString())
 
         Log.d("ClaimsFormAct",storageReference.toString())
-        Toast.makeText(activity, storageReference.toString(), Toast.LENGTH_LONG).show()
+//        Toast.makeText(activity, storageReference.toString(), Toast.LENGTH_LONG).show()
 
         var bitmap : Bitmap = BitmapFactory.decodeResource(resources, R.drawable.wickie_success)
 

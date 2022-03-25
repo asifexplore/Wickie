@@ -3,14 +3,17 @@ package com.example.Wickie.features.claims
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.data.source.ClaimRepository
 import com.example.Wickie.data.source.data.RequestClaimCall
 import com.example.Wickie.Utils.getCurrentDateTime
+import com.example.Wickie.data.source.SharedPrefRepo
 import com.example.Wickie.data.source.data.Claim
+import com.example.Wickie.features.profile.ProfileViewModel
 
-class ClaimViewModel : ViewModel() {
+class ClaimViewModel(private val prefRepo: SharedPrefRepo, private val claimRepository: ClaimRepository) : ViewModel() {
 
-    private val claimRepository: ClaimRepository = ClaimRepository()
+//    private val claimRepository: ClaimRepository = ClaimRepository()
     private var chosenClaimID = MutableLiveData<Int>()
 
     // 0 = Adding
@@ -33,7 +36,7 @@ class ClaimViewModel : ViewModel() {
 
     fun retrieve() : MutableLiveData<RequestClaimCall>
     {
-        return claimRepository.retrieve()
+        return claimRepository.retrieve(prefRepo.getUsername())
     }
 
 //    fun incrementPageStatus()
@@ -74,5 +77,16 @@ class ClaimViewModel : ViewModel() {
     fun getChosenClaimID(): Int? {
         return chosenClaimID.value
     }
-
+}
+class ClaimFragModelFactory(private val prefRepo: SharedPrefRepo, private val claimRepository: ClaimRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(ClaimViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return ClaimViewModel(prefRepo, claimRepository) as T
+//            return claimObj?.let { ClaimViewModel(it, prefRepo, claimRepository) } as T
+//            return pageType?.let { ClaimsFormViewModel(it.toInt(), claimObj,prefRepo, claimRepository) } as T
+//            return claimObj?.let { claimDetailsViewModel(it) } as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
+    }
 }

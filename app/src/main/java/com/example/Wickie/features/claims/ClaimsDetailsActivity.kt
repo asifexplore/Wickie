@@ -34,7 +34,7 @@ class ClaimsDetailsActivity : BaseActivity() {
             Log.d("claimdetail",claimObj.imageUrl.toString())
         }
         val claimDetailViewModel: claimDetailsViewModel by viewModels {
-            ClaimDetailsModelFactory(claimObj)
+            ClaimDetailsModelFactory(claimObj, sharedPrefRepo, claimRepository)
         }
 
         if (claimObj != null) {

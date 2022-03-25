@@ -1,33 +1,27 @@
 package com.example.Wickie.features.claims
 
-import android.Manifest
 import android.app.*
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
+import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.example.Wickie.Utils.ImageLibrary
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.ActivityClaimsformBinding
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.firebase.storage.FirebaseStorage
-import com.kofigyan.stateprogressbar.StateProgressBar
-import java.io.File
-import java.text.SimpleDateFormat
-import java.util.*
 import com.example.Wickie.features.home.MainActivity
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.kofigyan.stateprogressbar.StateProgressBar
+import java.util.*
+
 
 /*
 *   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
@@ -102,7 +96,7 @@ class ClaimsFormActivity:BaseActivity() {
         }
 
         val claimFormViewModel: ClaimsFormViewModel by viewModels {
-            ClaimFormModelFactory(status, claimObj)
+            ClaimFormModelFactory(status, claimObj, sharedPrefRepo,claimRepository)
         }
 
         if (claimFormViewModel.currPageType == 1)
@@ -145,10 +139,11 @@ class ClaimsFormActivity:BaseActivity() {
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build()
 
-        datePicker.addOnPositiveButtonClickListener {
-            // Respond to positive button click.
-            binding.editTextCalendar.setText(datePicker.headerText.toString())
-        }
+        datePicker.addOnPositiveButtonClickListener(MaterialPickerOnPositiveButtonClickListener<Long?> { selection -> // Do something...
+            val dateString: String = DateFormat.format("dd/MM/yyyy", Date(selection)).toString()
+            binding.editTextCalendar.setText(dateString)
+
+        })
 
         binding.editTextCalendar.setOnClickListener()
         {
@@ -168,7 +163,7 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.currClaimObj.reason = binding.editTextReason.text.toString()
                 claimFormViewModel.currClaimObj.amount = binding.editTextAmount.text.toString()
                 claimFormViewModel.currClaimObj.type = binding.autoCompleteType.text.toString()
-                claimFormViewModel.currClaimObj.claimDate = binding.textViewDate.text.toString()
+                claimFormViewModel.currClaimObj.claimDate = binding.editTextCalendar.text.toString()
 
                 // Increment to Image Upload Section
                 claimFormViewModel.incrementPageStatus()
@@ -177,7 +172,10 @@ class ClaimsFormActivity:BaseActivity() {
                     var filename = ""
                 imageURI?.let { it1 -> filename = imageLibrary.uploadImg(it1) }
                 // Update File Name
-                claimFormViewModel.currClaimObj.imageUrl = filename
+                if (filename != "")
+                {
+                    claimFormViewModel.currClaimObj.imageUrl = filename
+                }
 
                 if (status.toInt() == 0) {
                     claimFormViewModel.create()
@@ -252,25 +250,25 @@ class ClaimsFormActivity:BaseActivity() {
             binding.textViewReason.visibility = View.VISIBLE
             binding.textInputLayoutReason.visibility = View.VISIBLE
             binding.editTextReason.visibility = View.VISIBLE
-            binding.btnBack.visibility = View.INVISIBLE
+            binding.btnBack.visibility = View.GONE
             binding.imgViewUpload.visibility = View.GONE
         }else
         {
-            binding.textView.visibility = View.INVISIBLE
-            binding.textInputLayoutTitle.visibility = View.INVISIBLE
-            binding.editTextTitle.visibility = View.INVISIBLE
-            binding.textViewCost.visibility = View.INVISIBLE
-            binding.textInputLayoutAmount.visibility = View.INVISIBLE
-            binding.editTextAmount.visibility = View.INVISIBLE
-            binding.textViewType.visibility = View.INVISIBLE
-            binding.textInputLayoutType.visibility = View.INVISIBLE
-            binding.autoCompleteType.visibility = View.INVISIBLE
-            binding.textViewDate.visibility = View.INVISIBLE
-            binding.textInputLayout.visibility = View.INVISIBLE
-            binding.editTextCalendar.visibility = View.INVISIBLE
-            binding.textViewReason.visibility = View.INVISIBLE
-            binding.textInputLayoutReason.visibility = View.INVISIBLE
-            binding.editTextReason.visibility = View.INVISIBLE
+            binding.textView.visibility = View.GONE
+            binding.textInputLayoutTitle.visibility = View.GONE
+            binding.editTextTitle.visibility = View.GONE
+            binding.textViewCost.visibility = View.GONE
+            binding.textInputLayoutAmount.visibility = View.GONE
+            binding.editTextAmount.visibility = View.GONE
+            binding.textViewType.visibility = View.GONE
+            binding.textInputLayoutType.visibility = View.GONE
+            binding.autoCompleteType.visibility = View.GONE
+            binding.textViewDate.visibility = View.GONE
+            binding.textInputLayout.visibility = View.GONE
+            binding.editTextCalendar.visibility = View.GONE
+            binding.textViewReason.visibility = View.GONE
+            binding.textInputLayoutReason.visibility = View.GONE
+            binding.editTextReason.visibility = View.GONE
         }
     }
 

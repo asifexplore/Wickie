@@ -24,7 +24,7 @@ class ClaimAdapter(
         return ViewHolder(view)
     }
 
-    var viewModel: ClaimViewModel = ClaimViewModel()
+//    var viewModel: ClaimViewModel = ClaimViewModel()
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.titleTxtView.text = claimList[position].title
@@ -43,7 +43,7 @@ class ClaimAdapter(
         }
 
         holder.itemView.setOnClickListener{
-            viewModel.setChosenClaim(position)
+//            viewModel.setChosenClaim(position)
             // Intent
             holder.itemView.setOnClickListener { v ->
                 val intent2 = Intent(v.context, ClaimsDetailsActivity::class.java)

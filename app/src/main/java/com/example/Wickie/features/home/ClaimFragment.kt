@@ -5,11 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.Wickie.BaseActivity
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.FragmentClaimsBinding
+import com.example.Wickie.features.claims.ClaimFragModelFactory
 import com.example.Wickie.features.claims.ClaimViewModel
 import com.example.Wickie.features.claims.ClaimsFormActivity
 
@@ -32,28 +35,35 @@ class ClaimFragment:Fragment() {
     private lateinit var binding : FragmentClaimsBinding
     private lateinit var recyclerview: RecyclerView;
     private lateinit var adapter: ClaimAdapter; //Call my Adapter
-    private lateinit var viewModel: ClaimViewModel
     var claims: ArrayList<Claim> = ArrayList()
+
+    private val claimViewModel: ClaimViewModel by viewModels {
+        ClaimFragModelFactory(( this.requireContext() as BaseActivity).sharedPrefRepo,( this.requireContext() as BaseActivity).claimRepository)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentClaimsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
 
         //run recycler View
         recyclerview = binding.recyclerViewClaimsList
         recyclerview.layoutManager = LinearLayoutManager(this.context)
 
-        viewModel.retrieve().observe(viewLifecycleOwner) {
+        claimViewModel.retrieve().observe(viewLifecycleOwner) {
             // What do we do once we observe data from viewHolder?
             // Updated Recycler View
             claims.clear()
             if (it.message == "NO DATA FOUND") {
                 binding.noDataTxtView.visibility = View.VISIBLE
                 binding.recyclerViewClaimsList.visibility = View.INVISIBLE
-            } else {
+            } else if ( it.claimArray.count() <= 0 )
+            {
+                binding.noDataTxtView.visibility = View.VISIBLE
+                binding.recyclerViewClaimsList.visibility = View.INVISIBLE
+            }
+            else {
                 binding.noDataTxtView.visibility = View.INVISIBLE
                 binding.recyclerViewClaimsList.visibility = View.VISIBLE
                 binding.balanceTxtView.text = "$" + it.claimTotal.toString()

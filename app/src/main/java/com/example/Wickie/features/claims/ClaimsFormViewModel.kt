@@ -6,11 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.Utils.getCurrentDateTime
 import com.example.Wickie.data.source.ClaimRepository
+import com.example.Wickie.data.source.SharedPrefRepo
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.data.source.data.RequestClaimCall
+import com.example.Wickie.features.profile.ProfileViewModel
 
-class ClaimsFormViewModel(val pageType: Int = 0, val claimObj : Claim?) : ViewModel() {
-    private val claimRepository: ClaimRepository = ClaimRepository()
+class ClaimsFormViewModel(val pageType: Int = 0, val claimObj : Claim?, private val prefRepo: SharedPrefRepo ,private val claimRepository: ClaimRepository ) : ViewModel() {
+//    private val claimRepository: ClaimRepository = ClaimRepository()
     val pageStatus = MutableLiveData<Int>()
     lateinit var currClaimObj : Claim
     val currPageType = pageType
@@ -63,21 +65,21 @@ class ClaimsFormViewModel(val pageType: Int = 0, val claimObj : Claim?) : ViewMo
     {
         val date = getCurrentDateTime()
         val dateInString = date.toString()
-        return claimRepository.create(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imageUrl.toString(), dateInString,currClaimObj.claimDate.toString())
+        return claimRepository.create(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imageUrl.toString(), dateInString,currClaimObj.claimDate.toString(), prefRepo.getUsername())
     }
     //title : String,reason : String,amount : String,type : String, imgUrl: String,claimDate : String
     fun update()  : MutableLiveData<RequestClaimCall>
     {
-        return claimRepository.update(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imageUrl.toString(), currClaimObj.createdDate.toString(),currClaimObj.claimDate.toString(), currClaimObj.claimID.toString())
+        return claimRepository.update(currClaimObj.title.toString(),currClaimObj.reason.toString(),currClaimObj.amount.toString(),currClaimObj.type.toString(), currClaimObj.imageUrl.toString(), currClaimObj.createdDate.toString(),currClaimObj.claimDate.toString(), currClaimObj.claimID.toString(), prefRepo.getUsername())
     }
 
 }
-class ClaimFormModelFactory(val pageType: String? ,val claimObj: Claim?) : ViewModelProvider.Factory {
+class ClaimFormModelFactory(val pageType: String? ,val claimObj: Claim?,private val prefRepo: SharedPrefRepo, private val claimRepository: ClaimRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ClaimsFormViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-
-            return claimObj?.let { pageType?.let { it1 -> ClaimsFormViewModel(it1.toInt(), it) } } as T
+            return pageType?.let { ClaimsFormViewModel(it.toInt(), claimObj,prefRepo, claimRepository) } as T
+//            return claimObj?.let { pageType?.let { it1 -> ClaimsFormViewModel(it1.toInt(), it) } } as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
