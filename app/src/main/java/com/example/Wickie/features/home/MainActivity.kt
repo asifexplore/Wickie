@@ -25,7 +25,7 @@ class MainActivity : BaseActivity() {
 
 
         //initialise ImageLibrary
-        imageLibrary = ImageLibrary(this, this.packageManager,null)
+        imageLibrary = ImageLibrary(this, this.packageManager,null, null)
 //        imageLibrary = ImageLibrary(this, this.packageManager,null, "")
 
 

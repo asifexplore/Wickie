@@ -1,6 +1,8 @@
 package com.example.Wickie.features.claims
 
+import android.annotation.SuppressLint
 import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -10,6 +12,7 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
@@ -20,6 +23,8 @@ import com.example.Wickie.features.home.MainActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.kofigyan.stateprogressbar.StateProgressBar
+import java.io.ByteArrayOutputStream
+import java.io.File
 import java.util.*
 
 
@@ -63,6 +68,7 @@ class ClaimsFormActivity:BaseActivity() {
     // Name of File when Uploading
     private lateinit var fileName : String
 
+    @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimsformBinding.inflate(layoutInflater)
@@ -71,7 +77,7 @@ class ClaimsFormActivity:BaseActivity() {
         fileName = ""
 
 //        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload, fileName)
-        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload)
+        imageLibrary = ImageLibrary(this, this.packageManager, imageURI, binding.imgViewUpload)
 
         val claimObj : Claim?
         if (getIntent().getExtras()?.getSerializable("claimObj") as? Claim != null)
@@ -82,7 +88,11 @@ class ClaimsFormActivity:BaseActivity() {
             claimObj = Claim("","","","","","","","","")
         }
 
-        imageLibrary.receiveImage(binding.imgViewUpload)
+        if (imageLibrary.checkReceive(this))
+        {
+            imageURI = imageLibrary.receiveImage(this,binding.imgViewUpload)
+        }
+
 
         // 0 = Add
         // 1 = Update
@@ -349,7 +359,7 @@ class ClaimsFormActivity:BaseActivity() {
 
         if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
             Log.d("ClaimsFormAct",data.data.toString())
-           binding.imgViewUpload.setImageURI(data.data)
+            binding.imgViewUpload.setImageURI(data.data)
             imageURI = data.data!!
             Log.d("ClaimsFormActivity",imageURI.toString())
 //            uploadImg()
@@ -357,14 +367,29 @@ class ClaimsFormActivity:BaseActivity() {
         else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             Log.d("URI","HERE")
 
-            imageURI = data.data
+            val bitmap = data?.extras?.get("data") as Bitmap
+            val filename=""
+            binding.imgViewUpload.setImageBitmap(bitmap)
+            binding.imgViewUpload.layoutParams.height = 500
+            binding.imgViewUpload.layoutParams.width = 500
 
-            Log.d("URI",imageURI.toString())
-            binding.imgViewUpload.setImageBitmap(data.extras?.get("data") as Bitmap)
+            val file = File(this?.cacheDir,"CUSTOM NAME") //Get Access to a local file.
+            file.delete() // Delete the File, just in Case, that there was still another File
+            file.createNewFile()
+            val fileOutputStream = file.outputStream()
+            val byteArrayOutputStream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
+            val bytearray = byteArrayOutputStream.toByteArray()
+            fileOutputStream.write(bytearray)
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            byteArrayOutputStream.close()
+            imageURI = file.toUri()
         }
         else {
             Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
         }
     }
+
 }
 

@@ -3,8 +3,8 @@ package com.example.Wickie.Utils
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
-import android.app.ProgressDialog.show
 import android.content.Intent
+import android.content.Intent.getIntent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -12,18 +12,19 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
-import com.example.Wickie.features.claims.ClaimsFormActivity
 import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 /*
 *   CameraLibrary is responsible for camera realted activities
@@ -40,11 +41,12 @@ import java.util.*
 
  */
 
-class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, imageView: ImageView?) {
+class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, imageURI: Uri?, imageView: ImageView?) {
     private val REQUEST_IMAGE_GALLERY = 132
     private val REQUEST_IMAGE_CAMERA = 142
     private var activity : Activity = activity
     private var packageManager : PackageManager = packageManager;
+    private var imageURI : Uri? = imageURI;
     private var imageView : ImageView? = imageView
 //    private var fileName : String? = fileName
 
@@ -85,9 +87,13 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         var storageReference = FirebaseStorage.getInstance().getReference("images/asif/$fileName")
         storageReference.putFile(imageURI).addOnSuccessListener {
             //show("Image Uploaded Successfully")
+            Log.d("ImageLIbrary", "Success")
+            Log.d("ImageLIbrary", imageURI.toString())
             if(progressDialog.isShowing) progressDialog.dismiss()
         }.addOnFailureListener{
             //show("Image Not Uploaded Successfully. Please try again later. ")
+            Log.d("ImageLIbrary", "Failure")
+            Log.d("ImageLIbrary", imageURI.toString())
             if(progressDialog.isShowing) progressDialog.dismiss()
         }
         return fileName
@@ -136,22 +142,46 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
     fun sendImage(intent: Intent, requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             if (data != null) {
-                //val intent = Intent(activity, nextActivity::class.java)
-                //intent.putExtra()
+
                 val bitMapImage = data.extras?.get("data") as Bitmap
-                intent.putExtra("BitmapImage", bitMapImage)
+
+                intent.putExtra("CameraImage", bitMapImage)
                 activity.startActivity(intent)
             }
         }
 
 
     }
-
-    fun receiveImage(imageView: ImageView?) {
-        val bitmapIntent = activity.intent.getParcelableExtra<Bitmap>("BitmapImage")
-        if (bitmapIntent != null && checkImage(imageView)) {
-            imageView?.setImageBitmap(bitmapIntent)
+    fun checkReceive(receivingActivity: BaseActivity) : Boolean
+    {
+        val receive = receivingActivity.intent.getParcelableExtra<Bitmap>("CameraImage")
+        if (receive != null)
+        {
+            return true
         }
+        return false
+    }
+
+    fun receiveImage(receivingActivity: BaseActivity, image: ImageView) : Uri {
+        val receive = receivingActivity.intent.getParcelableExtra<Bitmap>("CameraImage")
+        val bitmap = receive as Bitmap
+        image.setImageBitmap(bitmap)
+        image.layoutParams.height = 500
+        image.layoutParams.width = 500
+
+        val file = File(receivingActivity?.cacheDir,"CUSTOM NAME") //Get Access to a local file.
+        file.delete() // Delete the File, just in Case, that there was still another File
+        file.createNewFile()
+        val fileOutputStream = file.outputStream()
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
+        val bytearray = byteArrayOutputStream.toByteArray()
+        fileOutputStream.write(bytearray)
+        fileOutputStream.flush()
+        fileOutputStream.close()
+        byteArrayOutputStream.close()
+        return file.toUri()
+
     }
 
     fun checkImage(imageView: ImageView?): Boolean

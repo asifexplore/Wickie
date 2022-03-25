@@ -52,7 +52,7 @@ class ClaimsDetailsActivity : BaseActivity() {
                 binding.imageItem.setImageResource(R.drawable.meal_icon)
             }
             Log.d("claimDetailsAct",claimDetailViewModel.claimObj.imageUrl.toString())
-            val imageLibrary = ImageLibrary(this, this.packageManager, binding.ImageViewAttachment)
+            val imageLibrary = ImageLibrary(this, this.packageManager, null, binding.ImageViewAttachment)
 //            val imageLibrary = ImageLibrary(this, this.packageManager, binding.ImageViewAttachment,"")
 
             //val tst = downloadImg(claimDetailViewModel.claimObj.imgUrl.toString())
