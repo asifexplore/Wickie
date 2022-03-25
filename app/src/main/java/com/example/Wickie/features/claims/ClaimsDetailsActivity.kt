@@ -43,6 +43,7 @@ class ClaimsDetailsActivity : BaseActivity() {
             binding.textViewAmount.text = "$"+claimDetailViewModel.claimObj.amount
             binding.textViewType.text = claimDetailViewModel.claimObj.type
             binding.textViewStatus.text = claimDetailViewModel.claimObj.status
+            binding.ReasonDescription.text = claimDetailViewModel.claimObj.reason
 
             if(claimDetailViewModel.claimObj.type == "transport"){
                 binding.imageItem.setImageResource(R.drawable.transport_icon)

@@ -12,7 +12,7 @@ data class LocationClass (
 //    var startpoint : LocationClass = LocationClass(,)
 //    var myPoint : LocationClass = LocationClass(longitude, latitude)
 
-    fun distance(lat1: Double, lon1: Double, lat2: Double = 1.3083148, lon2: Double = 103.7776367): Boolean {
+    fun distance(lat1: Double, lon1: Double, lat2: Double = 1.3800, lon2: Double = 103.8489): Boolean {
         val theta = lon1 - lon2
         var dist = (Math.sin(deg2rad(lat1))
                 * Math.sin(deg2rad(lat2))

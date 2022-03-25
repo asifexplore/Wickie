@@ -22,7 +22,7 @@ class AttendanceRepository {
     val requestCall = RequestAttendanceCall()
 
     // Create Function to create attendance object into Firebase
-    fun logIn() : MutableLiveData<RequestAttendanceCall>
+    fun logIn(userID : String) : MutableLiveData<RequestAttendanceCall>
     {
         val status = "Pending"
         val mLiveData = MutableLiveData<RequestAttendanceCall>()
@@ -41,7 +41,7 @@ class AttendanceRepository {
 
         database.get().addOnSuccessListener {
             Log.d("AttendanceRepo",it.toString())
-            database.child("attendance").child("asif").child(currentDate).setValue(attendanceObj).addOnSuccessListener{
+            database.child("attendance").child(userID).child(currentDate).setValue(attendanceObj).addOnSuccessListener{
                 requestCall.status = 2
                 requestCall.message = "Logged In"
                 mLiveData.postValue(requestCall)
@@ -57,7 +57,7 @@ class AttendanceRepository {
     }
 
     // Create Function to Store into Firebase
-    fun logOut() : MutableLiveData<RequestAttendanceCall>
+    fun logOut(userID : String) : MutableLiveData<RequestAttendanceCall>
     {
         val status = "Pending"
         val mLiveData = MutableLiveData<RequestAttendanceCall>()
@@ -74,7 +74,7 @@ class AttendanceRepository {
 
         database.get().addOnSuccessListener {
             Log.d("AttendanceRepo",it.toString())
-            database.child("attendance").child("asif").child(currentDate).child("endTime").setValue(checkOut).addOnSuccessListener{
+            database.child("attendance").child(userID).child(currentDate).child("endTime").setValue(checkOut).addOnSuccessListener{
                 requestCall.status = 2
                 requestCall.message = "Logged In"
                 mLiveData.postValue(requestCall)

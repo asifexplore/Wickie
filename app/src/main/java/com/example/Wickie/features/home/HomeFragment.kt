@@ -27,6 +27,7 @@ import com.example.Wickie.BaseActivity
 import com.example.Wickie.features.profile.ProfileViewModel
 import com.example.Wickie.features.profile.ProfileViewModelFactory
 import com.example.Wickie.hardware.CameraLibrary
+import com.example.Wickie.Utils.NotificationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -122,11 +123,11 @@ class HomeFragment:Fragment() {
                 }
                 2 ->{
                     // Logging Out
-                    Toast.makeText(context, "Logged Out Successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Checked Out Successfully", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
                     // Right Location
-                    Toast.makeText(context, "Successfully Logged In!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Checked In Successfully!", Toast.LENGTH_SHORT).show()
                 }
             }
         }

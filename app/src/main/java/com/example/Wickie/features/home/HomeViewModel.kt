@@ -31,7 +31,7 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
     var currStatus : MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        currStatus.value = prefRepo.getAttendanceStatus() == 1
+        currStatus.value = getAttendanceStatus()
     }
 
     fun showQuote() : MutableLiveData<RequestQuoteCall>
@@ -43,6 +43,12 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
     {
         location.latitude = lat
         location.longitude = long
+    }
+
+    fun getAttendanceStatus() : Boolean
+    {
+        //
+        return prefRepo.getAttendanceStatus() == 1
     }
 
     fun getUsername() : String
@@ -60,7 +66,7 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
         if (currStatus.value == true)
         {
             // Checking Out
-            attendanceRepository.logOut()
+            attendanceRepository.logOut(prefRepo.getUsername())
             currStatus.value = false
             // Add Into Shared Pref
             prefRepo.setAttendance(0)
@@ -73,7 +79,7 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
             if (location.distance(location.latitude,location.longitude))
             {
                 // Inside Correct Vicinity
-                attendanceRepository.logIn()
+                attendanceRepository.logIn(prefRepo.getUsername())
                 currStatus.value = true
                 // Add Into Shared Pref
                 prefRepo.setAttendance(1)

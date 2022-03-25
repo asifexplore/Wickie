@@ -1,4 +1,4 @@
-package com.example.quiz2_prep
+package com.example.Wickie.Utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
