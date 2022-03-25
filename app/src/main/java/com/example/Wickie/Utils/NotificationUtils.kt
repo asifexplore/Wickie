@@ -50,7 +50,7 @@ class NotificationUtils(currentActivity: Fragment) {
     /*
     * Builder that creates notification
     * */
-    fun sendNotification(resources: Resources)
+    fun sendNotification(resources: Resources, mood: String, slimeball: Int)
     {
         val intent = Intent (currentActivity.requireContext(),NotificationUtils::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -59,12 +59,13 @@ class NotificationUtils(currentActivity: Fragment) {
         val pendingIntent : PendingIntent = PendingIntent.getActivity(currentActivity.requireContext(), 0,intent, PendingIntent.FLAG_IMMUTABLE)
 
         val bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground)
-        val bitmaplargeIcon = BitmapFactory.decodeResource(resources, R.drawable.slimeballwickie)
+        val bitmaplargeIcon = BitmapFactory.decodeResource(resources, slimeball)
 
         val builder = NotificationCompat.Builder(currentActivity.requireContext(),CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setContentTitle("Example Title")
-            .setContentText("Example Description")
+            .setContentTitle("Your Wickie Mood!")
+            .setContentText("Your mood is $mood")
+            .setLargeIcon(bitmaplargeIcon)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 
