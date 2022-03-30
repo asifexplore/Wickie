@@ -47,7 +47,7 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
 
     fun getAttendanceStatus() : Boolean
     {
-        //
+        currStatus.value = prefRepo.getAttendanceStatus() == 1
         return prefRepo.getAttendanceStatus() == 1
     }
 

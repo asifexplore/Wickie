@@ -195,4 +195,18 @@ class HomeFragment:Fragment() {
             false
         })
     }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("HomeFragLifeCycle", "onResume()")
+        Log.d("HomeFragLifeCycle",homeViewModel.getAttendanceStatus().toString())
+        Log.d("HomeFragLifeCycle", homeViewModel.currStatus.value.toString())
+            if (homeViewModel.currStatus.value == true) {
+                binding.attendanceStatus.text = "Checked-In!"
+                binding.attendanceStatusImg.setImageResource(R.drawable.attendance_icon)
+            } else {
+                binding.attendanceStatus.text = "Checked-Out!"
+                binding.attendanceStatusImg.setImageResource(R.drawable.attendance_out)
+            }
+    }
 }
