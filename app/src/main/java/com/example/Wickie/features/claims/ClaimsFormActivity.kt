@@ -117,7 +117,7 @@ class ClaimsFormActivity:BaseActivity() {
               // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
             if (claimFormViewModel.currClaimObj != null) {
                 Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imageUrl.toString())
-                imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imageUrl.toString())
+                imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
                 binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
                 binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
                 binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
@@ -180,7 +180,7 @@ class ClaimsFormActivity:BaseActivity() {
             } else {
                 // Upload Image
                     var filename = ""
-                imageURI?.let { it1 -> filename = imageLibrary.uploadImg(it1) }
+                imageURI?.let { it1 -> filename = imageLibrary.uploadImg(it1, sharedPrefRepo.getUsername()) }
                 // Update File Name
                 if (filename != "")
                 {

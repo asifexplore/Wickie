@@ -73,7 +73,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         this.activity.startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
     }
 
-    fun uploadImg(imageURI : Uri) : String
+    fun uploadImg(imageURI : Uri, userID : String) : String
     {
         val progressDialog = ProgressDialog(activity)
         progressDialog.setMessage("Uploading Files...")
@@ -84,7 +84,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         val now = Date()
         val fileName = formatter.format(now).toString()
         // Need Username
-        var storageReference = FirebaseStorage.getInstance().getReference("images/asif/$fileName")
+        var storageReference = FirebaseStorage.getInstance().getReference("images/$userID/$fileName")
         storageReference.putFile(imageURI).addOnSuccessListener {
             //show("Image Uploaded Successfully")
             Log.d("ImageLIbrary", "Success")
@@ -99,14 +99,14 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         return fileName
     }
 
-    fun downloadImg(resources: Resources, imgUrl : String) : Bitmap
+    fun downloadImg(resources: Resources, imgUrl : String, userID : String ) : Bitmap
     {
         if (imgUrl == "")
         {
             var bitmap : Bitmap = BitmapFactory.decodeResource(resources, R.drawable.wickie_success)
             return bitmap
         }
-        var storageReference = FirebaseStorage.getInstance().reference.child("images").child("asif").child(imgUrl)
+        var storageReference = FirebaseStorage.getInstance().reference.child("images").child(userID).child(imgUrl)
         val localfile = File.createTempFile("tempImage","png")
         //activity.show(storageReference.toString())
 

@@ -57,7 +57,7 @@ class ClaimsDetailsActivity : BaseActivity() {
 //            val imageLibrary = ImageLibrary(this, this.packageManager, binding.ImageViewAttachment,"")
 
             //val tst = downloadImg(claimDetailViewModel.claimObj.imgUrl.toString())
-            val tst = imageLibrary.downloadImg(resources, claimDetailViewModel.claimObj.imageUrl.toString())
+            val tst = imageLibrary.downloadImg(resources, claimDetailViewModel.claimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
             imageLibrary.setImageResource(tst)
             //setImageResource(tst)
         }
