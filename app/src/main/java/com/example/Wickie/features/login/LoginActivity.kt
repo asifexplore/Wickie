@@ -1,5 +1,6 @@
 package com.example.Wickie.features.login
 
+import android.app.ProgressDialog
 import android.content.*
 import android.content.*
 import android.os.Bundle
@@ -113,11 +114,10 @@ class LoginActivity : BaseActivity() {
 
         binding.imageButtonFingerprintScan.setOnClickListener {
             biometricLibrary.useBiometric()
-
-            binding.buttonForgotPassword.setOnClickListener()
-            {
-                forgotPw()
-            }
+        }
+        binding.buttonForgotPassword.setOnClickListener()
+        {
+            forgotPw()
         }
 
     } // Oncreate()
@@ -128,6 +128,7 @@ class LoginActivity : BaseActivity() {
     */
 
     private fun login(choice: Int) {
+        startLoadingDialogBox("Validating Credentials...")
         var username = ""
         var password = ""
         if (choice == 1) {
@@ -151,17 +152,15 @@ class LoginActivity : BaseActivity() {
                 if (it.message == "NO DATA FOUND") {
                     show("Incorrect Username or Password, Please Try Again!")
                     Log.d("LoginActivitys", it.userDetail.user_email.toString())
-//                openActivityWithIntent(MainActivity::class.java,username)
-//                    openActivity(MainActivity::class.java)
                 } else {
                     if (it.message == "NO DATA FOUND") {
                         Log.d("LoginActivity", it.status.toString())
                         Log.d("LoginActivity", it.message.toString())
-
                     }
                 }
             }
         })
+        closeLoadingDialogBox()
     } // Login
 
     private fun forgotPw() {

@@ -16,13 +16,6 @@ class ClaimsFormViewModel(val pageType: Int = 0, val claimObj : Claim?, private 
     val pageStatus = MutableLiveData<Int>()
     lateinit var currClaimObj : Claim
     val currPageType = pageType
-//    val latestClaimID : MutableLiveData<String> = claimRepository.retrieveLatestID().observe()
-//
-//    fun retrieveLatestID() : MutableLiveData<String>
-//    {
-//        latestClaimID.value = claimRepository.retrieveLatestID().value
-//        return latestClaimID
-//    }
 
     init {
         pageStatus.value = 1
@@ -37,7 +30,6 @@ class ClaimsFormViewModel(val pageType: Int = 0, val claimObj : Claim?, private 
             // Create --> Empty Claim, Informmation is updated as user progress thru the form
             currClaimObj = Claim("","","","","","","","","")
         }
-//        Log.d("ClaimsFormViewModel",latestClaimID.value.toString())
     }
 
     // For ProgressTab
@@ -79,7 +71,6 @@ class ClaimFormModelFactory(val pageType: String? ,val claimObj: Claim?,private 
         if (modelClass.isAssignableFrom(ClaimsFormViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return pageType?.let { ClaimsFormViewModel(it.toInt(), claimObj,prefRepo, claimRepository) } as T
-//            return claimObj?.let { pageType?.let { it1 -> ClaimsFormViewModel(it1.toInt(), it) } } as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
