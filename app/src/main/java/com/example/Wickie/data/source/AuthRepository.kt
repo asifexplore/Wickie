@@ -2,12 +2,7 @@ package com.example.Wickie
 
 import android.content.Context
 import android.util.Log
-//import androidx.datastore.core.DataStore
-//import androidx.datastore.preferences.core.Preferences
-//import androidx.datastore.preferences.core.stringPreferencesKey
-//import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.MutableLiveData
-import com.example.Wickie.data.source.UserRepository
 import com.example.Wickie.data.source.data.RequestAuthCall
 import com.example.Wickie.data.source.data.User
 import com.google.firebase.database.*
@@ -27,7 +22,7 @@ class AuthRepository {
         requestCall.message = "Fetching Data"
         mLiveData.value = requestCall
 
-        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
+        val database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
 
         database.get().addOnSuccessListener {
             Log.d("AuthRepo",it.toString())
@@ -39,7 +34,7 @@ class AuthRepository {
                 {
                     requestCall.status = 2
                     requestCall.message = "DATA FOUND"
-                    var user  = User()
+                    val user  = User()
                     user.user_email = it.child(username).child("user_email").toString()
                     requestCall.userDetail = user
                 }else

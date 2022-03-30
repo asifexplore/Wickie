@@ -3,7 +3,6 @@ package com.example.Wickie.data.source
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.example.Wickie.AuthRepository
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.data.source.data.RequestClaimCall
 import com.google.firebase.database.DatabaseReference

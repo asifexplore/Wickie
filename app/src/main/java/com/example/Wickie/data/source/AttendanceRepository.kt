@@ -1,19 +1,14 @@
 package com.example.Wickie.data.source
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.Attendance
 import com.example.Wickie.data.source.data.RequestAttendanceCall
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.example.Wickie.Utils.getCurrentDate
-import com.example.Wickie.Utils.getCurrentDateTime
 import com.example.Wickie.Utils.getCurrentTime
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
 import java.util.*
 
 

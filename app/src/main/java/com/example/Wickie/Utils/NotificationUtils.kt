@@ -7,8 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -18,11 +16,10 @@ import com.example.Wickie.R
 
 // https://developer.android.com/training/notify-user/build-notification
 // https://www.youtube.com/watch?v=B5dgmvbrHgs
-class NotificationUtils(currentActivity: Fragment) {
+class NotificationUtils(private var currentActivity: Fragment) {
 
     private val CHANNEL_ID = "channel_id_example_01"
     private val notificationID = 101
-    private var currentActivity: Fragment = currentActivity
 
     /*
     * Function ensures notiication appears for android versions above O
@@ -50,7 +47,7 @@ class NotificationUtils(currentActivity: Fragment) {
     /*
     * Builder that creates notification
     * */
-    fun sendNotification(resources: Resources, mood: String, slimeball: Int)
+    fun sendNotification(resources: Resources, mood: String, slime_ball: Int)
     {
         val intent = Intent (currentActivity.requireContext(),NotificationUtils::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -58,14 +55,13 @@ class NotificationUtils(currentActivity: Fragment) {
 
         val pendingIntent : PendingIntent = PendingIntent.getActivity(currentActivity.requireContext(), 0,intent, PendingIntent.FLAG_IMMUTABLE)
 
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_launcher_foreground)
-        val bitmaplargeIcon = BitmapFactory.decodeResource(resources, slimeball)
+        val bitmapIconLarge = BitmapFactory.decodeResource(resources, slime_ball)
 
         val builder = NotificationCompat.Builder(currentActivity.requireContext(),CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Your Wickie Mood!")
             .setContentText("Your mood is $mood")
-            .setLargeIcon(bitmaplargeIcon)
+            .setLargeIcon(bitmapIconLarge)
             .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
 

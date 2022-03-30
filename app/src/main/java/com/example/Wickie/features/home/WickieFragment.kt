@@ -1,5 +1,4 @@
 package com.example.Wickie.features.home
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,15 +17,48 @@ class WickieFragment:Fragment()  {
     private val adapterChatBot = AdapterChatBot()
     private lateinit var binding : FragmentWickieBinding
     private lateinit var viewModel: ChatBotViewModel
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentWickieBinding.inflate(inflater, container, false)
         viewModel = ViewModelProvider(this).get(ChatBotViewModel::class.java)
         val apiService = viewModel.connect()
         binding.rvChatList.layoutManager = LinearLayoutManager(this.context)
         binding.rvChatList.adapter = adapterChatBot
+        val bundle = this.arguments
+
+        if (bundle != null) {
+            //Collects message sent from home screen
+            val value = requireArguments().getString("KEY")
+            //Collects notification status sent from home screen
+            val notificationHappy = requireArguments().getString("HAPPY")
+            val notificationTired = requireArguments().getString("TIRED")
+            val reply: String = value.toString()
+            val notificationStringHappy: String = notificationHappy.toString()
+            val notificationStringTired: String = notificationTired.toString()
+            if (reply != "null") {
+                adapterChatBot.addChatToList(ChatModel(reply))
+                apiService.chatWithTheBot(reply).enqueue(callBack)
+                onScrollPosition()
+                binding.etChat.text.clear()
+            }
+            if (notificationStringHappy != "null") {
+                adapterChatBot.addChatToList(ChatModel(notificationStringHappy))
+                apiService.chatWithTheBot(reply).enqueue(callBack)
+                onScrollPosition()
+                binding.etChat.text.clear()
+            }
+            if (notificationStringTired != "null") {
+                adapterChatBot.addChatToList(ChatModel(notificationStringTired))
+                apiService.chatWithTheBot(reply).enqueue(callBack)
+                onScrollPosition()
+                binding.etChat.text.clear()
+            }
+            bundle.clear()
+        }
         binding.btnSend.setOnClickListener {
-            if(binding.etChat.text.isNullOrEmpty()){
+            if (binding.etChat.text.isNullOrEmpty()) {
                 Toast.makeText(this.activity, "Please enter a text", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -35,8 +67,7 @@ class WickieFragment:Fragment()  {
             onScrollPosition()
             binding.etChat.text.clear()
         }
-        val root: View = binding.root
-        return root
+        return binding.root
     }
 
 

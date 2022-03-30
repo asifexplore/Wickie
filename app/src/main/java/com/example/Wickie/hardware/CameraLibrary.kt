@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 /*
-*   CameraLibrary is responsible for camera realted activities
+*   CameraLibrary is responsible for camera related activities
 *
 * Functions Within:
 *  ==========================================================================

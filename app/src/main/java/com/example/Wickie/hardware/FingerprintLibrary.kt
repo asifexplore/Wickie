@@ -3,35 +3,15 @@ package com.example.Wickie.hardware
 
 import android.app.Activity
 import android.app.KeyguardManager
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.Context.KEYGUARD_SERVICE
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.hardware.biometrics.BiometricManager
-
-import android.hardware.fingerprint.FingerprintManager
-import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.os.CancellationSignal
-import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.biometric.BiometricManager.from
 import androidx.biometric.BiometricPrompt
 import androidx.core.app.ActivityCompat
-
-
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
-import com.example.Wickie.BaseActivity
-import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.features.login.LoginActivity
 import com.example.Wickie.features.login.LoginViewModel
 import java.util.concurrent.Executor
