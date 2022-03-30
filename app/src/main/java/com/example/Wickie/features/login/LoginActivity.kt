@@ -1,17 +1,12 @@
 package com.example.Wickie.features.login
 
 import android.content.*
-import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.biometric.BiometricPrompt
-import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-
-import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
 import com.example.Wickie.databinding.ActivityLoginBinding
@@ -20,12 +15,10 @@ import com.example.Wickie.services.NetworkService
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
-import com.example.Wickie.features.home.HomeViewModel
 
 
 class LoginActivity : BaseActivity() {
 
-    private lateinit var viewModel: HomeViewModel
     //Call NetworkService Class
     private lateinit var  networkService: NetworkService
     private var Bound : Boolean = false
@@ -70,16 +63,13 @@ class LoginActivity : BaseActivity() {
             handler.postDelayed(runnable!!, 10000)
         }.also { runnable = it }, 10000)
 
-        loginViewModel.fingerprintStatus.observe(this, Observer {
-            if (it == true)
-            {
+        loginViewModel.fingerprintStatus.observe(this) {
+            if (it == true) {
                 binding.imageButtonFingerprintScan.visibility = View.VISIBLE
-            }
-            else
-            {
+            } else {
                 binding.imageButtonFingerprintScan.visibility = View.GONE
             }
-        })
+        }
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
@@ -128,7 +118,7 @@ class LoginActivity : BaseActivity() {
     */
 
     private fun login(choice: Int) {
-        var username = ""
+        var username: String
         var password = ""
         if (choice == 1) {
             username = binding.editTextEmail.text.toString()
@@ -139,10 +129,10 @@ class LoginActivity : BaseActivity() {
             Log.d("LoginAct",password)
             password = loginViewModel.getPassword()
         }
-        loginViewModel.login(username, password).observe(this, Observer {
+        loginViewModel.login(username, password).observe(this) {
             if (it.status == 2) {
                 // Intent to next screen
-                Log.d("LoginActivity", it.message.toString())
+                Log.d("LoginActivity", it.message)
                 Log.d("LoginActivity", it.userDetail.user_email.toString())
                 loginViewModel.setUsername(username)
                 loginViewModel.setPassword(password)
@@ -156,12 +146,12 @@ class LoginActivity : BaseActivity() {
                 } else {
                     if (it.message == "NO DATA FOUND") {
                         Log.d("LoginActivity", it.status.toString())
-                        Log.d("LoginActivity", it.message.toString())
+                        Log.d("LoginActivity", it.message)
 
                     }
                 }
             }
-        })
+        }
     } // Login
 
     private fun forgotPw() {
@@ -169,13 +159,6 @@ class LoginActivity : BaseActivity() {
     }
 
     //    fingerprint feature with (shared preferences function, not sure how to update)
-    private fun enableFingerprint() {
-        if (biometricLibrary.hasBiometric()) {
-            binding.imageButtonFingerprintScan.visibility = View.VISIBLE
-        } else {
-            binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
-        }
-    }
     override fun onStart(){
         super.onStart()
         Intent(this, NetworkService::class.java).also { intent -> bindService(intent,connection,

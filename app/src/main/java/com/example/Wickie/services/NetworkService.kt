@@ -5,14 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.IBinder
 import android.os.Binder
-import androidx.lifecycle.MutableLiveData
-import kotlin.random.Random
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.os.Bundle
-import android.widget.Button
-import android.widget.Toast
 
 class NetworkService : Service() {
 

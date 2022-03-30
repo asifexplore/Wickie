@@ -1,6 +1,5 @@
 package com.example.Wickie.features.chatbot
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -36,11 +35,6 @@ class AdapterChatBot : RecyclerView.Adapter<AdapterChatBot.MyViewHolder>() {
     fun addChatToList(chat: ChatModel) {
         list.add(chat)
         notifyDataSetChanged()
-    }
-
-
-    fun getListPosition(): Int {
-        return list.size-1
     }
 
 }

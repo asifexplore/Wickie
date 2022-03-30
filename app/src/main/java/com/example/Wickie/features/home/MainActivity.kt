@@ -1,10 +1,5 @@
 package com.example.Wickie.features.home
-import android.app.Activity
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.*
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
@@ -13,7 +8,6 @@ import com.example.Wickie.databinding.ActivityMainBinding
 import com.example.Wickie.features.claims.ClaimsFormActivity
 
 class MainActivity : BaseActivity() {
-    private val REQUEST_IMAGE_CAMERA = 142
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageLibrary: ImageLibrary
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,18 +28,51 @@ class MainActivity : BaseActivity() {
         val claimFragment=ClaimFragment()
         val wickieFragment=WickieFragment()
         setCurrentFragment(homeFragment)
-
+        //Set Home Button as Default Selected Item in the Home Menu Screen
+        binding.bottomNavigationView.selectedItemId = R.id.home
         val claimCompleted = intent.getStringExtra("claimCompleted")
         if ( claimCompleted == "true")
         {
+            binding.bottomNavigationView.selectedItemId = R.id.claim
             setCurrentFragment(claimFragment)
         }
 
         //If Claims has been created, redirect back to claims fragment (logic to check)
         val check = intent.getBooleanExtra("exist",false)
         if(check){
+            binding.bottomNavigationView.selectedItemId = R.id.claim
             setCurrentFragment(claimFragment)
         }
+
+        //If user sends message through Home Screen (Collects Message)
+        val message = intent.getStringExtra("KEY")
+        val check2 = intent.getBooleanExtra("WICKIE",false)
+        if(check2){
+            val bundle = Bundle()
+            bundle.putString("KEY", message)
+            bundle.putBoolean("notEmpty",true)
+            wickieFragment.arguments = bundle
+            binding.bottomNavigationView.selectedItemId = R.id.wickie
+            setCurrentFragment(wickieFragment)
+
+        }
+        val happy = intent.getBooleanExtra("HAPPY",false)
+        val tired = intent.getBooleanExtra("TIRED",false)
+        if(happy){
+            val bundle = Bundle()
+            bundle.putString("HAPPY","HAPPY")
+            wickieFragment.arguments = bundle
+            binding.bottomNavigationView.selectedItemId = R.id.wickie
+            setCurrentFragment(wickieFragment)
+        }
+        if(tired){
+            val bundle = Bundle()
+            bundle.putString("TIRED","TIRED")
+            wickieFragment.arguments = bundle
+            binding.bottomNavigationView.selectedItemId = R.id.wickie
+            setCurrentFragment(wickieFragment)
+        }
+
 
         //Else Display Home Menu Screen with navigation bar
         binding.bottomNavigationView.setOnNavigationItemSelectedListener {
@@ -56,8 +83,7 @@ class MainActivity : BaseActivity() {
             }
             true
         }
-        //Set Home Button as Default Selected Item in the Home Menu Screen
-        binding.bottomNavigationView.selectedItemId = R.id.home
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

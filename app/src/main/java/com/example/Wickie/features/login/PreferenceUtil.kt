@@ -1,9 +1,8 @@
 package com.example.Wickie.features.login
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import java.lang.NullPointerException
+import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 
 //class PreferenceUtil private constructor(context: Context) {
 class PreferenceUtil private constructor(context: Context) {

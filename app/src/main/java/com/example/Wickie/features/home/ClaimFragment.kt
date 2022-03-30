@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.Wickie.BaseActivity
@@ -33,8 +32,8 @@ import com.example.Wickie.features.claims.ClaimsFormActivity
 
 class ClaimFragment:Fragment() {
     private lateinit var binding : FragmentClaimsBinding
-    private lateinit var recyclerview: RecyclerView;
-    private lateinit var adapter: ClaimAdapter; //Call my Adapter
+    private lateinit var recyclerview: RecyclerView
+    private lateinit var adapter: ClaimAdapter //Call my Adapter
     var claims: ArrayList<Claim> = ArrayList()
 
     private val claimViewModel: ClaimViewModel by viewModels {
@@ -44,7 +43,7 @@ class ClaimFragment:Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentClaimsBinding.inflate(inflater, container, false)
 
         //run recycler View
@@ -67,7 +66,7 @@ class ClaimFragment:Fragment() {
                 binding.noDataTxtView.visibility = View.INVISIBLE
                 binding.recyclerViewClaimsList.visibility = View.VISIBLE
                 binding.balanceTxtView.text = "$" + it.claimTotal.toString()
-                adapter = ClaimAdapter(it.claimArray as ArrayList<Claim>)
+                adapter = ClaimAdapter(it.claimArray)
                 recyclerview.adapter = adapter
                 adapter.notifyDataSetChanged()
             }

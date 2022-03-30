@@ -12,20 +12,13 @@ import androidx.fragment.app.Fragment
 import com.example.Wickie.R
 import com.example.Wickie.databinding.FragmentHomeBinding
 import com.example.Wickie.features.profile.ProfileActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.Observer
 import android.app.AlertDialog
 import android.content.pm.PackageManager
-import android.media.Image
-import android.text.Layout
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import com.example.Wickie.BaseActivity
-import com.example.Wickie.features.profile.ProfileViewModel
-import com.example.Wickie.features.profile.ProfileViewModelFactory
 import com.example.Wickie.hardware.CameraLibrary
 import com.example.Wickie.Utils.NotificationUtils
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -49,11 +42,8 @@ import com.google.android.gms.location.LocationServices
 
 class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
-    //    private lateinit var viewModel: HomeViewModel
     private lateinit var notificationUtils: NotificationUtils
-    var dialogBuilder: AlertDialog.Builder? = null
-    var alertDialog: AlertDialog? = null
-    var attendanceState: Boolean = false
+    private var alertDialog: AlertDialog? = null
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -61,9 +51,9 @@ class HomeFragment:Fragment() {
         HomeViewModelFactory(( this.requireContext() as BaseActivity).quoteRepository,( this.requireContext() as BaseActivity).attendanceRepository ,(this.requireContext() as BaseActivity).sharedPrefRepo)
     }
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         if (ActivityCompat.checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION)
@@ -105,14 +95,13 @@ class HomeFragment:Fragment() {
             LocationUtils.location.let {
                 Log.d("HomeFrag123", it.value?.latitude.toString())
                 it.value?.longitude?.let { it1 -> it.value?.latitude?.let { it2 ->
-                    homeViewModel.addLocation(it1.toDouble(),
-                        it2.toDouble())
+                    homeViewModel.addLocation(it1,
+                        it2)
                 } }
             }
 
-            val attendanceStatus = homeViewModel.setAttendance()
             // Error
-            when (attendanceStatus) {
+            when (homeViewModel.setAttendance()) {
                 0 -> {
                     Log.d("HomeFragment","Still Loading")
 //                    Toast.makeText(context, "Please try again later", Toast.LENGTH_SHORT).show()
@@ -155,9 +144,9 @@ class HomeFragment:Fragment() {
 
     //Function to show quotes each day
     private fun showQuote(){
-        homeViewModel.showQuote().observe(this.viewLifecycleOwner, Observer {
+        homeViewModel.showQuote().observe(this.viewLifecycleOwner) {
             binding.TextQuote.text = it.quoteDetail.mon_quote.toString()
-        })
+        }
     }
 
     private fun launchCustomDialog() {
@@ -174,12 +163,20 @@ class HomeFragment:Fragment() {
         happy.setOnClickListener {
                 binding.imageMoodie.setImageResource(R.drawable.slimeball_happy)
                 notificationUtils.sendNotification(resources,"Happy",R.drawable.slimeball_happy)
+                val notificationHappy = true
+                val intent = Intent(context, MainActivity::class.java)
+                intent.putExtra("HAPPY",notificationHappy)
                 alertDialog?.cancel()
+                startActivity(intent)
             }
         tired.setOnClickListener {
                 binding.imageMoodie.setImageResource(R.drawable.slimeball_tired)
                 notificationUtils.sendNotification(resources,"Tired",R.drawable.slimeball_tired)
+                val notificationTired = true
+                val intent = Intent(context, MainActivity::class.java)
+                intent.putExtra("TIRED",notificationTired)
                 alertDialog?.cancel()
+                startActivity(intent)
         }
     }
 
@@ -188,7 +185,12 @@ class HomeFragment:Fragment() {
         search.setOnEditorActionListener(TextView.OnEditorActionListener{ _, actionId, _ ->
 
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                Toast.makeText(context, "Sent", Toast.LENGTH_SHORT).show()
+                val word = binding.chatMessageText.text.toString()
+                val messageWickie = true
+                val intent = Intent(context, MainActivity::class.java)
+                intent.putExtra("KEY",word)
+                    .putExtra("WICKIE",messageWickie)
+                startActivity(intent)
 
                 return@OnEditorActionListener true
             }
