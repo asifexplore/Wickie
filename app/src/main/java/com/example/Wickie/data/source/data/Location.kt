@@ -6,13 +6,10 @@ data class LocationClass (
     var latitude: Double
 )
 {
-//    var results
     var results: FloatArray? = FloatArray(1)
 
-//    var startpoint : LocationClass = LocationClass(,)
-//    var myPoint : LocationClass = LocationClass(longitude, latitude)
-
-    fun distance(lat1: Double, lon1: Double, lat2: Double = 1.3800, lon2: Double = 103.8489): Boolean {
+    // 1.3774 | 103.8488
+    fun distance(lat1: Double, lon1: Double, lat2: Double = 1.4443, lon2: Double = 103.7838): Boolean {
         val theta = lon1 - lon2
         var dist = (Math.sin(deg2rad(lat1))
                 * Math.sin(deg2rad(lat2))
@@ -36,16 +33,4 @@ data class LocationClass (
     {
         return (dist * 1.60934)
     }
-
-
-//    fun distanceAcceptable(myPoint : LocationClass) : Boolean
-//    {
-//        var location  = Location.distanceBetween(startpoint.latitude,startpoint.longitude,myPoint.latitude,myPoint.longitude,results)
-//        if (location < 1000)
-//        {
-//
-//        }
-//    }
-
-
 }
