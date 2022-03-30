@@ -20,6 +20,10 @@ class ProfileViewModel(private val userRepository : UserRepository, private val 
     {
         prefRepo.setFingerPrintStatus(status)
     }
+    fun getFingerPrintStatus() : Boolean
+    {
+        return prefRepo.getFingerPrintStatus()
+    }
 
     fun logout()
     {

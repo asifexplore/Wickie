@@ -34,6 +34,8 @@ class ProfileActivity : BaseActivity() {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.EnableFingerprint.isChecked = profileViewModel.getFingerPrintStatus()
+
         // Obtain Attendance Status
         homeViewModel.currStatus.observe(this){
             if (it == true)
@@ -48,12 +50,10 @@ class ProfileActivity : BaseActivity() {
             }
         }
 
-
         // To initialise LocationUtils if instance was not created
         LocationUtils.getInstance(this)
         // Getting Current Location
         LocationUtils.getCurrLocation()
-
         displayUser()
         //Logout Button
         binding.LogoutLayout.setOnClickListener {

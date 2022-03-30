@@ -1,6 +1,7 @@
 package com.example.Wickie.features.login
 
 import android.app.ProgressDialog
+import android.app.ProgressDialog.show
 import android.content.*
 import android.content.*
 import android.os.Bundle
@@ -75,25 +76,22 @@ class LoginActivity : BaseActivity() {
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
-
+                show("Login Failed")
+                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_SHORT).show()
                 binding.imageButtonFingerprintScan.visibility = View.VISIBLE
                 login(2)
-
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
+                show(errString.toString())
                 Toast.makeText(this@LoginActivity, errString, Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
             }
-
         }
 
         biometricLibrary = BiometricLibrary(this, authCallBack)
@@ -151,10 +149,9 @@ class LoginActivity : BaseActivity() {
                     }
                 }
             }
-        })
-        closeLoadingDialogBox()
         }
-    } // Login
+        closeLoadingDialogBox()
+        } // Login
 
     private fun forgotPw() {
         show("HR has been notified")
