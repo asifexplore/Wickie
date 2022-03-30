@@ -45,13 +45,13 @@ class WickieFragment:Fragment()  {
             }
             if (notificationStringHappy != "null") {
                 adapterChatBot.addChatToList(ChatModel(notificationStringHappy))
-                apiService.chatWithTheBot(reply).enqueue(callBack)
+                apiService.chatWithTheBot(notificationStringHappy).enqueue(callBack)
                 onScrollPosition()
                 binding.etChat.text.clear()
             }
             if (notificationStringTired != "null") {
                 adapterChatBot.addChatToList(ChatModel(notificationStringTired))
-                apiService.chatWithTheBot(reply).enqueue(callBack)
+                apiService.chatWithTheBot(notificationStringTired).enqueue(callBack)
                 onScrollPosition()
                 binding.etChat.text.clear()
             }
