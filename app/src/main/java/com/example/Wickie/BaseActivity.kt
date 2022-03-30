@@ -1,6 +1,6 @@
 package com.example.Wickie
 
-
+import android.app.ProgressDialog
 import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import com.example.Wickie.data.source.*
 
 /*
 *  Base Activity will be the parent activity, allowing other activities to inherit functionalites. Prevent the need to rewrite codes.
+*  Also initialising repo instances for Singleton Pattern.
 *
 * Functions Within:
 * ==========================================================================
@@ -17,8 +18,27 @@ import com.example.Wickie.data.source.*
 * Function Arguments: Class (Activity)
 * Results:
 *         Success: Goes to next page
-*         Failed:
 *---------------------------------------------------
+* Function Name: openActivityWithIntent(classProv: Class<*>?, argument1: String?, argument2 : String?)
+* Function Purpose: Intent to Other Activity while passing variables
+* Function Arguments:
+*         Class (Activity)
+*         argument1 would the key on putExtra in the Intent
+*         argument2 would be the value of the putExtra in the Intent.
+* Results:
+*         Success: Goes to next page
+*---------------------------------------------------
+* Function Name: startLoadingDialogBox(text : String )
+* Function Purpose: Function that displays ProgressDialogBox
+* Function Arguments: variable text is the string that would be displayed on the ProgressDialogBox
+* Results:
+*         Success: Display ProgressDialogBox
+*---------------------------------------------------
+* Function Name: closeLoadingDialogBox()
+* Function Purpose: Function that closes ProgressDialogBox if it exists
+* Function Arguments: Nil
+* Results:
+*         Success: Closes ProgressDialogBox
 */
 
 open class BaseActivity : AppCompatActivity() {
@@ -50,4 +70,20 @@ open class BaseActivity : AppCompatActivity() {
             replace(R.id.flFragment,fragment)
             commit()
         }
+
+    protected fun startLoadingDialogBox(text : String )
+    {
+        // Loading Dialog Box
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage(text)
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+    }
+    protected  fun closeLoadingDialogBox()
+    {
+        // Loading Dialog Box
+        val progressDialog = ProgressDialog(this)
+        if(progressDialog.isShowing) progressDialog.dismiss()
+    }
+
 }

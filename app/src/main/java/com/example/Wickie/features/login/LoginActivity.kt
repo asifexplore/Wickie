@@ -1,5 +1,8 @@
 package com.example.Wickie.features.login
 
+import android.app.ProgressDialog
+import android.app.ProgressDialog.show
+import android.content.*
 import android.content.*
 import android.os.Bundle
 import android.util.Log
@@ -73,25 +76,22 @@ class LoginActivity : BaseActivity() {
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
-
+                show("Login Failed")
+                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_SHORT).show()
                 binding.imageButtonFingerprintScan.visibility = View.VISIBLE
                 login(2)
-
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
+                show(errString.toString())
                 Toast.makeText(this@LoginActivity, errString, Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
             }
-
         }
 
         biometricLibrary = BiometricLibrary(this, authCallBack)
@@ -103,11 +103,10 @@ class LoginActivity : BaseActivity() {
 
         binding.imageButtonFingerprintScan.setOnClickListener {
             biometricLibrary.useBiometric()
-
-            binding.buttonForgotPassword.setOnClickListener()
-            {
-                forgotPw()
-            }
+        }
+        binding.buttonForgotPassword.setOnClickListener()
+        {
+            forgotPw()
         }
 
     } // Oncreate()
@@ -118,7 +117,8 @@ class LoginActivity : BaseActivity() {
     */
 
     private fun login(choice: Int) {
-        var username: String
+        startLoadingDialogBox("Validating Credentials...")
+        var username = ""
         var password = ""
         if (choice == 1) {
             username = binding.editTextEmail.text.toString()
@@ -141,8 +141,6 @@ class LoginActivity : BaseActivity() {
                 if (it.message == "NO DATA FOUND") {
                     show("Incorrect Username or Password, Please Try Again!")
                     Log.d("LoginActivitys", it.userDetail.user_email.toString())
-//                openActivityWithIntent(MainActivity::class.java,username)
-//                    openActivity(MainActivity::class.java)
                 } else {
                     if (it.message == "NO DATA FOUND") {
                         Log.d("LoginActivity", it.status.toString())
@@ -152,13 +150,21 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
-    } // Login
+        closeLoadingDialogBox()
+        } // Login
 
     private fun forgotPw() {
         show("HR has been notified")
     }
 
     //    fingerprint feature with (shared preferences function, not sure how to update)
+    private fun enableFingerprint() {
+        if (biometricLibrary.hasBiometric()) {
+            binding.imageButtonFingerprintScan.visibility = View.VISIBLE
+        } else {
+            binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
+        }
+    }
     override fun onStart(){
         super.onStart()
         Intent(this, NetworkService::class.java).also { intent -> bindService(intent,connection,
