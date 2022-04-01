@@ -54,12 +54,8 @@ class ClaimsDetailsActivity : BaseActivity() {
             }
             Log.d("claimDetailsAct",claimDetailViewModel.claimObj.imageUrl.toString())
             val imageLibrary = ImageLibrary(this, this.packageManager, null, binding.ImageViewAttachment)
-//            val imageLibrary = ImageLibrary(this, this.packageManager, binding.ImageViewAttachment,"")
-
-            //val tst = downloadImg(claimDetailViewModel.claimObj.imgUrl.toString())
             val tst = imageLibrary.downloadImg(resources, claimDetailViewModel.claimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
             imageLibrary.setImageResource(tst)
-            //setImageResource(tst)
         }
         else
         {
@@ -92,36 +88,7 @@ class ClaimsDetailsActivity : BaseActivity() {
 
         }
     }
-//to put inside CameraLibrary
-//    private fun downloadImg(imgUrl : String) : Bitmap
-//    {
-//        if (imgUrl == "")
-//        {
-//            var bitmap : Bitmap = BitmapFactory.decodeResource(resources, R.drawable.wickie_success)
-//            return bitmap
-//        }
-//        var storageReference = FirebaseStorage.getInstance().reference.child("images").child("asif").child(imgUrl)
-//        val localfile = File.createTempFile("tempImage","png")
-////        show(storageReference.toString())
-//
-//        Log.d("ClaimsFormAct",storageReference.toString())
-//        Toast.makeText(this, storageReference.toString(), Toast.LENGTH_LONG)
-//
-//        var bitmap : Bitmap = BitmapFactory.decodeResource(resources, R.drawable.wickie_success)
-//
-//        storageReference.getFile(localfile).addOnSuccessListener {
-//            bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-//            Log.d("ClaimFormsActivity",it.toString())
-//            Log.d("ClaimFormsActivity","Success")
-//            setImageResource(bitmap)
-//
-//        }.addOnFailureListener(){
-//            Log.d("ClaimFormsActivity",it.toString())
-//            setImageResource(bitmap)
-//        }
-//        Log.d("ClaimFormsActivity","Before Return")
-//        return bitmap
-//    }
+
 
     fun setImageResource(imageBitMap : Bitmap)
     {

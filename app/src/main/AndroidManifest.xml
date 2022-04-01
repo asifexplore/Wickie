@@ -17,6 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_app"
         android:usesCleartextTraffic="true">
+
+        <provider
+            android:authorities="com.example.Wickie.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
+        </provider>
         <service
             android:name=".services.NetworkService"
             android:enabled="true"

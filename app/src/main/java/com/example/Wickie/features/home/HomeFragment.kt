@@ -1,28 +1,28 @@
 package com.example.Wickie.features.home
 import LocationUtils
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.example.Wickie.R
-import com.example.Wickie.databinding.FragmentHomeBinding
-import com.example.Wickie.features.profile.ProfileActivity
-import android.app.AlertDialog
-import android.content.pm.PackageManager
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.Wickie.BaseActivity
-import com.example.Wickie.hardware.CameraLibrary
+import com.example.Wickie.R
+import com.example.Wickie.Utils.ImageLibrary
 import com.example.Wickie.Utils.NotificationUtils
+import com.example.Wickie.databinding.FragmentHomeBinding
+import com.example.Wickie.features.profile.ProfileActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import java.io.File
 
 
 /*
@@ -44,6 +44,8 @@ class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private lateinit var notificationUtils: NotificationUtils
     private var alertDialog: AlertDialog? = null
+    public lateinit var photoFile: File
+    public val FILE_NAME = "photo.jpg"
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -124,9 +126,13 @@ class HomeFragment:Fragment() {
         //Submit Claims Button via Camera Activity
         binding.layoutClaims.setOnClickListener {
             //TODO
-            val current = this.activity as Activity
-            val camera = CameraLibrary(current, current.packageManager)
-            camera.useCamera()
+            //val current = this.activity as Activity
+            //val camera = CameraLibrary(current, current.packageManager)
+            //camera.useCamera()
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("cameraflag", true)
+            startActivity(intent)
+
         }
 
         //Mood Dialog Activity

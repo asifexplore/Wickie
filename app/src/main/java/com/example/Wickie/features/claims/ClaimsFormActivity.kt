@@ -5,13 +5,17 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
@@ -67,6 +71,8 @@ class ClaimsFormActivity:BaseActivity() {
     private var imageURI: Uri? = null
     // Name of File when Uploading
     private lateinit var fileName : String
+    private lateinit var photoFile: File
+    private val FILE_NAME = "photo.png"
 
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -309,26 +315,7 @@ class ClaimsFormActivity:BaseActivity() {
         }
     }
 
-//    private fun uploadImg()
-//    {
-//        val progressDialog = ProgressDialog(this)
-//        progressDialog.setMessage("Uploading Files...")
-//        progressDialog.setCancelable(false)
-//        progressDialog.show()
-//
-//        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
-//        val now = Date()
-//        fileName = formatter.format(now)
-//        // Need Username
-//        var storageReference = FirebaseStorage.getInstance().getReference("images/asif/$fileName")
-//        storageReference.putFile(imageURI).addOnSuccessListener {
-//            show("Image Uploaded Successfully")
-//            if(progressDialog.isShowing) progressDialog.dismiss()
-//        }.addOnFailureListener{
-//            show("Image Not Uploaded Successfully. Please try again later. ")
-//            if(progressDialog.isShowing) progressDialog.dismiss()
-//        }
-//    }
+
 
     fun galleryAlertBuilder()
     {
@@ -347,12 +334,16 @@ class ClaimsFormActivity:BaseActivity() {
         builder.setNegativeButton("Camera"){dialog, which ->
             dialog.dismiss()
 
-            imageLibrary.useCamera()
+            //imageLibrary.useCamera()
+            photoFile = imageLibrary.getPhotoFile(FILE_NAME)
+            imageLibrary.useCamera(photoFile)
+
         }
         // Create the AlertDialog
         val dialog: AlertDialog = builder.create()
         dialog.show()
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -364,27 +355,14 @@ class ClaimsFormActivity:BaseActivity() {
             Log.d("ClaimsFormActivity",imageURI.toString())
 //            uploadImg()
         }
-        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
+        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK) {
             Log.d("URI","HERE")
-
-            val bitmap = data?.extras?.get("data") as Bitmap
-            val filename=""
+            val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             binding.imgViewUpload.setImageBitmap(bitmap)
-            binding.imgViewUpload.layoutParams.height = 500
-            binding.imgViewUpload.layoutParams.width = 500
+            val filename=""
+            imageURI = photoFile.toUri()
 
-            val file = File(this?.cacheDir,"CUSTOM NAME") //Get Access to a local file.
-            file.delete() // Delete the File, just in Case, that there was still another File
-            file.createNewFile()
-            val fileOutputStream = file.outputStream()
-            val byteArrayOutputStream = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
-            val bytearray = byteArrayOutputStream.toByteArray()
-            fileOutputStream.write(bytearray)
-            fileOutputStream.flush()
-            fileOutputStream.close()
-            byteArrayOutputStream.close()
-            imageURI = file.toUri()
+
         }
         else {
             Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
