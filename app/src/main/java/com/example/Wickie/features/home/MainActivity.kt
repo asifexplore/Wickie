@@ -71,14 +71,14 @@ class MainActivity : BaseActivity() {
         val tired = intent.getBooleanExtra("TIRED",false)
         if(happy){
             val bundle = Bundle()
-            bundle.putString("HAPPY","HAPPY")
+            bundle.putString("HAPPY","Good Mood Today!")
             wickieFragment.arguments = bundle
             binding.bottomNavigationView.selectedItemId = R.id.wickie
             setCurrentFragment(wickieFragment)
         }
         if(tired){
             val bundle = Bundle()
-            bundle.putString("TIRED","TIRED")
+            bundle.putString("TIRED","I am Tired")
             wickieFragment.arguments = bundle
             binding.bottomNavigationView.selectedItemId = R.id.wickie
             setCurrentFragment(wickieFragment)

@@ -19,7 +19,7 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_slimeball"
+                    android:src="@drawable/ic_slimeball_green"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf= "parent"
                     app:layout_constraintTop_toTopOf="parent" />
