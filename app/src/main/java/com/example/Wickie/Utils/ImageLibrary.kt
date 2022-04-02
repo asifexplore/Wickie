@@ -10,12 +10,14 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
@@ -48,24 +50,25 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
     private var packageManager : PackageManager = packageManager;
     private var imageURI : Uri? = imageURI;
     private var imageView : ImageView? = imageView
-//    private var fileName : String? = fileName
 
-    public fun useCamera() {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePhoto ->
-            takePhoto.resolveActivity(this.packageManager)?.also {
-                val consent = ContextCompat.checkSelfPermission(this.activity, Manifest.permission.CAMERA)
-                if (consent != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(this.activity, arrayOf(Manifest.permission.CAMERA), 1)
-                }
-                else {
-                    this.activity.startActivityForResult(takePhoto, REQUEST_IMAGE_CAMERA)
-                }
+    public fun useCamera(photoFile: File) {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
-            }
-
+        val fileProvider = FileProvider.getUriForFile(activity, "com.example.Wickie.fileprovider", photoFile)
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider)
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            activity.startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAMERA)
+        } else {
+            Toast.makeText(activity, "Unable to open camera", Toast.LENGTH_SHORT).show()
         }
 
     }
+    public fun getPhotoFile(fileName: String): File {
+        // Use `getExternalFilesDir` on Context to access package-specific directories.
+        val storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(fileName, ".png", storageDirectory)
+    }
+
 
     fun useGallery() {
         val intent = Intent(Intent.ACTION_PICK)
@@ -139,22 +142,19 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
 
     }
 
-    fun sendImage(intent: Intent, requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
-            if (data != null) {
+    fun sendImage(intent: Intent, requestCode: Int, resultCode: Int, photoFile: File) {
+        if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK) {
+            //val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
+            intent.putExtra("photoFile", photoFile)
+            activity.startActivity(intent)
 
-                val bitMapImage = data.extras?.get("data") as Bitmap
-
-                intent.putExtra("CameraImage", bitMapImage)
-                activity.startActivity(intent)
-            }
         }
 
 
     }
     fun checkReceive(receivingActivity: BaseActivity) : Boolean
     {
-        val receive = receivingActivity.intent.getParcelableExtra<Bitmap>("CameraImage")
+        val receive = receivingActivity.intent.extras?.get("photoFile")
         if (receive != null)
         {
             return true
@@ -163,24 +163,11 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
     }
 
     fun receiveImage(receivingActivity: BaseActivity, image: ImageView) : Uri {
-        val receive = receivingActivity.intent.getParcelableExtra<Bitmap>("CameraImage")
-        val bitmap = receive as Bitmap
+        val receive = receivingActivity.intent.extras?.get("photoFile") as File
+        val bitmap = BitmapFactory.decodeFile(receive.absolutePath)
         image.setImageBitmap(bitmap)
-        image.layoutParams.height = 500
-        image.layoutParams.width = 500
 
-        val file = File(receivingActivity?.cacheDir,"CUSTOM NAME") //Get Access to a local file.
-        file.delete() // Delete the File, just in Case, that there was still another File
-        file.createNewFile()
-        val fileOutputStream = file.outputStream()
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG,100,byteArrayOutputStream)
-        val bytearray = byteArrayOutputStream.toByteArray()
-        fileOutputStream.write(bytearray)
-        fileOutputStream.flush()
-        fileOutputStream.close()
-        byteArrayOutputStream.close()
-        return file.toUri()
+        return receive.toUri()
 
     }
 

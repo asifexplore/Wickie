@@ -6,21 +6,32 @@ import com.example.Wickie.R
 import com.example.Wickie.Utils.ImageLibrary
 import com.example.Wickie.databinding.ActivityMainBinding
 import com.example.Wickie.features.claims.ClaimsFormActivity
+import java.io.File
 
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageLibrary: ImageLibrary
+    public lateinit var photoFile: File
+    public val FILE_NAME = "photo.png"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // initialize view binding on activity_main.xml
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.bottomNavigationView.itemIconTintList = null
         setContentView(binding.root)
+        imageLibrary =  ImageLibrary(this, this.packageManager, null, null)
+        if (intent.getBooleanExtra("cameraflag", false))
+        {
+
+            photoFile = imageLibrary.getPhotoFile(FILE_NAME)
+            imageLibrary.useCamera(photoFile)
+        }
 
 
         //initialise ImageLibrary
         imageLibrary = ImageLibrary(this, this.packageManager,null, null)
-//        imageLibrary = ImageLibrary(this, this.packageManager,null, "")
+        imageLibrary.getPhotoFile(FILE_NAME)
 
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)
@@ -90,7 +101,8 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         val intent = Intent(this, ClaimsFormActivity::class.java)
-        imageLibrary.sendImage(intent, requestCode, resultCode, data)
+        imageLibrary.sendImage(intent, requestCode, resultCode, photoFile)
     }
+
 
 }

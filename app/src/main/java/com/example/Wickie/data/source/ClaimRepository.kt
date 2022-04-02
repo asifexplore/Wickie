@@ -117,7 +117,7 @@ class ClaimRepository {
     {
         val mLiveData = MutableLiveData<RequestClaimCall>()
         val requestCall = RequestClaimCall()
-        var claimTotal : Int = 0
+        var claimTotal : Double = 0.0
 
         // In Progress
         requestCall.status = 1
@@ -150,7 +150,7 @@ class ClaimRepository {
                         Log.d("ClaimRepos",l.type.toString())
                         claimList.add(l)
                         val x: String = i["amount"].toString()
-                        claimTotal = (x.toInt() +  claimTotal.toInt())
+                        claimTotal = (x.toDouble() +  claimTotal.toDouble())
                     }
                     else{
                         // To not display deleted claims
@@ -160,7 +160,7 @@ class ClaimRepository {
                 Log.d("ClaimRepo", claimList.toString())
                 requestCall.status = 2
                 requestCall.message = " DATA FOUND"
-                requestCall.claimTotal = (10000 - claimTotal)
+                requestCall.claimTotal = (10000.0 - claimTotal)
                 requestCall.claimArray = claimList
 
             }else{

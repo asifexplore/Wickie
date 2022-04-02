@@ -205,7 +205,6 @@
                 android:paddingBottom="10dp"
                 android:text="Pending"
                 android:textAlignment="textEnd"
-                android:textColor="@color/colorPrimary"
                 android:textSize="20sp" />
 
         </LinearLayout>
