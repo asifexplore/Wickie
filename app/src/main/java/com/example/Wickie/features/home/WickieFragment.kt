@@ -41,7 +41,7 @@ class WickieFragment:Fragment()  {
             val notificationStringHappy: String = notificationHappy.toString()
             val notificationStringTired: String = notificationTired.toString()
             if (reply != "null") {
-                adapterChatBot.addChatToList(ChatModel(reply))
+                adapterChatBot.addChatToList  (ChatModel(reply))
                 apiService.chatWithTheBot(reply).enqueue(callBack)
                 binding.etChat.text.clear()
             }

@@ -6,6 +6,7 @@ import android.graphics.Bitmap.createBitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -56,11 +57,19 @@ class ClaimsDetailsActivity : BaseActivity() {
             val imageLibrary = ImageLibrary(this, this.packageManager, null, binding.ImageViewAttachment)
             val tst = imageLibrary.downloadImg(resources, claimDetailViewModel.claimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
             imageLibrary.setImageResource(tst)
+
+            if (claimDetailViewModel.claimObj.status == "Approved" || claimDetailViewModel.claimObj.status == "Rejected")
+            {
+                binding.btnDelete.visibility = View.GONE
+                binding.btnUpdate.visibility = View.GONE
+            }
         }
         else
         {
             //Open Back Claim Fragment with Error Toast Message
         }
+
+
 
         binding.btnUpdate.setOnClickListener()
         {

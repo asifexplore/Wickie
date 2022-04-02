@@ -2,6 +2,7 @@ package com.example.Wickie.features.home
 
 //code cleanup
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,14 @@ class ClaimAdapter(
         holder.dateTxtView.text = claimList[position].claimDate
         holder.amountTxtView.text = "$"+claimList[position].amount.toString()
         holder.statusTxtView.text = claimList[position].status
+
+        if (claimList[position].status == "Approved")
+        {
+            holder.statusTxtView.setTextColor(Color.parseColor("#00FF00"))
+        }else if (claimList[position].status == "Rejected")
+        {
+            holder.statusTxtView.setTextColor(Color.parseColor("#FF0000"))
+        }
 
         if (claimList[position].type == "transport")
         {
