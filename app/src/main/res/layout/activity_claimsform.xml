@@ -224,7 +224,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/imgViewUpload"
-            android:src ="@drawable/uploadimg"
+            android:src ="@drawable/uploadclick"
             android:layout_marginTop="40dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/layoutHeader" />

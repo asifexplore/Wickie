@@ -72,7 +72,7 @@ class ClaimsFormActivity:BaseActivity() {
     // Name of File when Uploading
     private lateinit var fileName : String
     private lateinit var photoFile: File
-    private val FILE_NAME = "photo.png"
+    private val FILE_NAME = "photo.jpg"
 
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {

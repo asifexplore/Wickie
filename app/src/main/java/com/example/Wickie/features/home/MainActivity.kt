@@ -12,7 +12,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageLibrary: ImageLibrary
     public lateinit var photoFile: File
-    public val FILE_NAME = "photo.png"
+    public val FILE_NAME = "photo.jpg"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,15 +23,14 @@ class MainActivity : BaseActivity() {
         imageLibrary =  ImageLibrary(this, this.packageManager, null, null)
         if (intent.getBooleanExtra("cameraflag", false))
         {
-
             photoFile = imageLibrary.getPhotoFile(FILE_NAME)
             imageLibrary.useCamera(photoFile)
         }
 
 
         //initialise ImageLibrary
-        imageLibrary = ImageLibrary(this, this.packageManager,null, null)
-        imageLibrary.getPhotoFile(FILE_NAME)
+//        imageLibrary = ImageLibrary(this, this.packageManager,null, null)
+//        imageLibrary.getPhotoFile(FILE_NAME)
 
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)

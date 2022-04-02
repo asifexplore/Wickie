@@ -63,10 +63,10 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         }
 
     }
-    public fun getPhotoFile(fileName: String): File {
+    fun getPhotoFile(fileName: String): File {
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         val storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(fileName, ".png", storageDirectory)
+        return File.createTempFile(fileName, ".jpg", storageDirectory)
     }
 
 
