@@ -18,6 +18,7 @@ import com.example.Wickie.services.NetworkService
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import androidx.appcompat.app.AppCompatDelegate
 
 
 class LoginActivity : BaseActivity() {
@@ -53,14 +54,13 @@ class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         handler.postDelayed(Runnable {
             check = networkService.checkForInternet(this)
             if (!check) {
-                Toast.makeText(this, "Please connect to a network", Toast.LENGTH_LONG).show()
+                show("Please connect to a network")
             }
             Log.d("Service Activity", "NetworkService: $check added")
             handler.postDelayed(runnable!!, 10000)

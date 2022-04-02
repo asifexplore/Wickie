@@ -104,5 +104,8 @@ class MainActivity : BaseActivity() {
         imageLibrary.sendImage(intent, requestCode, resultCode, photoFile)
     }
 
+    override fun onBackPressed() {
+        show("Backpress is blocked on this screen")
+    }
 
 }

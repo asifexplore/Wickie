@@ -157,11 +157,25 @@ class ClaimRepository {
                     }
 
                 }
+
+                // Swapping ArrayList
+                var swapArrayList = arrayListOf<Claim>()
+
+                // Total in Array
+                var totalNum = claimList.count()
+                // To prevent index out of range error
+                totalNum -= 1
+
+                for (n in totalNum downTo 0)
+                {
+                    swapArrayList.add(claimList.get(n))
+                }
+
                 Log.d("ClaimRepo", claimList.toString())
                 requestCall.status = 2
                 requestCall.message = " DATA FOUND"
                 requestCall.claimTotal = (10000.0 - claimTotal)
-                requestCall.claimArray = claimList
+                requestCall.claimArray = swapArrayList
 
             }else{
 //                Log.d("ClaimsRepo",it.child(username).toString())

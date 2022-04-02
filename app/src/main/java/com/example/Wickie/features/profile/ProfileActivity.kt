@@ -40,12 +40,12 @@ class ProfileActivity : BaseActivity() {
         homeViewModel.currStatus.observe(this){
             if (it == true)
             {
-                binding.textViewSettings.text = "Checked-In!"
+                binding.textViewSettings.text = "Checked-In"
                 binding.imageViewCheckIn.setImageResource(R.drawable.check_in)
             }
             else
             {
-                binding.textViewSettings.text = "Checked-Out!"
+                binding.textViewSettings.text = "Checked-Out"
                 binding.imageViewCheckIn.setImageResource(R.drawable.checkoutprofile)
             }
         }
