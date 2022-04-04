@@ -67,7 +67,6 @@ class ClaimsFormActivity:BaseActivity() {
     private val REQUEST_IMAGE_CAMERA = 142
     private lateinit var imageLibrary: ImageLibrary
 
-//    lateinit var imageURI : Uri
     private var imageURI: Uri? = null
     // Name of File when Uploading
     private lateinit var fileName : String
@@ -93,7 +92,7 @@ class ClaimsFormActivity:BaseActivity() {
         {
             claimObj = Claim("","","","","","","","","")
         }
-
+        //checks if receive image from intent
         if (imageLibrary.checkReceive(this))
         {
             imageURI = imageLibrary.receiveImage(this,binding.imgViewUpload)
@@ -288,6 +287,10 @@ class ClaimsFormActivity:BaseActivity() {
         }
     }
 
+    /*
+    * set the visibility of the pages
+    * according to the state
+     */
     private fun pageVisibility(newStatus: Int)
     {
         // Set Visibility and Invisibility Accordingly
@@ -313,9 +316,11 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnBack.visibility = View.INVISIBLE
             binding.btnNext.visibility = View.INVISIBLE
         }
-    }
-
-
+    } //pageVisibility()
+    /*
+    * Creates the popup dialog to allow user to choose
+    * to upload through gallery or through the camera
+     */
 
     fun galleryAlertBuilder()
     {
@@ -334,7 +339,6 @@ class ClaimsFormActivity:BaseActivity() {
         builder.setNegativeButton("Camera"){dialog, which ->
             dialog.dismiss()
 
-            //imageLibrary.useCamera()
             photoFile = imageLibrary.getPhotoFile(FILE_NAME)
             imageLibrary.useCamera(photoFile)
 
@@ -342,32 +346,28 @@ class ClaimsFormActivity:BaseActivity() {
         // Create the AlertDialog
         val dialog: AlertDialog = builder.create()
         dialog.show()
-    }
+    }//galleryAlertBuilder()
 
-
+    /*
+    * set the imgViewUpload button or the thumbnail
+    * in the ClaimsForm to the chosen picture
+    * checks what action was taken
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-            Log.d("ClaimsFormAct",data.data.toString())
             binding.imgViewUpload.setImageURI(data.data)
             imageURI = data.data!!
-            Log.d("ClaimsFormActivity",imageURI.toString())
-//            uploadImg()
         }
         else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK) {
-            Log.d("URI","HERE")
             val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             binding.imgViewUpload.setImageBitmap(bitmap)
-            val filename=""
             imageURI = photoFile.toUri()
-
-
         }
         else {
             Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
         }
-    }
+    }//onActivityResult()
 
 }
 

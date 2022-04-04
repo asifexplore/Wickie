@@ -28,20 +28,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-/*
-*   CameraLibrary is responsible for camera realted activities
-*
-* Functions Within:
-*  ==========================================================================
-* Function Name: useCamera
-* Function Purpose: ask for permission to use the camera and start the camera intent
-* Function Arguments:
- Results:
-*         Success: Proceed to camera intent
-*         Failed: Toast to indicate cannot access camera
-*---------------------------------------------------
-
- */
 
 class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, imageURI: Uri?, imageView: ImageView?) {
     private val REQUEST_IMAGE_GALLERY = 132
@@ -51,7 +37,13 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
     private var imageURI : Uri? = imageURI;
     private var imageView : ImageView? = imageView
 
-    public fun useCamera(photoFile: File) {
+    /*
+    * starts the camera feature of the device
+    * check if have permission
+    * if have permission, start the Camera Intent
+    * else inform user that there is no permission
+     */
+    fun useCamera(photoFile: File) {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
 
         val fileProvider = FileProvider.getUriForFile(activity, "com.example.Wickie.fileprovider", photoFile)
@@ -62,20 +54,31 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
             Toast.makeText(activity, "Unable to open camera", Toast.LENGTH_SHORT).show()
         }
 
-    }
+    }//useCamera()
+
+    /*
+    * create a file based on the filename
+    * returns the file
+     */
     fun getPhotoFile(fileName: String): File {
-        // Use `getExternalFilesDir` on Context to access package-specific directories.
         val storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile(fileName, ".jpg", storageDirectory)
-    }
+    } //getPhotoFile()
 
 
+    /*
+    start the gallery intent
+     */
     fun useGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         this.activity.startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
-    }
+    }//useGallery()
 
+    /*
+    * responsible for uploading the image
+    * returns the fileName
+     */
     fun uploadImg(imageURI : Uri, userID : String) : String
     {
         val progressDialog = ProgressDialog(activity)
@@ -89,19 +92,17 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         // Need Username
         var storageReference = FirebaseStorage.getInstance().getReference("images/$userID/$fileName")
         storageReference.putFile(imageURI).addOnSuccessListener {
-            //show("Image Uploaded Successfully")
-            Log.d("ImageLIbrary", "Success")
-            Log.d("ImageLIbrary", imageURI.toString())
             if(progressDialog.isShowing) progressDialog.dismiss()
         }.addOnFailureListener{
-            //show("Image Not Uploaded Successfully. Please try again later. ")
-            Log.d("ImageLIbrary", "Failure")
-            Log.d("ImageLIbrary", imageURI.toString())
             if(progressDialog.isShowing) progressDialog.dismiss()
         }
         return fileName
-    }
+    } //uploadImg()
 
+    /*
+    * responsible for downloading the image
+    * returns the bitmap
+     */
     fun downloadImg(resources: Resources, imgUrl : String, userID : String ) : Bitmap
     {
         if (imgUrl == "")
@@ -111,47 +112,48 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
         }
         var storageReference = FirebaseStorage.getInstance().reference.child("images").child(userID).child(imgUrl)
         val localfile = File.createTempFile("tempImage","png")
-        //activity.show(storageReference.toString())
-
-        Log.d("ClaimsFormAct",storageReference.toString())
-//        Toast.makeText(activity, storageReference.toString(), Toast.LENGTH_LONG).show()
 
         var bitmap : Bitmap = BitmapFactory.decodeResource(resources, R.drawable.wickie_success)
 
         storageReference.getFile(localfile).addOnSuccessListener {
             bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
-            Log.d("ClaimFormsActivity",it.toString())
-            Log.d("ClaimFormsActivity","Success")
             setImageResource(bitmap)
 
         }.addOnFailureListener(){
-            Log.d("ClaimFormsActivity",it.toString())
             setImageResource(bitmap)
         }
-        Log.d("ClaimFormsActivity","Before Return")
         return bitmap
-    }
+    } //downloadImg()
 
+    /*
+    * set the image of the imageView
+     */
     fun setImageResource(imageBitMap : Bitmap)
     {
         if (checkImage(imageView))
         {
             imageView?.setImageBitmap(imageBitMap)
         }
+    } //setImageResource()
 
-
-    }
-
+    /*
+    * send the Image from one activity to another
+    * checks for the outcome of the camera intent
+    * if there is an image from the intent,
+    * send the image to the next activity through the intent
+     */
     fun sendImage(intent: Intent, requestCode: Int, resultCode: Int, photoFile: File) {
         if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK) {
-            //val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             intent.putExtra("photoFile", photoFile)
             activity.startActivity(intent)
 
         }
+    } //sendImage()
 
-
-    }
+    /*
+    * checks if the activity receives an image
+    * from an intent
+     */
     fun checkReceive(receivingActivity: BaseActivity) : Boolean
     {
         val receive = receivingActivity.intent.extras?.get("photoFile")
@@ -160,8 +162,13 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
             return true
         }
         return false
-    }
+    } //checkReceive()
 
+    /*
+    * receive the image from the sending activity
+    * set the imageView of the activity to the image
+    * return the Uri of the image
+     */
     fun receiveImage(receivingActivity: BaseActivity, image: ImageView) : Uri {
         val receive = receivingActivity.intent.extras?.get("photoFile") as File
         val bitmap = BitmapFactory.decodeFile(receive.absolutePath)
@@ -169,8 +176,12 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
 
         return receive.toUri()
 
-    }
+    } //receiveImage()
 
+    /*
+    * check if the imageView is assigned
+    * used by functions
+     */
     fun checkImage(imageView: ImageView?): Boolean
     {
         if (imageView == null)
@@ -178,7 +189,7 @@ class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, ima
             return false
         }
         return true
-    }
+    } //checkImage()
 }
 
 
