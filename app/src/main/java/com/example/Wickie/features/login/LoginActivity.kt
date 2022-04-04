@@ -2,7 +2,6 @@ package com.example.Wickie.features.login
 
 import android.app.ProgressDialog
 import android.content.*
-import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -81,18 +80,22 @@ class LoginActivity : BaseActivity() {
                 binding.imageButtonFingerprintScan.visibility = View.GONE
             }
         })
+        /*
+        * Initialise the callback
+        * Success: Login
+        * Fail: Send toast message "Login Failed"
+        * Error: Send toast message to indicate the error
+         */
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
                 Toast.makeText(this@LoginActivity, "Login Failed", Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
 
             }
 
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 Toast.makeText(this@LoginActivity, "Login Success", Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.VISIBLE
                 login(2)
 
             }
@@ -100,18 +103,20 @@ class LoginActivity : BaseActivity() {
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
                 Toast.makeText(this@LoginActivity, errString, Toast.LENGTH_SHORT).show()
-                binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
             }
 
         }
 
+        //Initialise the BiometricLibrary
         biometricLibrary = BiometricLibrary(this, authCallBack)
 
+        //login through manual key input
         binding.buttonSignIn.setOnClickListener()
         {
             login(1)
         }
 
+        //use the biometric feature to login
         binding.imageButtonFingerprintScan.setOnClickListener {
             biometricLibrary.useBiometric()
         }
@@ -120,7 +125,7 @@ class LoginActivity : BaseActivity() {
             forgotPw()
         }
 
-    } // Oncreate()
+    } // onCreate
     /*
     * Gets Username & Password. Observes for mutable live data from login function in view model class.
     * Success: Intent to HomeActivity
@@ -163,27 +168,43 @@ class LoginActivity : BaseActivity() {
         closeLoadingDialogBox()
     } // Login
 
+    /*
+    * display toast message
+    * once user clicks "Forget Password"
+     */
     private fun forgotPw() {
         show("HR has been notified")
     }
 
-    //    fingerprint feature with (shared preferences function, not sure how to update)
+    /*
+    * Checks if the device has fingerprint feature
+    * Success: set visibility of imageButtonFingerprintScan to visible
+    * Failed: set visibility of imageButtonFingerprintScan to invisible
+    */
     private fun enableFingerprint() {
         if (biometricLibrary.hasBiometric()) {
             binding.imageButtonFingerprintScan.visibility = View.VISIBLE
         } else {
             binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
         }
-    }
+    }//enableFingerprint
+
+    /*
+    * starts the NetworkService onStart
+     */
     override fun onStart(){
         super.onStart()
         Intent(this, NetworkService::class.java).also { intent -> bindService(intent,connection,
             Context.BIND_AUTO_CREATE)}
-    }
+    }//onStart
+
+    /*
+    * unbinds the NetworkService onStop
+     */
     override fun onStop(){
         super.onStop()
         unbindService(connection)
         Bound = false
-    }
+    }//onStop
 
-} // LoginAc
+} // LoginActivity
