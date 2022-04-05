@@ -3,13 +3,14 @@ package com.example.Wickie.features.login
 import android.app.ProgressDialog
 import android.app.ProgressDialog.show
 import android.content.*
-import android.content.*
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.biometric.BiometricPrompt
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
 import com.example.Wickie.databinding.ActivityLoginBinding
@@ -18,10 +19,17 @@ import com.example.Wickie.services.NetworkService
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import com.example.Wickie.features.home.HomeViewModel
+/*
+* LoginActivity will be the activity responsible for logging
+* in the user to the Wickie Application
+*
+ */
 
 
 class LoginActivity : BaseActivity() {
 
+    private lateinit var viewModel: HomeViewModel
     //Call NetworkService Class
     private lateinit var  networkService: NetworkService
     private var Bound : Boolean = false
@@ -66,13 +74,22 @@ class LoginActivity : BaseActivity() {
             handler.postDelayed(runnable!!, 10000)
         }.also { runnable = it }, 10000)
 
-        loginViewModel.fingerprintStatus.observe(this) {
-            if (it == true) {
+        loginViewModel.fingerprintStatus.observe(this, Observer {
+            if (it == true)
+            {
                 binding.imageButtonFingerprintScan.visibility = View.VISIBLE
-            } else {
+            }
+            else
+            {
                 binding.imageButtonFingerprintScan.visibility = View.GONE
             }
-        }
+        })
+        /*
+        * Initialise the callback
+        * Success: Login
+        * Fail: Send toast message "Login Failed"
+        * Error: Send toast message to indicate the error
+         */
         val authCallBack = object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
@@ -94,13 +111,16 @@ class LoginActivity : BaseActivity() {
             }
         }
 
+        //Initialise the BiometricLibrary
         biometricLibrary = BiometricLibrary(this, authCallBack)
 
+        //login through manual key input
         binding.buttonSignIn.setOnClickListener()
         {
             login(1)
         }
 
+        //use the biometric feature to login
         binding.imageButtonFingerprintScan.setOnClickListener {
             biometricLibrary.useBiometric()
         }
@@ -153,27 +173,43 @@ class LoginActivity : BaseActivity() {
         closeLoadingDialogBox()
         } // Login
 
+    /*
+    * display toast message
+    * once user clicks "Forget Password"
+     */
     private fun forgotPw() {
         show("HR has been notified")
     }
 
-    //    fingerprint feature with (shared preferences function, not sure how to update)
+    /*
+    * Checks if the device has fingerprint feature
+    * Success: set visibility of imageButtonFingerprintScan to visible
+    * Failed: set visibility of imageButtonFingerprintScan to invisible
+    */
     private fun enableFingerprint() {
         if (biometricLibrary.hasBiometric()) {
             binding.imageButtonFingerprintScan.visibility = View.VISIBLE
         } else {
             binding.imageButtonFingerprintScan.visibility = View.INVISIBLE
         }
-    }
+    }//enableFingerprint
+
+    /*
+    * starts the NetworkService onStart
+     */
     override fun onStart(){
         super.onStart()
         Intent(this, NetworkService::class.java).also { intent -> bindService(intent,connection,
             Context.BIND_AUTO_CREATE)}
-    }
+    }//onStart
+
+    /*
+    * unbinds the NetworkService onStop
+     */
     override fun onStop(){
         super.onStop()
         unbindService(connection)
         Bound = false
-    }
+    }//onStop
 
-} // LoginAc
+} // LoginActivity
