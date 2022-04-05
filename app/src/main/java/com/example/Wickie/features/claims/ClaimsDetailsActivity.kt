@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Bitmap.createBitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -43,7 +44,7 @@ class ClaimsDetailsActivity : BaseActivity() {
             binding.textViewDate.text =claimDetailViewModel.claimObj.claimDate
             binding.textViewAmount.text = "$"+claimDetailViewModel.claimObj.amount
             binding.textViewType.text = claimDetailViewModel.claimObj.type
-            binding.textViewStatus.text = claimDetailViewModel.claimObj.status
+            binding.textViewStatusText.text = claimDetailViewModel.claimObj.status
             binding.ReasonDescription.text = claimDetailViewModel.claimObj.reason
 
             if(claimDetailViewModel.claimObj.type == "transport"){
@@ -53,6 +54,15 @@ class ClaimsDetailsActivity : BaseActivity() {
             } else {
                 binding.imageItem.setImageResource(R.drawable.meal_icon)
             }
+
+            if (claimDetailViewModel.claimObj.status == "Approved")
+            {
+                binding.textViewStatusText.setTextColor(Color.parseColor("#00FF00"))
+            }else if(claimDetailViewModel.claimObj.status == "Rejected")
+            {
+                binding.textViewStatusText.setTextColor(Color.parseColor("#FF0000"))
+            }
+
             Log.d("claimDetailsAct",claimDetailViewModel.claimObj.imageUrl.toString())
             val imageLibrary = ImageLibrary(this, this.packageManager, null, binding.ImageViewAttachment)
             val tst = imageLibrary.downloadImg(resources, claimDetailViewModel.claimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
@@ -68,8 +78,6 @@ class ClaimsDetailsActivity : BaseActivity() {
         {
             //Open Back Claim Fragment with Error Toast Message
         }
-
-
 
         binding.btnUpdate.setOnClickListener()
         {

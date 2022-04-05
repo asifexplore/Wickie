@@ -12,6 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
     </style>
     <style name="Button1" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/button1_bg</item>
