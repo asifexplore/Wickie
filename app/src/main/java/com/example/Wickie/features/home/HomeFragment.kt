@@ -44,8 +44,7 @@ class HomeFragment:Fragment() {
     private lateinit var binding : FragmentHomeBinding
     private lateinit var notificationUtils: NotificationUtils
     private var alertDialog: AlertDialog? = null
-    public lateinit var photoFile: File
-    public val FILE_NAME = "photo.jpg"
+    lateinit var photoFile: File
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
@@ -125,10 +124,6 @@ class HomeFragment:Fragment() {
 
         //Submit Claims Button via Camera Activity
         binding.layoutClaims.setOnClickListener {
-            //TODO
-            //val current = this.activity as Activity
-            //val camera = CameraLibrary(current, current.packageManager)
-            //camera.useCamera()
             val intent = Intent(context, MainActivity::class.java)
             intent.putExtra("cameraflag", true)
             startActivity(intent)
@@ -137,7 +132,6 @@ class HomeFragment:Fragment() {
 
         //Mood Dialog Activity
         binding.layoutMood.setOnClickListener {
-            //TODO
             launchCustomDialog()
         }
 
@@ -155,6 +149,12 @@ class HomeFragment:Fragment() {
         }
     }
 
+    /*
+    * launch dialog to allow users to select their mood
+    * perform actions based on mood selected
+    * update the notification based on mood
+    * pass mood notification to intent
+     */
     private fun launchCustomDialog() {
         val customLayout = LayoutInflater.from(this.activity).inflate(R.layout.dialog_mood_layout, null)
         val happy: ImageView = customLayout.findViewById(R.id.ImageViewHappy)
@@ -184,7 +184,7 @@ class HomeFragment:Fragment() {
                 alertDialog?.cancel()
                 startActivity(intent)
         }
-    }
+    }//launchCustomDialog
 
     //Send Chat Message
     private fun sendMessage(search: EditText){
@@ -202,7 +202,7 @@ class HomeFragment:Fragment() {
             }
             false
         })
-    }
+    }//sendMessage
 
     override fun onResume() {
         super.onResume()

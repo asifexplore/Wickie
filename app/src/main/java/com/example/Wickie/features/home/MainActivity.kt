@@ -12,7 +12,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageLibrary: ImageLibrary
     public lateinit var photoFile: File
-    public val FILE_NAME = "photo.jpg"
+    public val FILE_NAME = "photo.png"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +20,14 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.bottomNavigationView.itemIconTintList = null
         setContentView(binding.root)
+
+        //initialise ImageLibrary
         imageLibrary =  ImageLibrary(this, this.packageManager, null, null)
+
+        /*
+        * check if HomeFragment selects Submit Claims button
+        * if yes, create a file and start the camera
+         */
         if (intent.getBooleanExtra("cameraflag", false))
         {
             photoFile = imageLibrary.getPhotoFile(FILE_NAME)
@@ -29,8 +36,8 @@ class MainActivity : BaseActivity() {
 
 
         //initialise ImageLibrary
-//        imageLibrary = ImageLibrary(this, this.packageManager,null, null)
-//        imageLibrary.getPhotoFile(FILE_NAME)
+        imageLibrary = ImageLibrary(this, this.packageManager,null, null)
+        imageLibrary.getPhotoFile(FILE_NAME)
 
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)
@@ -96,12 +103,16 @@ class MainActivity : BaseActivity() {
 
     }
 
+    /*
+    * send the Image from the Camera intent
+    * to the ClaimsFormActivity
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         val intent = Intent(this, ClaimsFormActivity::class.java)
         imageLibrary.sendImage(intent, requestCode, resultCode, photoFile)
-    }
+    }//onActivityResult
 
     override fun onBackPressed() {
         show("Backpress is blocked on this screen")
