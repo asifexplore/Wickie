@@ -1,21 +1,18 @@
 package com.example.Wickie.features.claims
 
 import android.annotation.SuppressLint
-import android.app.*
-import android.content.Context
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.text.format.DateFormat
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
@@ -27,7 +24,6 @@ import com.example.Wickie.features.home.MainActivity
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.kofigyan.stateprogressbar.StateProgressBar
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.*
 
@@ -63,15 +59,15 @@ import java.util.*
 */
 class ClaimsFormActivity:BaseActivity() {
     private lateinit var binding : ActivityClaimsformBinding
-    private val REQUEST_IMAGE_GALLERY = 132
-    private val REQUEST_IMAGE_CAMERA = 142
+    private val requestGallery = 132
+    private val requestCamera = 142
     private lateinit var imageLibrary: ImageLibrary
 
     private var imageURI: Uri? = null
     // Name of File when Uploading
     private lateinit var fileName : String
     private lateinit var photoFile: File
-    private val FILE_NAME = "photo.jpg"
+    private val FILENAME = "photo.jpg"
 
     @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -339,7 +335,7 @@ class ClaimsFormActivity:BaseActivity() {
         builder.setNegativeButton("Camera"){dialog, which ->
             dialog.dismiss()
 
-            photoFile = imageLibrary.getPhotoFile(FILE_NAME)
+            photoFile = imageLibrary.getPhotoFile(FILENAME)
             imageLibrary.useCamera(photoFile)
 
         }
@@ -355,11 +351,11 @@ class ClaimsFormActivity:BaseActivity() {
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
+        if(requestCode == requestGallery && resultCode == Activity.RESULT_OK && data != null) {
             binding.imgViewUpload.setImageURI(data.data)
             imageURI = data.data!!
         }
-        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK) {
+        else if(requestCode == requestCamera && resultCode == Activity.RESULT_OK) {
             val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             binding.imgViewUpload.setImageBitmap(bitmap)
             imageURI = photoFile.toUri()

@@ -2,27 +2,22 @@ package com.example.Wickie.features.claims
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.Bitmap.createBitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.createBitmap
-import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.example.Wickie.Utils.ImageLibrary
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.ClaimsDetailsBinding
 import com.example.Wickie.features.home.MainActivity
-import com.google.firebase.storage.FirebaseStorage
-import java.io.File
-import java.io.Serializable
 
+/*
+* ClaimsDetailsActivity is the activity that will
+* allow the user to view, update and delete the claims they applied
+ */
 class ClaimsDetailsActivity : BaseActivity() {
     private lateinit var binding : ClaimsDetailsBinding
 
@@ -33,7 +28,7 @@ class ClaimsDetailsActivity : BaseActivity() {
 
         val claimObj  = intent.getSerializableExtra("claimObj") as? Claim
         if (claimObj != null) {
-            Log.d("claimdetail",claimObj.imageUrl.toString())
+
         }
         val claimDetailViewModel: claimDetailsViewModel by viewModels {
             ClaimDetailsModelFactory(claimObj, sharedPrefRepo, claimRepository)
@@ -63,7 +58,7 @@ class ClaimsDetailsActivity : BaseActivity() {
                 binding.textViewStatusText.setTextColor(Color.parseColor("#FF0000"))
             }
 
-            Log.d("claimDetailsAct",claimDetailViewModel.claimObj.imageUrl.toString())
+            //initialise the ImageLibrary
             val imageLibrary = ImageLibrary(this, this.packageManager, null, binding.ImageViewAttachment)
             val tst = imageLibrary.downloadImg(resources, claimDetailViewModel.claimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
             imageLibrary.setImageResource(tst)
@@ -104,13 +99,14 @@ class ClaimsDetailsActivity : BaseActivity() {
             }
 
         }
-    }
+    }   //onCreate
 
-
+    /*
+    * sets the ImageViewAttachment to the bitmap image passed
+     */
     fun setImageResource(imageBitMap : Bitmap)
     {
         binding.ImageViewAttachment.setImageBitmap(imageBitMap)
-    }
-
+    } //setImageResource
 
 }

@@ -1,10 +1,8 @@
 package com.example.Wickie.Utils
 
-import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
@@ -12,22 +10,21 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.google.firebase.storage.FirebaseStorage
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+/*
+*   ImageLibrary is the class that will be instantiated
+*   by activities that uses the camera or gallery
+ */
 
 class ImageLibrary (activity: BaseActivity, packageManager : PackageManager, imageURI: Uri?, imageView: ImageView?) {
     private val REQUEST_IMAGE_GALLERY = 132
