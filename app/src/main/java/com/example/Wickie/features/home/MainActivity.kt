@@ -8,11 +8,16 @@ import com.example.Wickie.databinding.ActivityMainBinding
 import com.example.Wickie.features.claims.ClaimsFormActivity
 import java.io.File
 
+/*
+* MainActivity is the activity that will host
+* the three main fragments:
+* HomeFragment(), CLaimsFragment() and the WickieFragment()
+ */
 class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageLibrary: ImageLibrary
-    public lateinit var photoFile: File
-    public val FILE_NAME = "photo.png"
+    lateinit var photoFile: File
+    val FILE_NAME = "photo.png"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +38,6 @@ class MainActivity : BaseActivity() {
             photoFile = imageLibrary.getPhotoFile(FILE_NAME)
             imageLibrary.useCamera(photoFile)
         }
-
-
-        //initialise ImageLibrary
-        imageLibrary = ImageLibrary(this, this.packageManager,null, null)
-        imageLibrary.getPhotoFile(FILE_NAME)
-
 
         //Initialize Fragments for the Navigation Bar (Claims, Home , Settings)
         val homeFragment=HomeFragment()
@@ -114,8 +113,11 @@ class MainActivity : BaseActivity() {
         imageLibrary.sendImage(intent, requestCode, resultCode, photoFile)
     }//onActivityResult
 
+    /*
+    * block the user from clicking on back
+     */
     override fun onBackPressed() {
         show("Backpress is blocked on this screen")
-    }
+    }//onBackPressed
 
 }
