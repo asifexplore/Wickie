@@ -12,7 +12,12 @@ import androidx.fragment.app.FragmentActivity
 import com.example.Wickie.BaseActivity
 import java.util.concurrent.Executor
 
-
+/*
+* BiometricLibrary will be used as a library responsible
+* for handling biometric related operations
+* Will be instantiated on activities that has
+* biometric operations
+ */
 class BiometricLibrary (currentActivity: BaseActivity, authCallBack : BiometricPrompt.AuthenticationCallback)
 {
     private var currentActivity: BaseActivity = currentActivity;

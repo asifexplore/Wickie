@@ -11,7 +11,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 
-import androidx.lifecycle.ViewModelProvider
+
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
 import com.example.Wickie.databinding.ActivityLoginBinding
@@ -21,6 +21,11 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
 import com.example.Wickie.features.home.HomeViewModel
+/*
+* LoginActivity will be the activity responsible for logging
+* in the user to the Wickie Application
+*
+ */
 
 
 class LoginActivity : BaseActivity() {
