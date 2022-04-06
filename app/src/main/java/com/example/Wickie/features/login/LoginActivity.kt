@@ -20,6 +20,7 @@ import com.example.Wickie.services.NetworkService
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import com.example.Wickie.Validation
 import com.example.Wickie.features.home.HomeViewModel
 /*
 * LoginActivity will be the activity responsible for logging
@@ -140,14 +141,15 @@ class LoginActivity : BaseActivity() {
     */
 
     private fun login(choice: Int, usernameInput:String, passwordInput : String) {
-//        startLoadingDialogBox("Validating Credentials...")
+        startLoadingDialogBox("Validating Credentials...")
         var username = ""
         var password = ""
         if (choice == 1) {
-            username = usernameInput
-            password = passwordInput
-//            username = binding.editTextEmail.text.toString()
-//            password = binding.editTextPassword.text.toString()
+            username = binding.editTextEmail.text.toString()
+            password = binding.editTextPassword.text.toString()
+            val validation = Validation()
+            var loginStatus = validation.validateLogin(binding.editTextEmail, binding.editTextPassword)
+
         } else {
             username = loginViewModel.getUsername()
             Log.d("LoginAct",username)
@@ -166,18 +168,18 @@ class LoginActivity : BaseActivity() {
                 if (it.message == "NO DATA FOUND") {
                     show("Incorrect Username or Password, Please Try Again!")
                     Log.d("LoginActivitys", it.userDetail.user_email.toString())
+                    closeLoadingDialogBox()
                 } else {
                     if (it.message == "NO DATA FOUND") {
                         Log.d("LoginActivity", it.status.toString())
                         Log.d("LoginActivity", it.message)
+                        closeLoadingDialogBox()
 
                     }
                 }
             }
         }
-//        closeLoadingDialogBox()
-//        Log.d("LoginActivitys", "After closeLoadingDialogBox")
-        } // Login
+    } // Login
 
     /*
     * display toast message
@@ -217,4 +219,5 @@ class LoginActivity : BaseActivity() {
         unbindService(connection)
         Bound = false
     }//onStop
+
 } // LoginActivity
