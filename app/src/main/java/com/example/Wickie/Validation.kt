@@ -2,6 +2,8 @@ package com.example.Wickie
 
 import android.view.View
 import android.widget.EditText
+import java.lang.Double.parseDouble
+import java.lang.Exception
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -28,7 +30,7 @@ import java.util.regex.Pattern
 
 class Validation (){
 
-    fun validateEmptyEditText(array : Array<EditText>): Boolean {
+    private fun validateEmptyEditText(array : Array<EditText>): Boolean {
         for (item in array) {
             if(item.text.toString().isEmpty()) {
                 item.error = "This field is missing"
@@ -45,5 +47,23 @@ class Validation (){
             return true
         }
         return false
+    }
+    fun validateClaim(title: EditText, amount: EditText, type: EditText, date : EditText, reason : EditText ) : Boolean
+    {
+        val claim = arrayOf<EditText>(title, amount, type, date, reason)
+            if (validateEmptyEditText(claim))
+            {
+                return try {
+                    val amountDouble = parseDouble(amount.text.toString())
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    amount.error = "Amount not in numeric format"
+                    false
+                }
+            }
+
+        return false
+
     }
 }

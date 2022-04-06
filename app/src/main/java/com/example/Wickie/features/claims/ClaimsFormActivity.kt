@@ -18,6 +18,7 @@ import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
 import com.example.Wickie.Utils.ImageLibrary
+import com.example.Wickie.Validation
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.ActivityClaimsformBinding
 import com.example.Wickie.features.home.MainActivity
@@ -143,6 +144,7 @@ class ClaimsFormActivity:BaseActivity() {
             ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
         binding.autoCompleteType.setAdapter(arrayAdapter)
 
+
         // Date Picker Initalization
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
@@ -165,6 +167,8 @@ class ClaimsFormActivity:BaseActivity() {
         // Binding name of states to array stored in ViewModel
         binding.progressBar.setStateDescriptionData(claimFormViewModel.descriptionData)
         // To Go Next on Horizontal Status Progress Bar
+        val validation = Validation()
+
         binding.btnNext.setOnClickListener()
         {
             if (claimFormViewModel.pageStatus.value == 1) {
@@ -176,8 +180,14 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.currClaimObj.type = binding.autoCompleteType.text.toString()
                 claimFormViewModel.currClaimObj.claimDate = binding.editTextCalendar.text.toString()
 
+
+
                 // Increment to Image Upload Section
-                claimFormViewModel.incrementPageStatus()
+                val claimValid = validation.validateClaim(binding.editTextTitle, binding.editTextAmount, binding.autoCompleteType,binding.editTextCalendar, binding.editTextReason)
+                if (claimValid) {
+                    claimFormViewModel.incrementPageStatus()
+                }
+
             } else {
                 // Upload Image
                 var filename = ""
