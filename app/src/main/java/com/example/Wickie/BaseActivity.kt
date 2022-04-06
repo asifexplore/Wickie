@@ -48,6 +48,7 @@ open class BaseActivity : AppCompatActivity() {
     val attendanceRepository by lazy { AttendanceRepository.getInstance(this)  }
     val authRepository by lazy { AuthRepository.getInstance(this)  }
     val claimRepository by lazy { ClaimRepository.getInstance(this) }
+    private val progressDialog by lazy { ProgressDialog(this) }
 
     protected fun openActivity(classProv: Class<*>?)
     {
@@ -74,16 +75,18 @@ open class BaseActivity : AppCompatActivity() {
     protected fun startLoadingDialogBox(text : String )
     {
         // Loading Dialog Box
-        val progressDialog = ProgressDialog(this)
+        //progressDialog = ProgressDialog(this)
         progressDialog.setMessage(text)
+        //progressDialog.setCancelable(false)
         progressDialog.setCancelable(false)
         progressDialog.show()
     }
     protected  fun closeLoadingDialogBox()
     {
         // Loading Dialog Box
-        val progressDialog = ProgressDialog(this)
+        //val progressDialog = ProgressDialog(this)
         if(progressDialog.isShowing) progressDialog.dismiss()
+
     }
 
 }
