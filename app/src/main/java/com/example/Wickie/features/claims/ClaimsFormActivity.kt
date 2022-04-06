@@ -180,7 +180,7 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.incrementPageStatus()
             } else {
                 // Upload Image
-                    var filename = ""
+                var filename = ""
                 imageURI?.let { it1 -> filename = imageLibrary.uploadImg(it1, sharedPrefRepo.getUsername()) }
                 // Update File Name
                 if (filename != "")

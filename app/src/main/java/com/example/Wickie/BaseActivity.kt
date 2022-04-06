@@ -1,11 +1,15 @@
 package com.example.Wickie
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.Wickie.data.source.*
+
 
 /*
 *  Base Activity will be the parent activity, allowing other activities to inherit functionalites. Prevent the need to rewrite codes.
@@ -71,7 +75,7 @@ open class BaseActivity : AppCompatActivity() {
             commit()
         }
 
-    protected fun startLoadingDialogBox(text : String )
+     protected fun startLoadingDialogBox(text : String )
     {
         // Loading Dialog Box
         val progressDialog = ProgressDialog(this)
@@ -79,11 +83,26 @@ open class BaseActivity : AppCompatActivity() {
         progressDialog.setCancelable(false)
         progressDialog.show()
     }
-    protected  fun closeLoadingDialogBox()
+    protected fun closeLoadingDialogBox()
     {
         // Loading Dialog Box
         val progressDialog = ProgressDialog(this)
         if(progressDialog.isShowing) progressDialog.dismiss()
+    }
+
+    /*
+    *   Function to close keyboard. Can be used across activities.
+    */
+    open fun hideKeyboard(activity: Activity) {
+        val imm: InputMethodManager =
+            activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        //Find the currently focused view, so we can grab the correct window token from it.
+        var view: View? = activity.currentFocus
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = View(activity)
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0)
     }
 
 }

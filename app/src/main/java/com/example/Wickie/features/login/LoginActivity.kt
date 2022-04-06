@@ -1,5 +1,6 @@
 package com.example.Wickie.features.login
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.app.ProgressDialog.show
 import android.content.*
@@ -100,7 +101,7 @@ class LoginActivity : BaseActivity() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 binding.imageButtonFingerprintScan.visibility = View.VISIBLE
-                login(2)
+                login(2, "", "")
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -117,7 +118,9 @@ class LoginActivity : BaseActivity() {
         //login through manual key input
         binding.buttonSignIn.setOnClickListener()
         {
-            login(1)
+            // Close Keyboard Dynamically
+            hideKeyboard(this)
+            login(1, binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString())
         }
 
         //use the biometric feature to login
@@ -136,13 +139,15 @@ class LoginActivity : BaseActivity() {
     * Failed: Display Error Message
     */
 
-    private fun login(choice: Int) {
+    private fun login(choice: Int, usernameInput:String, passwordInput : String) {
         startLoadingDialogBox("Validating Credentials...")
         var username = ""
         var password = ""
         if (choice == 1) {
-            username = binding.editTextEmail.text.toString()
-            password = binding.editTextPassword.text.toString()
+            username = usernameInput
+            password = passwordInput
+//            username = binding.editTextEmail.text.toString()
+//            password = binding.editTextPassword.text.toString()
         } else {
             username = loginViewModel.getUsername()
             Log.d("LoginAct",username)
@@ -171,6 +176,7 @@ class LoginActivity : BaseActivity() {
             }
         }
         closeLoadingDialogBox()
+        Log.d("LoginActivitys", "After closeLoadingDialogBox")
         } // Login
 
     /*
@@ -211,5 +217,4 @@ class LoginActivity : BaseActivity() {
         unbindService(connection)
         Bound = false
     }//onStop
-
 } // LoginActivity
