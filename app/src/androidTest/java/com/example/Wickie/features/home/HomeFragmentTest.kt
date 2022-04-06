@@ -45,8 +45,7 @@ class HomeFragmentTest {
             msg = it.message
             quoteDetail = it.quoteDetail.toString()!!
         }
-        System.out.println(quoteDetail.toString())
-        System.out.println("Hello StackOverflow")
+        System.out.println(quoteDetail)
         assertEquals("DATA FOUND", msg)
     }
 }
