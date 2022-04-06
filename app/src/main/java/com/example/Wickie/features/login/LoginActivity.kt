@@ -140,7 +140,7 @@ class LoginActivity : BaseActivity() {
     */
 
     private fun login(choice: Int, usernameInput:String, passwordInput : String) {
-        startLoadingDialogBox("Validating Credentials...")
+//        startLoadingDialogBox("Validating Credentials...")
         var username = ""
         var password = ""
         if (choice == 1) {
@@ -175,8 +175,8 @@ class LoginActivity : BaseActivity() {
                 }
             }
         }
-        closeLoadingDialogBox()
-        Log.d("LoginActivitys", "After closeLoadingDialogBox")
+//        closeLoadingDialogBox()
+//        Log.d("LoginActivitys", "After closeLoadingDialogBox")
         } // Login
 
     /*
