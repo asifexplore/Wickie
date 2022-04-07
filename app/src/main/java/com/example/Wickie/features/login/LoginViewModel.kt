@@ -5,15 +5,21 @@ import com.example.Wickie.AuthRepository
 import com.example.Wickie.data.source.SharedPrefRepo
 import com.example.Wickie.data.source.data.RequestAuthCall
 
-
+/*
+*  LoginViewModel contains these following functions:
+*       getFingerprintStatus() : Boolean | Returns if Fingerprint is enabled or not
+*       getUsername() : String | Returns Username from SharedPreference
+*       getPassword() : String | Returns Password from SharedPreference
+*       setUsername() : String | Sets the Username inside SharedPreference
+*       setPassword() : String | Sets the Password inside SharedPreference
+*       login(username:String, password: String) : Authenticate User Input (Both Username and Password), Check if tally with DB
+*/
 class LoginViewModel(private val authRepository: AuthRepository, private val prefRepo: SharedPrefRepo)  : ViewModel() {
-
-
     // Live Data for Fingerprint
-    //var fingerPrintStatus = MutableLiveData<Boolean>()
     val fingerprintStatus: MutableLiveData<Boolean> by lazy {
         MutableLiveData<Boolean>()
     }
+    // Live Data for username
     var username = MutableLiveData<String>()
 
     init{
@@ -25,7 +31,7 @@ class LoginViewModel(private val authRepository: AuthRepository, private val pre
         return authRepository.login(username,password)
     }
 
-    fun getFingerprintStatus() : Boolean
+    private fun getFingerprintStatus() : Boolean
     {
        return prefRepo.getFingerPrintStatus()
     }

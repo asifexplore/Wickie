@@ -1,5 +1,6 @@
 package com.example.Wickie.features.login
 
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.app.ProgressDialog.show
 import android.content.*
@@ -101,7 +102,7 @@ class LoginActivity : BaseActivity() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
                 binding.imageButtonFingerprintScan.visibility = View.VISIBLE
-                login(2)
+                login(2, "", "")
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
@@ -118,7 +119,9 @@ class LoginActivity : BaseActivity() {
         //login through manual key input
         binding.buttonSignIn.setOnClickListener()
         {
-            login(1)
+            // Close Keyboard Dynamically
+            hideKeyboard(this)
+            login(1, binding.editTextEmail.text.toString(), binding.editTextPassword.text.toString())
         }
 
         //use the biometric feature to login
@@ -137,7 +140,7 @@ class LoginActivity : BaseActivity() {
     * Failed: Display Error Message
     */
 
-    private fun login(choice: Int) {
+    private fun login(choice: Int, usernameInput:String, passwordInput : String) {
         startLoadingDialogBox("Validating Credentials...")
         var username = ""
         var password = ""
