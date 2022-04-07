@@ -9,9 +9,22 @@ import com.google.firebase.database.*
 import com.google.firebase.database.DatabaseReference
 
 class AuthRepository {
-
-
-
+    /*
+         Function Name: login
+         Function Signature: (username:String, password: String)
+         Function Purpose: To check if entered credentials tally with database.
+         Function Arguments:
+                 username = String | Username the user inputted.
+                 password  = String | Password the user inputted.
+         Function Return : MutableLiveData of RequestAuthCall Object
+         Fields inside RequestAuthCall Object:
+                var status = 0
+                var message : String = "No Message"
+                var userDetail: User = User()
+         Function Success :
+                message = DATA FOUND when username and password is correct.
+                message = NO DATA FOUND when anything goes wrong.
+     */
     fun login(username:String, password: String) : MutableLiveData<RequestAuthCall>
     {
         val mLiveData = MutableLiveData<RequestAuthCall>()
@@ -20,7 +33,6 @@ class AuthRepository {
         // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
 
         val database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
 
@@ -49,8 +61,6 @@ class AuthRepository {
                 requestCall.message = "NO DATA FOUND"
                 Log.d("AuthRepo", "user does not exist ")
             }
-
-
             mLiveData.postValue(requestCall)
 
         }.addOnFailureListener()
