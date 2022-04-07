@@ -98,13 +98,10 @@ class ClaimsFormActivity:BaseActivity() {
 
         // 0 = Add
         // 1 = Update
-        val status : String
-        if (intent.getStringExtra("status") != null)
-        {
-            status = "1"
-        }
-        else{
-            status = "0"
+        val status : String = if (intent.getStringExtra("status") != null) {
+            "1"
+        } else{
+            "0"
         }
 
         val claimFormViewModel: ClaimsFormViewModel by viewModels {
@@ -117,16 +114,12 @@ class ClaimsFormActivity:BaseActivity() {
             binding.textHello.text = "Update Claims"
             // Set edit txt field values
               // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
-            if (claimFormViewModel.currClaimObj != null) {
-                Log.d("imageUrlTest",claimFormViewModel.currClaimObj.imageUrl.toString())
-                imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
-                binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
-                binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
-                binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
-                binding.editTextReason.setText(claimFormViewModel.currClaimObj.reason)
-                binding.autoCompleteType.setText(claimFormViewModel.currClaimObj.type)
-                Log.d("Tst",claimFormViewModel.currClaimObj.imageUrl.toString())
-            }
+            imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
+            binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
+            binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
+            binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
+            binding.editTextReason.setText(claimFormViewModel.currClaimObj.reason)
+            binding.autoCompleteType.setText(claimFormViewModel.currClaimObj.type)
         }
         else{
             // Inserting
@@ -145,7 +138,7 @@ class ClaimsFormActivity:BaseActivity() {
         binding.autoCompleteType.setAdapter(arrayAdapter)
 
 
-        // Date Picker Initalization
+        // Date Picker Initialization
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
@@ -171,6 +164,7 @@ class ClaimsFormActivity:BaseActivity() {
 
         binding.btnNext.setOnClickListener()
         {
+            hideKeyboard(this)
             if (claimFormViewModel.pageStatus.value == 1) {
 
                 // Add into Claims Object inside ViewModel
@@ -179,8 +173,6 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.currClaimObj.amount = binding.editTextAmount.text.toString()
                 claimFormViewModel.currClaimObj.type = binding.autoCompleteType.text.toString()
                 claimFormViewModel.currClaimObj.claimDate = binding.editTextCalendar.text.toString()
-
-
 
                 // Increment to Image Upload Section
                 val claimValid = validation.validateClaim(binding.editTextTitle, binding.editTextAmount, binding.autoCompleteType,binding.editTextCalendar, binding.editTextReason)
@@ -203,7 +195,6 @@ class ClaimsFormActivity:BaseActivity() {
                         .observe(this, Observer {
                             if (it.status == 2) {
                                 // Success
-                                Log.d("ClaimsFormActivity", it.message.toString())
                                 claimFormViewModel.incrementPageStatus()
                             } else {
                                 if (it.message == "NO DATA FOUND") {
@@ -224,7 +215,7 @@ class ClaimsFormActivity:BaseActivity() {
                             } else {
                                 if (it.message == "NO DATA FOUND") {
                                     Log.d("ClaimsFormActivity", it.status.toString())
-                                    Log.d("ClaimsFormActivity", it.message.toString())
+                                    Log.d("ClaimsFormActivity", it.message)
 
                                 }
                             }
@@ -237,10 +228,9 @@ class ClaimsFormActivity:BaseActivity() {
                 claimFormViewModel.decrementPageStatus()
             }
             // Update Items on Screen based on pageStatus on ViewModel
-            claimFormViewModel.pageStatus.observe(this, Observer { newStatus ->
+            claimFormViewModel.pageStatus.observe(this) { newStatus ->
                 pageVisibility(newStatus)
-            })
-
+            }
 
 
             // Btn Home to Redirect User to Claims Screen, when Claims are added successfully
@@ -297,6 +287,7 @@ class ClaimsFormActivity:BaseActivity() {
     * set the visibility of the pages
     * according to the state
      */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun pageVisibility(newStatus: Int)
     {
         // Set Visibility and Invisibility Accordingly
@@ -316,7 +307,7 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnNext.text = "Submit"
         }else{
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
-            binding.imgViewUpload.setImageDrawable(getResources().getDrawable(R.drawable.wickie_success))
+            binding.imgViewUpload.setImageDrawable(resources.getDrawable(R.drawable.wickie_success))
             binding.btnHome.visibility = View.VISIBLE
             binding.imgViewUpload.visibility = View.VISIBLE
             binding.btnBack.visibility = View.INVISIBLE
@@ -328,7 +319,7 @@ class ClaimsFormActivity:BaseActivity() {
     * to upload through gallery or through the camera
      */
 
-    fun galleryAlertBuilder()
+    private fun galleryAlertBuilder()
     {
         val builder = AlertDialog.Builder(this)
         //set title for alert dialog
@@ -337,12 +328,12 @@ class ClaimsFormActivity:BaseActivity() {
         builder.setMessage("How would you upload your attachment?")
 
         //performing positive action
-        builder.setPositiveButton("Gallery") { dialog, which ->
+        builder.setPositiveButton("Gallery") { dialog, _ ->
             dialog.dismiss()
             imageLibrary.useGallery()
         }
         //performing negative action
-        builder.setNegativeButton("Camera"){dialog, which ->
+        builder.setNegativeButton("Camera"){ dialog, _ ->
             dialog.dismiss()
 
             photoFile = imageLibrary.getPhotoFile(FILENAME)

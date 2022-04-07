@@ -4,7 +4,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import com.example.Wickie.BaseActivity
@@ -30,7 +29,7 @@ class ClaimsDetailsActivity : BaseActivity() {
         if (claimObj != null) {
 
         }
-        val claimDetailViewModel: claimDetailsViewModel by viewModels {
+        val claimDetailViewModel: ClaimDetailsViewModel by viewModels {
             ClaimDetailsModelFactory(claimObj, sharedPrefRepo, claimRepository)
         }
 
