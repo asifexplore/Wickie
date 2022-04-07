@@ -76,8 +76,6 @@ dependencies {
     androidTestImplementation 'com.google.truth:truth:1.0.1'
     androidTestImplementation 'androidx.test:core-ktx:1.1.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-
-
     // Fingerprint
     implementation 'androidx.biometric:biometric:1.1.0'
 
