@@ -8,33 +8,50 @@ import com.example.Wickie.data.source.data.RequestClaimCall
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
+
+/*
+    This Repository contains functions to Create, Read, Update, Delete Claims.
+*/
 class ClaimRepository {
     val requestCall = RequestClaimCall()
 
-    // Create
-//    var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
-//    var imgUrl : String?, var createdDate : String?, var claimDate : String?
+    /*
+        Function Name: create
+        Function Signature: (title : String, reason : String, amount : String, type : String, imageUrl: String, createdDate : String, claimDate : String, userID : String )
+        Function Purpose: To update Claim request.
+        Function Arguments:
+                title = Title of the Claim Request
+                reason = reason for requesting claim
+                amount = cost of claim
+                type = Type of Claim | 3 options = phone, meal, transport
+                imageUrl = Firebase Storage URL
+                createdDate = Auto generated Date of the day user applies for claim
+                claimDate = Date of purchase
+                userID  = String | Refers to the ID of the User
+        Function Return : MutableLiveData of RequestClaimCall() Object
+        Fields inside RequestClaimCall Object:
+                var status = 0
+                var message : String = "No Message"
+                var claimDetail: Claim?  = null
+                var claimArray : ArrayList<Claim> = ArrayList<Claim>()
+                var claimTotal : Double? = null
+    */
     fun create(title : String, reason : String, amount : String, type : String, imageUrl: String, createdDate : String, claimDate : String, userID : String) :
             MutableLiveData<RequestClaimCall>
     {
         val status = "Pending"
         val mLiveData = MutableLiveData<RequestClaimCall>()
-//        // In Progress
+        // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
 
-        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").reference
+        val database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").reference
         var claimID : String = ""
 
         database.get().addOnSuccessListener {
-            Log.d("ClaimRepoID",it.toString())
-
             if (it.exists() && it.child("users").child(userID).exists())
             {
-                Log.d("ClaimRepoID",it.child("users").child(userID).toString())
                 claimID = it.child("users").child(userID).child("no_of_claims").value.toString()
-                Log.d("ClaimRepoNew",claimID)
                 // Add onto Firebase
                 val claim = Claim(title, reason, amount, status,type,imageUrl, createdDate,claimDate, claimID.toString())
                 database.child("claims").child(userID).child(claimID.toString()).setValue(claim).addOnSuccessListener {
@@ -44,7 +61,6 @@ class ClaimRepository {
                     database.child("users").child(userID).child("no_of_claims").setValue(newClaimID).addOnSuccessListener {
                         // Sucessfully added
                     }
-
                     requestCall.status = 2
                     requestCall.message = "Add Success"
                     mLiveData.postValue(requestCall)
@@ -54,9 +70,6 @@ class ClaimRepository {
                     requestCall.message = "Add Failed"
                     mLiveData.postValue(requestCall)
                 }
-
-                // Adding to User - no_of_claims (Stores total number of claims)
-
             }else
             {
                 Log.d("ClaimRepoID","Inside Else")
@@ -64,42 +77,74 @@ class ClaimRepository {
         }
         return mLiveData
     }
-    //    var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
-//    var imgUrl : String?, var createdDate : String?, var claimDate : String?
+    /*
+        Function Name: update
+        Function Signature: (title : String, reason : String, amount : String, type : String, imageUrl: String, createdDate : String, claimDate : String, claimID : String, userID : String )
+        Function Purpose: To update Claim request.
+        Function Arguments:
+                title = Title of the Claim Request
+                reason = reason for requesting claim
+                amount = cost of claim
+                type = Type of Claim | 3 options = phone, meal, transport
+                imageUrl = Firebase Storage URL
+                createdDate = Auto generated Date of the day user applies for claim
+                claimDate = Date of purchase
+                claimID = String | ID of the specific claim
+                userID  = String | Refers to the ID of the User
+        Function Return : MutableLiveData of RequestClaimCall Object
+        Fields inside RequestClaimCall Object:
+                var status = 0
+                var message : String = "No Message"
+                var claimDetail: Claim?  = null
+                var claimArray : ArrayList<Claim> = ArrayList<Claim>()
+                var claimTotal : Double? = null
+    */
     fun update(title : String, reason : String, amount : String, type : String, imageUrl: String, createdDate : String, claimDate : String, claimID : String, userID : String ) : MutableLiveData<RequestClaimCall>
     {
         val mLiveData = MutableLiveData<RequestClaimCall>()
         // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
 
-        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
+        val database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
         // Add onto Firebase
         val claim = Claim(title, reason, amount, "Pending" ,type,imageUrl, createdDate,claimDate, claimID)
 
         database.child(userID).child(claimID).setValue(claim).addOnSuccessListener {
             requestCall.status = 2
-            requestCall.message = "Add Success"
+            requestCall.message = "Update Success"
             mLiveData.postValue(requestCall)
         }.addOnFailureListener(){
             Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
-            requestCall.message = "Add Failed"
+            requestCall.message = "Update Failed"
             mLiveData.postValue(requestCall)
         }
-
         return mLiveData
     }
+    /*
+        Function Name: delete
+        Function Signature: (claimID : String, userID : String)
+        Function Purpose: To delete Claim request.
+        Function Arguments:
+                claimID = String | ID of the specific claim
+                userID  = String | Refers to the ID of the User
+        Function Return : MutableLiveData of RequestClaimCall Object
+        Fields inside RequestClaimCall Object:
+                var status = 0
+                var message : String = "No Message"
+                var claimDetail: Claim?  = null
+                var claimArray : ArrayList<Claim> = ArrayList<Claim>()
+                var claimTotal : Double? = null
+    */
     fun delete(claimID : String, userID : String) : MutableLiveData<RequestClaimCall>
     {
         val mLiveData = MutableLiveData<RequestClaimCall>()
         // In Progress
         requestCall.status = 0
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
 
-        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
+        val database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
         database.child(userID).child(claimID).child("deleted").setValue("true").addOnSuccessListener {
             requestCall.status = 2
             requestCall.message = "Delete Success"
@@ -112,7 +157,20 @@ class ClaimRepository {
         }
         return mLiveData
     }
-
+    /*
+        Function Name: retrieve
+        Function Signature: (userID : String)
+        Function Purpose: To retrieve all Claim requests made by user which has not been deleted. Sorts return data to latest first.
+        Function Arguments:
+                userID  = String | Refers to the ID of the User
+        Function Return : MutableLiveData of RequestClaimCall Object
+        Fields inside RequestClaimCall Object:
+                var status = 0
+                var message : String = "No Message"
+                var claimDetail: Claim?  = null
+                var claimArray : ArrayList<Claim> = ArrayList<Claim>()
+                var claimTotal : Double? = null
+    */
     fun retrieve(userID :String) : MutableLiveData<RequestClaimCall>
     {
         val mLiveData = MutableLiveData<RequestClaimCall>()
@@ -122,19 +180,14 @@ class ClaimRepository {
         // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
 
-        var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
-
+        val database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("claims")
+        requestCall.message = "After DB Ref"
         database.get().addOnSuccessListener {
-            Log.d("ClaimRepo",it.toString())
+        requestCall.message = "Inside SuccessListener"
             if (it.exists())
             {
-                Log.d("ClaimRepo","Inside exists")
-                Log.d("ClaimRepo",it.toString())
-                Log.d("ClaimRepo", it.child(userID).toString())
-
-                Log.d("ClaimsRepos", it.child(userID).value.toString())
+                requestCall.message = "Inside Exist"
                 val claims = it.child(userID).value as ArrayList<HashMap<String,Any?>>
 
                 val claimList = arrayListOf<Claim>()
@@ -142,24 +195,23 @@ class ClaimRepository {
                 {
                     if (i["deleted"].toString() != "true")
                     {
-                        Log.d("ClaimRepos","Inside Loop")
-                        // var title: String?, var reason : String? ,var amount : String? , var status:String?, var type : String?,
-                        //            var imgUrl : String?, var createdDate : String?, var claimDate : String?
                         val l = Claim(i["title"].toString(), i["reason"].toString(), i["amount"].toString(), i["status"].toString(),
                             i["type"].toString(), i["imageUrl"].toString(), i["createdDate"].toString(), i["claimDate"].toString(),i["claimID"].toString())
                         Log.d("ClaimRepos",l.type.toString())
                         claimList.add(l)
                         val x: String = i["amount"].toString()
-                        claimTotal = (x.toDouble() +  claimTotal.toDouble())
+                        if (i["status"].toString() != "Rejected")
+                        {
+                            claimTotal = (x.toDouble() +  claimTotal.toDouble())
+                        }
                     }
                     else{
                         // To not display deleted claims
                     }
-
                 }
-
+                requestCall.message = "Before DataLoop"
                 // Swapping ArrayList
-                var swapArrayList = arrayListOf<Claim>()
+                val swapArrayList = arrayListOf<Claim>()
 
                 // Total in Array
                 var totalNum = claimList.count()
@@ -168,27 +220,23 @@ class ClaimRepository {
 
                 for (n in totalNum downTo 0)
                 {
-                    swapArrayList.add(claimList.get(n))
+                    swapArrayList.add(claimList[n])
                 }
-
-                Log.d("ClaimRepo", claimList.toString())
                 requestCall.status = 2
-                requestCall.message = " DATA FOUND"
+                requestCall.message = "DATA FOUND"
                 requestCall.claimTotal = (10000.0 - claimTotal)
                 requestCall.claimArray = swapArrayList
-
             }else{
-//                Log.d("ClaimsRepo",it.child(username).toString())
                 // Data does not exits
                 requestCall.status = 1
                 requestCall.message = "NO DATA FOUND"
                 Log.d("ClaimRepo", "user does not exist ")
             }
-
             mLiveData.postValue(requestCall)
 
         }.addOnFailureListener()
         {
+            requestCall.message = "Inside Failure Listener"
             Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
             requestCall.message = "NO DATA FOUND"
@@ -209,7 +257,6 @@ class ClaimRepository {
                 INSTANCE?.let {
                     return it
                 }
-
                 val instance = ClaimRepository()
                 INSTANCE = instance
                 instance

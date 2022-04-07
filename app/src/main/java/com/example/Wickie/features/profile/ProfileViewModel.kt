@@ -1,13 +1,9 @@
 package com.example.Wickie.features.profile
 
 import androidx.lifecycle.*
-import com.example.Wickie.AuthRepository
-import com.example.Wickie.data.source.AttendanceRepository
 import com.example.Wickie.data.source.SharedPrefRepo
 import com.example.Wickie.data.source.UserRepository
-import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.data.source.data.RequestAuthCall
-import com.example.Wickie.features.claims.claimDetailsViewModel
 
 class ProfileViewModel(private val userRepository : UserRepository, private val prefRepo: SharedPrefRepo)  : ViewModel() {
 

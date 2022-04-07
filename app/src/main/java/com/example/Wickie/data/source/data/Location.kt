@@ -9,7 +9,8 @@ data class LocationClass (
     var results: FloatArray? = FloatArray(1)
 
     // 1.3774 | 103.8488 | 1.4443 / 103.7838
-    fun distance(lat1: Double, lon1: Double, lat2: Double = 1.3774, lon2: Double = 103.8488): Boolean {
+    // 1.4507° N, 103.8232° E
+    fun distance(lat1: Double, lon1: Double, lat2: Double = 1.4507, lon2: Double = 103.8232): Boolean {
         val theta = lon1 - lon2
         var dist = (Math.sin(deg2rad(lat1))
                 * Math.sin(deg2rad(lat2))

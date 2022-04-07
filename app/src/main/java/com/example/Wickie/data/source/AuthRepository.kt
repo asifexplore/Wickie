@@ -10,8 +10,6 @@ import com.google.firebase.database.DatabaseReference
 
 class AuthRepository {
 
-
-
     fun login(username:String, password: String) : MutableLiveData<RequestAuthCall>
     {
         val mLiveData = MutableLiveData<RequestAuthCall>()
