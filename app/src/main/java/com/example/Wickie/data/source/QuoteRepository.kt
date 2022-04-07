@@ -18,7 +18,7 @@ class QuoteRepository {
         // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
+//        mLiveData.value = requestCall
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference("quotes")
@@ -28,6 +28,7 @@ class QuoteRepository {
             //Collects Quote Children Values: mon_quote in database
             quote.mon_quote = it.child("mon_quotes").value.toString()
             requestCall.quoteDetail = quote
+            requestCall.message = "DATA FOUND"
             mLiveData.postValue(requestCall)
         }.addOnFailureListener()
         {
