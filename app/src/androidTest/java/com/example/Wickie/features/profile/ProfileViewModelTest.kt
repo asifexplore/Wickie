@@ -17,6 +17,7 @@ import org.junit.runner.RunWith
 class ProfileViewModelTest {
 
     private lateinit var viewModel : ProfileViewModel
+    private lateinit var sharedPref : SharedPrefRepo
 
 @get:Rule
 val instantTaskExecutorRole = InstantTaskExecutorRule()
@@ -25,7 +26,8 @@ val instantTaskExecutorRole = InstantTaskExecutorRule()
 fun setup()
 {
     val context = ApplicationProvider.getApplicationContext<Context>()
-    viewModel = ProfileViewModel(UserRepository(), SharedPrefRepo( context ))
+    sharedPref = SharedPrefRepo( context )
+    viewModel = ProfileViewModel(UserRepository(), sharedPref)
 }
 @Test
 fun retrieve()
@@ -35,7 +37,30 @@ fun retrieve()
         System.out.println(it.userDetail)
         msg = it.message
     }
-
     assertEquals("DATA FOUND", msg)
-}}
+}
+
+@Test
+fun setUsername()
+{
+    var username = "TestingUsername"
+    sharedPref.setUsername(username)
+    val result = viewModel.getUsername()
+    assertEquals(username, result)
+}
+@Test
+fun tstFingerprintTrue()
+{
+    viewModel.setFingerPrintStatus(true)
+    val result = viewModel.getFingerPrintStatus()
+    assertEquals(true, result)
+}
+@Test
+fun tstFingerprintFalse()
+{
+    viewModel.setFingerPrintStatus(false)
+    val result = viewModel.getFingerPrintStatus()
+    assertEquals(false, result)
+}
+}
 
