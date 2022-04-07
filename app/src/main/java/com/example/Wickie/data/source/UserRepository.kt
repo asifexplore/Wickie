@@ -19,7 +19,7 @@ class UserRepository {
         // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-        mLiveData.value = requestCall
+
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("users")
 
