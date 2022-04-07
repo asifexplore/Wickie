@@ -8,5 +8,4 @@ class RequestAuthCall {
     var status = 0
     var message : String = "No Message"
     var userDetail: User = User()
-
 }
