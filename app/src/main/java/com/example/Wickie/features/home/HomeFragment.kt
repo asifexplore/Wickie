@@ -5,7 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -62,7 +61,6 @@ class HomeFragment:Fragment() {
             != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.requireActivity(), arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 101)
         }
-        Log.d("HomeFrag", homeViewModel.getUsername())
         binding.textUsername.text = homeViewModel.getUsername()
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this.requireContext())
@@ -94,7 +92,6 @@ class HomeFragment:Fragment() {
         binding.layoutAttendance.setOnClickListener {
             LocationUtils.getCurrLocation()
             LocationUtils.location.let {
-                Log.d("HomeFrag123", it.value?.latitude.toString())
                 it.value?.longitude?.let { it1 -> it.value?.latitude?.let { it2 ->
                     homeViewModel.addLocation(it1,
                         it2)
@@ -104,7 +101,6 @@ class HomeFragment:Fragment() {
             // Error
             when (homeViewModel.setAttendance()) {
                 0 -> {
-                    Log.d("HomeFragment","Still Loading")
 //                    Toast.makeText(context, "Please try again later", Toast.LENGTH_SHORT).show()
                 }
                 1 -> {
@@ -206,9 +202,6 @@ class HomeFragment:Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("HomeFragLifeCycle", "onResume()")
-        Log.d("HomeFragLifeCycle",homeViewModel.getAttendanceStatus().toString())
-        Log.d("HomeFragLifeCycle", homeViewModel.currStatus.value.toString())
             if (homeViewModel.currStatus.value == true) {
                 binding.attendanceStatus.text = "Checked-In!"
                 binding.attendanceStatusImg.setImageResource(R.drawable.attendance_icon)

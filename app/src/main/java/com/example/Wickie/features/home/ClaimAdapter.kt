@@ -3,7 +3,6 @@ package com.example.Wickie.features.home
 //code cleanup
 import android.content.Intent
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,7 +57,6 @@ class ClaimAdapter(
                     .putExtra("imgUrl",claimList[position].imageUrl)
                     .putExtra("claimID",claimList[position].claimID)
                     .putExtra("claimObj",claimList[position])
-                Log.d("ClaimAdapter", claimList[position].imageUrl.toString())
                 v.context.startActivity(intent2)
             }
         }

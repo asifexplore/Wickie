@@ -1,7 +1,6 @@
 package com.example.Wickie.data.source
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.Attendance
 import com.example.Wickie.data.source.data.RequestAttendanceCall
@@ -35,14 +34,12 @@ class AttendanceRepository {
         val attendanceObj  = Attendance(currentDate,checkIn,"")
 
         database.get().addOnSuccessListener {
-            Log.d("AttendanceRepo",it.toString())
             database.child("attendance").child(userID).child(currentDate).setValue(attendanceObj).addOnSuccessListener{
                 requestCall.status = 2
                 requestCall.message = "Logged In"
                 mLiveData.postValue(requestCall)
 
             }.addOnFailureListener(){
-                Log.d("AttendanceRepo", "Failed")
                 requestCall.status = 1
                 requestCall.message = "Logged Out"
                 mLiveData.postValue(requestCall)
@@ -68,14 +65,12 @@ class AttendanceRepository {
         val checkOut = getCurrentTime()
 
         database.get().addOnSuccessListener {
-            Log.d("AttendanceRepo",it.toString())
             database.child("attendance").child(userID).child(currentDate).child("endTime").setValue(checkOut).addOnSuccessListener{
                 requestCall.status = 2
                 requestCall.message = "Logged In"
                 mLiveData.postValue(requestCall)
 
             }.addOnFailureListener(){
-                Log.d("AttendanceRepo", "Failed")
                 requestCall.status = 1
                 requestCall.message = "Logged Out"
                 mLiveData.postValue(requestCall)

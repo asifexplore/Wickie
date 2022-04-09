@@ -1,7 +1,7 @@
 package com.example.Wickie.features.home
 
 
-import android.util.Log
+
 import androidx.lifecycle.*
 import com.example.Wickie.data.source.AttendanceRepository
 import com.example.Wickie.data.source.QuoteRepository
@@ -60,7 +60,6 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
         {
             // Checking In | Check Lat & Lng
             // 1.4507 | 103.8232
-            Log.d("HomeViewModel",location.distance(location.latitude,location.longitude).toString())
             if (location.distance(location.latitude,location.longitude))
             {
                 // Inside Correct Vicinity
@@ -71,8 +70,6 @@ class HomeViewModel(private val quoteRepository : QuoteRepository, private val a
                 return 3
             }else
             {
-                Log.d("HomeViewModel Lat",location.latitude.toString())
-                Log.d("HomeViewModel Lng",location.longitude.toString())
                 // Not at the right place
                 return 1
             }

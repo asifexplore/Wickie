@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -198,8 +197,6 @@ class ClaimsFormActivity:BaseActivity() {
                                 claimFormViewModel.incrementPageStatus()
                             } else {
                                 if (it.message == "NO DATA FOUND") {
-                                    Log.d("LoginActivity", it.status.toString())
-                                    Log.d("LoginActivity", it.message.toString())
 
                                 }
                             }
@@ -209,13 +206,9 @@ class ClaimsFormActivity:BaseActivity() {
                         .observe(this, Observer {
                             if (it.status == 2) {
                                 // Success
-                                Log.d("ClaimsFormActivity", "Update Success")
-                                Log.d("ClaimsFormActivity", it.message.toString())
                                 claimFormViewModel.incrementPageStatus()
                             } else {
                                 if (it.message == "NO DATA FOUND") {
-                                    Log.d("ClaimsFormActivity", it.status.toString())
-                                    Log.d("ClaimsFormActivity", it.message)
 
                                 }
                             }

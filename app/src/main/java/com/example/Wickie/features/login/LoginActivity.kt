@@ -1,17 +1,13 @@
 package com.example.Wickie.features.login
 
-import android.app.AlertDialog
-import android.app.ProgressDialog
-import android.app.ProgressDialog.show
+
 import android.content.*
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.biometric.BiometricPrompt
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.Utils.BiometricLibrary
 import com.example.Wickie.databinding.ActivityLoginBinding
@@ -51,7 +47,6 @@ class LoginActivity : BaseActivity() {
 
         override fun onServiceDisconnected(argument: ComponentName) {
             Bound = false
-            Log.d("ServiceActivity: ", "Service Disconnected")
         }
     }
     private lateinit var binding : ActivityLoginBinding
@@ -72,7 +67,6 @@ class LoginActivity : BaseActivity() {
             if (!check) {
                 Toast.makeText(this, "Please connect to a network", Toast.LENGTH_LONG).show()
             }
-            Log.d("Service Activity", "NetworkService: $check added")
             handler.postDelayed(runnable!!, 10000)
         }.also { runnable = it }, 10000)
 
@@ -152,27 +146,19 @@ class LoginActivity : BaseActivity() {
 
         } else {
             username = loginViewModel.getUsername()
-            Log.d("LoginAct",username)
-            Log.d("LoginAct",password)
             password = loginViewModel.getPassword()
         }
         loginViewModel.login(username, password).observe(this) {
             if (it.status == 2) {
                 // Intent to next screen
-                Log.d("LoginActivity", it.message)
-                Log.d("LoginActivity", it.userDetail.user_email.toString())
                 loginViewModel.setUsername(username)
                 loginViewModel.setPassword(password)
                 openActivity(MainActivity::class.java)
             } else {
                 if (it.message == "NO DATA FOUND") {
-                    show("Incorrect Username or Password, Please Try Again!")
-                    Log.d("LoginActivitys", it.userDetail.user_email.toString())
                     closeLoadingDialogBox()
                 } else {
                     if (it.message == "NO DATA FOUND") {
-                        Log.d("LoginActivity", it.status.toString())
-                        Log.d("LoginActivity", it.message)
                         closeLoadingDialogBox()
 
                     }

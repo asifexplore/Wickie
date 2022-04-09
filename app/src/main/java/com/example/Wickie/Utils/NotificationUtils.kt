@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
@@ -41,7 +40,6 @@ class NotificationUtils(private var currentActivity: Fragment) {
             }
             val notificationManager : NotificationManager = currentActivity.requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
-            Log.d("Notif Activity", "Channel Created ")
         }
     }
     /*
@@ -69,7 +67,6 @@ class NotificationUtils(private var currentActivity: Fragment) {
         {
             notify(notificationID, builder.build())
         }
-        Log.d("Notif Activity", "Notif Sent ")
     }
 
 }

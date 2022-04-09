@@ -2,9 +2,6 @@ package com.example.Wickie.features.profile
 
 
 import android.os.Bundle
-import android.util.Log
-import android.widget.CompoundButton
-import android.widget.Switch
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
@@ -12,7 +9,6 @@ import com.example.Wickie.BaseActivity
 import com.example.Wickie.databinding.ActivityProfileBinding
 import com.example.Wickie.features.login.LoginActivity
 import LocationUtils
-import androidx.fragment.app.viewModels
 import com.example.Wickie.R
 import com.example.Wickie.features.home.HomeViewModel
 import com.example.Wickie.features.home.HomeViewModelFactory
@@ -90,7 +86,6 @@ class ProfileActivity : BaseActivity() {
             // Error
             when (attendanceStatus) {
                 0 -> {
-                    Log.d("HomeFragment","Still Loading")
 //                    Toast.makeText(context, "Please try again later", Toast.LENGTH_SHORT).show()
                 }
                 1 -> {
@@ -113,8 +108,6 @@ class ProfileActivity : BaseActivity() {
         profileViewModel.retrieve(username).observe(this, Observer {
             if (it.status == 2){
                 // Intent to next screen
-                Log.d("ProfileActivity", it.message)
-                Log.d("ProfileActivity", it.userDetail.user_email.toString())
                 binding.textViewName.text = username
                 binding.textViewEmail.text = it.userDetail.user_email.toString()
                 binding.textViewPositionValue.text = it.userDetail.user_position.toString()
@@ -126,8 +119,7 @@ class ProfileActivity : BaseActivity() {
             }else{
                 if (it.message == "NO DATA FOUND")
                 {
-                    Log.d("ProfileActivity", it.status.toString())
-                    Log.d("ProfileActivity", it.message)
+                    //user not found
                 }
             }
         })

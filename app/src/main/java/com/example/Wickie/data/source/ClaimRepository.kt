@@ -1,7 +1,6 @@
 package com.example.Wickie.data.source
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.data.source.data.RequestClaimCall
@@ -65,14 +64,13 @@ class ClaimRepository {
                     requestCall.message = "Add Success"
                     mLiveData.postValue(requestCall)
                 }.addOnFailureListener(){
-                    Log.d("ClaimRepo", "Failed")
                     requestCall.status = 1
                     requestCall.message = "Add Failed"
                     mLiveData.postValue(requestCall)
                 }
             }else
             {
-                Log.d("ClaimRepoID","Inside Else")
+                //user does not exist
             }
         }
         return mLiveData
@@ -115,7 +113,6 @@ class ClaimRepository {
             requestCall.message = "Update Success"
             mLiveData.postValue(requestCall)
         }.addOnFailureListener(){
-            Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
             requestCall.message = "Update Failed"
             mLiveData.postValue(requestCall)
@@ -150,7 +147,6 @@ class ClaimRepository {
             requestCall.message = "Delete Success"
             mLiveData.postValue(requestCall)
         }.addOnFailureListener(){
-            Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
             requestCall.message = "Delete Failed"
             mLiveData.postValue(requestCall)
@@ -197,7 +193,6 @@ class ClaimRepository {
                     {
                         val l = Claim(i["title"].toString(), i["reason"].toString(), i["amount"].toString(), i["status"].toString(),
                             i["type"].toString(), i["imageUrl"].toString(), i["createdDate"].toString(), i["claimDate"].toString(),i["claimID"].toString())
-                        Log.d("ClaimRepos",l.type.toString())
                         claimList.add(l)
                         val x: String = i["amount"].toString()
                         if (i["status"].toString() != "Rejected")
@@ -230,14 +225,12 @@ class ClaimRepository {
                 // Data does not exits
                 requestCall.status = 1
                 requestCall.message = "NO DATA FOUND"
-                Log.d("ClaimRepo", "user does not exist ")
             }
             mLiveData.postValue(requestCall)
 
         }.addOnFailureListener()
         {
             requestCall.message = "Inside Failure Listener"
-            Log.d("ClaimRepo", "Failed")
             requestCall.status = 1
             requestCall.message = "NO DATA FOUND"
             mLiveData.postValue(requestCall)

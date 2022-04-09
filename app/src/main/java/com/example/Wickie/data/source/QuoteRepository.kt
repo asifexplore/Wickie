@@ -1,7 +1,6 @@
 package com.example.Wickie.data.source
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.Wickie.data.source.data.Quote
 import com.example.Wickie.data.source.data.RequestQuoteCall
@@ -18,7 +17,6 @@ class QuoteRepository {
         // In Progress
         requestCall.status = 1
         requestCall.message = "Fetching Data"
-//        mLiveData.value = requestCall
 
         var database : DatabaseReference = FirebaseDatabase.getInstance("https://wickie-3cfa2-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference("quotes")
@@ -32,7 +30,6 @@ class QuoteRepository {
             mLiveData.postValue(requestCall)
         }.addOnFailureListener()
         {
-            Log.d("AuthRepo", "Failed")
             requestCall.status = 1
             requestCall.message = "NO DATA FOUND"
             mLiveData.postValue(requestCall)

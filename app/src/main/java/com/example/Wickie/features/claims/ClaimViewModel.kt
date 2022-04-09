@@ -1,15 +1,11 @@
 package com.example.Wickie.features.claims
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.Wickie.data.source.ClaimRepository
 import com.example.Wickie.data.source.data.RequestClaimCall
-import com.example.Wickie.Utils.getCurrentDateTime
 import com.example.Wickie.data.source.SharedPrefRepo
-import com.example.Wickie.data.source.data.Claim
-import com.example.Wickie.features.profile.ProfileViewModel
 
 class ClaimViewModel(private val prefRepo: SharedPrefRepo, private val claimRepository: ClaimRepository) : ViewModel() {
     private var chosenClaimID = MutableLiveData<Int>()
@@ -30,7 +26,6 @@ class ClaimViewModel(private val prefRepo: SharedPrefRepo, private val claimRepo
 
     fun retrieve(username : String = prefRepo.getUsername()) : MutableLiveData<RequestClaimCall>
     {
-//        return claimRepository.retrieve(prefRepo.getUsername())
         return claimRepository.retrieve(username)
     }
 
