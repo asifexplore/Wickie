@@ -3,10 +3,8 @@ package com.example.Wickie.features.splashscreen
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.Wickie.R
-import com.example.Wickie.features.home.MainActivity
 import com.example.Wickie.features.login.LoginActivity
 /*
 *   SplashscreenActivity is the responsible for the loading animation to the LoginActivity

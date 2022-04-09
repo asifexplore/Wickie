@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/homeFrag"
     tools:context=".features.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -66,6 +67,7 @@
             app:layout_constraintTop_toBottomOf="@id/imageMenu">
 
             <EditText
+                android:id="@+id/chatMessageText"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_weight="1"
@@ -80,6 +82,7 @@
                 android:inputType="text" />
 
             <ImageView
+                android:id="@+id/chat_message"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/chat_icon_background"
@@ -150,6 +153,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
+                    android:id="@+id/attendanceStatusImg"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_margin="8dp"
@@ -161,6 +165,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:id="@+id/attendanceStatus"
                     android:text="Status: Checked-In"
                     android:textColor="@color/black"
                     android:textSize="15sp"

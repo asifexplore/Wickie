@@ -1,39 +1,32 @@
 package com.example.Wickie.features.claims
 
-import android.Manifest
-import android.app.*
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
+import android.text.format.DateFormat
 import android.view.View
-import android.widget.*
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProvider
+import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.core.net.toUri
+import androidx.lifecycle.Observer
 import com.example.Wickie.BaseActivity
 import com.example.Wickie.R
+import com.example.Wickie.Utils.ImageLibrary
 import com.example.Wickie.Validation
+import com.example.Wickie.data.source.data.Claim
 import com.example.Wickie.databinding.ActivityClaimsformBinding
-import com.example.Wickie.features.home.ClaimFragment
 import com.example.Wickie.features.home.MainActivity
-import com.example.Wickie.hardware.CameraLibrary
-import com.example.Wickie.hardware.GalleryLibrary
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.internal.ContextUtils.getActivity
-import com.google.firebase.storage.FirebaseStorage
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener
 import com.kofigyan.stateprogressbar.StateProgressBar
 import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import androidx.lifecycle.Observer
+
 
 /*
 *   ClaimsFormActivity will be the activity to handle the logic for submitting a claim
@@ -64,85 +57,158 @@ import androidx.lifecycle.Observer
 *         Failed:
 *---------------------------------------------------
 */
-
-
 class ClaimsFormActivity:BaseActivity() {
     private lateinit var binding : ActivityClaimsformBinding
-    private val REQUEST_IMAGE_GALLERY = 132
-    private val REQUEST_IMAGE_CAMERA = 142
+    private val requestGallery = 132
+    private val requestCamera = 142
+    private lateinit var imageLibrary: ImageLibrary
 
-    lateinit var imageURI : Uri
-    private lateinit var viewModel: ClaimViewModel
+    private var imageURI: Uri? = null
+    // Name of File when Uploading
+    private lateinit var fileName : String
+    private lateinit var photoFile: File
+    private val FILENAME = "photo.jpg"
 
+    @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClaimsformBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel = ViewModelProvider(this).get(ClaimViewModel::class.java)
+        fileName = ""
 
-        // Update Items on Screen based on pageStatus on ViewModel
-        viewModel.pageType.observe(this, androidx.lifecycle.Observer { newStatus ->
-            if (newStatus == 1) {
-                binding.textHello.text = "Update Claims"
-                // Set edit txt field values
-                binding.editTextTitle.setText(viewModel.chosenClaim.title)
-                binding.editTextAmount.setText(viewModel.chosenClaim.amount)
-                binding.editTextCalendar.setText(viewModel.chosenClaim.claimDate)
-                binding.editTextReason.setText(viewModel.chosenClaim.reason)
-                binding.autoCompleteType.setText(viewModel.chosenClaim.type)
-                // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
-                downloadImg("2022_02_24_08_26_21")
-            }
+//        imageLibrary = ImageLibrary(this, this.packageManager, binding.imgViewUpload, fileName)
+        imageLibrary = ImageLibrary(this, this.packageManager, imageURI, binding.imgViewUpload)
 
-            // Insert Data into Respective Edit Texts
+        val claimObj : Claim?
+        if (getIntent().getExtras()?.getSerializable("claimObj") as? Claim != null)
+        {
+            claimObj  = getIntent().getExtras()?.getSerializable("claimObj") as? Claim
+        }else
+        {
+            claimObj = Claim("","","","","","","","","")
+        }
+        //checks if receive image from intent
+        if (imageLibrary.checkReceive(this))
+        {
+            imageURI = imageLibrary.receiveImage(this,binding.imgViewUpload)
+        }
+
+
+        // 0 = Add
+        // 1 = Update
+        val status : String = if (intent.getStringExtra("status") != null) {
+            "1"
+        } else{
+            "0"
+        }
+
+        val claimFormViewModel: ClaimsFormViewModel by viewModels {
+            ClaimFormModelFactory(status, claimObj, sharedPrefRepo,claimRepository)
+        }
+
+        if (claimFormViewModel.currPageType == 1)
+        {
+            // Updating
+            binding.textHello.text = "Update Claims"
+            // Set edit txt field values
+              // Downloads and Sets Image to ImageView | Possible to use coroutine in the future
+            imageLibrary.downloadImg(resources,claimFormViewModel.currClaimObj.imageUrl.toString(), sharedPrefRepo.getUsername())
+            binding.editTextTitle.setText(claimFormViewModel.currClaimObj.title)
+            binding.editTextAmount.setText(claimFormViewModel.currClaimObj.amount)
+            binding.editTextCalendar.setText(claimFormViewModel.currClaimObj.claimDate)
+            binding.editTextReason.setText(claimFormViewModel.currClaimObj.reason)
+            binding.autoCompleteType.setText(claimFormViewModel.currClaimObj.type)
+        }
+        else{
+            // Inserting
+            binding.textHello.text = "Inserting Claims"
+        }
+
+        binding.imgViewUpload.setOnClickListener {
+            // Open Camera or Gallery
+            galleryAlertBuilder()
+        }
+
+        // Dropdown Items for Claims Form
+        val types = resources.getStringArray(R.array.types)
+        val arrayAdapter =
+            ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
+        binding.autoCompleteType.setAdapter(arrayAdapter)
+
+
+        // Date Picker Initialization
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build()
+
+        datePicker.addOnPositiveButtonClickListener(MaterialPickerOnPositiveButtonClickListener<Long?> { selection -> // Do something...
+            val dateString: String = DateFormat.format("dd/MM/yyyy", Date(selection)).toString()
+            binding.editTextCalendar.setText(dateString)
+
         })
 
+        binding.editTextCalendar.setOnClickListener()
+        {
+            // Open Calendar DialogBox
+            datePicker.show(supportFragmentManager, "DatePickerDialogBox");
+        }
+
         // Binding name of states to array stored in ViewModel
-        binding.progressBar.setStateDescriptionData(viewModel.descriptionData)
+        binding.progressBar.setStateDescriptionData(claimFormViewModel.descriptionData)
         // To Go Next on Horizontal Status Progress Bar
+        val validation = Validation()
+
         binding.btnNext.setOnClickListener()
         {
-            if (viewModel.pageStatus.value == 1) {
-                // Increment to Image Upload Section
-                viewModel.incrementPageStatus()
-            } else {
-                // Obtain Data From Form
-                // Submitting to Firebase
-                var title = binding.editTextTitle.text.toString()
-                var reason = binding.editTextReason.text.toString()
-                var amount = binding.editTextAmount.text.toString()
-                var type = binding.autoCompleteType.text.toString()
-                var imgUrl = "No Img Yet"
-                var claimDate = binding.textViewDate.text.toString()
+            hideKeyboard(this)
+            if (claimFormViewModel.pageStatus.value == 1) {
 
-                if (viewModel.pageType.equals(0)) {
-                    viewModel.create(title, reason, amount, type, imgUrl, claimDate)
+                // Add into Claims Object inside ViewModel
+                claimFormViewModel.currClaimObj.title = binding.editTextTitle.text.toString()
+                claimFormViewModel.currClaimObj.reason = binding.editTextReason.text.toString()
+                claimFormViewModel.currClaimObj.amount = binding.editTextAmount.text.toString()
+                claimFormViewModel.currClaimObj.type = binding.autoCompleteType.text.toString()
+                claimFormViewModel.currClaimObj.claimDate = binding.editTextCalendar.text.toString()
+
+                // Increment to Image Upload Section
+                val claimValid = validation.validateClaim(binding.editTextTitle, binding.editTextAmount, binding.autoCompleteType,binding.editTextCalendar, binding.editTextReason)
+                if (claimValid) {
+                    claimFormViewModel.incrementPageStatus()
+                }
+
+            } else {
+                // Upload Image
+                var filename = ""
+                imageURI?.let { it1 -> filename = imageLibrary.uploadImg(it1, sharedPrefRepo.getUsername()) }
+                // Update File Name
+                if (filename != "")
+                {
+                    claimFormViewModel.currClaimObj.imageUrl = filename
+                }
+
+                if (status.toInt() == 0) {
+                    claimFormViewModel.create()
                         .observe(this, Observer {
                             if (it.status == 2) {
                                 // Success
-                                Log.d("ClaimsFormActivity", it.message.toString())
-                                viewModel.incrementPageStatus()
+                                claimFormViewModel.incrementPageStatus()
                             } else {
                                 if (it.message == "NO DATA FOUND") {
-                                    Log.d("LoginActivity", it.status.toString())
-                                    Log.d("LoginActivity", it.message.toString())
 
                                 }
                             }
                         })
                 } else {
-                    viewModel.update(title, reason, amount, type, imgUrl, claimDate)
+                    claimFormViewModel.update()
                         .observe(this, Observer {
                             if (it.status == 2) {
                                 // Success
-                                Log.d("ClaimsFormActivity", "Update Success")
-                                Log.d("ClaimsFormActivity", it.message.toString())
-                                viewModel.incrementPageStatus()
+                                claimFormViewModel.incrementPageStatus()
                             } else {
                                 if (it.message == "NO DATA FOUND") {
-                                    Log.d("ClaimsFormActivity", it.status.toString())
-                                    Log.d("ClaimsFormActivity", it.message.toString())
 
                                 }
                             }
@@ -152,35 +218,11 @@ class ClaimsFormActivity:BaseActivity() {
             // To Go Back on Horizontal Status Progress Bar
             binding.btnBack.setOnClickListener()
             {
-                viewModel.decrementPageStatus()
+                claimFormViewModel.decrementPageStatus()
             }
             // Update Items on Screen based on pageStatus on ViewModel
-            viewModel.pageStatus.observe(this, androidx.lifecycle.Observer { newStatus ->
+            claimFormViewModel.pageStatus.observe(this) { newStatus ->
                 pageVisibility(newStatus)
-            })
-
-            // Dropdown Items for Claims Form
-            val types = resources.getStringArray(R.array.types)
-            val arrayAdapter =
-                ArrayAdapter(applicationContext, R.layout.claims_dropdown_items, types)
-            binding.autoCompleteType.setAdapter(arrayAdapter)
-
-            // Date Picker Initalization
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
-
-            datePicker.addOnPositiveButtonClickListener {
-                // Respond to positive button click.
-                binding.editTextCalendar.setText(datePicker.headerText.toString())
-            }
-
-            binding.editTextCalendar.setOnClickListener()
-            {
-                // Open Calendar DialogBox
-                datePicker.show(supportFragmentManager, "DatePickerDialogBox");
             }
 
 
@@ -188,6 +230,7 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnHome.setOnClickListener()
             {
                 // Intent to MainActivity and call the Claim Fragment
+                openActivityWithIntent(MainActivity::class.java,"claimCompleted", "true")
             }
         }
     }
@@ -211,28 +254,33 @@ class ClaimsFormActivity:BaseActivity() {
             binding.textViewReason.visibility = View.VISIBLE
             binding.textInputLayoutReason.visibility = View.VISIBLE
             binding.editTextReason.visibility = View.VISIBLE
-            binding.btnBack.visibility = View.INVISIBLE
+            binding.btnBack.visibility = View.GONE
             binding.imgViewUpload.visibility = View.GONE
         }else
         {
-            binding.textView.visibility = View.INVISIBLE
-            binding.textInputLayoutTitle.visibility = View.INVISIBLE
-            binding.editTextTitle.visibility = View.INVISIBLE
-            binding.textViewCost.visibility = View.INVISIBLE
-            binding.textInputLayoutAmount.visibility = View.INVISIBLE
-            binding.editTextAmount.visibility = View.INVISIBLE
-            binding.textViewType.visibility = View.INVISIBLE
-            binding.textInputLayoutType.visibility = View.INVISIBLE
-            binding.autoCompleteType.visibility = View.INVISIBLE
-            binding.textViewDate.visibility = View.INVISIBLE
-            binding.textInputLayout.visibility = View.INVISIBLE
-            binding.editTextCalendar.visibility = View.INVISIBLE
-            binding.textViewReason.visibility = View.INVISIBLE
-            binding.textInputLayoutReason.visibility = View.INVISIBLE
-            binding.editTextReason.visibility = View.INVISIBLE
+            binding.textView.visibility = View.GONE
+            binding.textInputLayoutTitle.visibility = View.GONE
+            binding.editTextTitle.visibility = View.GONE
+            binding.textViewCost.visibility = View.GONE
+            binding.textInputLayoutAmount.visibility = View.GONE
+            binding.editTextAmount.visibility = View.GONE
+            binding.textViewType.visibility = View.GONE
+            binding.textInputLayoutType.visibility = View.GONE
+            binding.autoCompleteType.visibility = View.GONE
+            binding.textViewDate.visibility = View.GONE
+            binding.textInputLayout.visibility = View.GONE
+            binding.editTextCalendar.visibility = View.GONE
+            binding.textViewReason.visibility = View.GONE
+            binding.textInputLayoutReason.visibility = View.GONE
+            binding.editTextReason.visibility = View.GONE
         }
     }
 
+    /*
+    * set the visibility of the pages
+    * according to the state
+     */
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun pageVisibility(newStatus: Int)
     {
         // Set Visibility and Invisibility Accordingly
@@ -252,71 +300,64 @@ class ClaimsFormActivity:BaseActivity() {
             binding.btnNext.text = "Submit"
         }else{
             binding.progressBar.setCurrentStateNumber(StateProgressBar.StateNumber.THREE)
-            binding.imgViewUpload.setImageDrawable(getResources().getDrawable(R.drawable.wickie_success))
+            binding.imgViewUpload.setImageDrawable(resources.getDrawable(R.drawable.wickie_success))
             binding.btnHome.visibility = View.VISIBLE
             binding.imgViewUpload.visibility = View.VISIBLE
             binding.btnBack.visibility = View.INVISIBLE
             binding.btnNext.visibility = View.INVISIBLE
         }
-    }
+    } //pageVisibility()
+    /*
+    * Creates the popup dialog to allow user to choose
+    * to upload through gallery or through the camera
+     */
 
-
-    private fun uploadImg()
+    private fun galleryAlertBuilder()
     {
-        val progressDialog = ProgressDialog(this)
-        progressDialog.setMessage("Uploading Files...")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+        val builder = AlertDialog.Builder(this)
+        //set title for alert dialog
+        builder.setTitle("Attachment Upload")
+        //set message for alert dialog
+        builder.setMessage("How would you upload your attachment?")
 
-        val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.getDefault())
-        val now = Date()
-        val fileName = formatter.format(now)
-        // Need Username
-        var storageReference = FirebaseStorage.getInstance().getReference("images/asif/$fileName")
-        storageReference.putFile(imageURI).addOnSuccessListener {
-            show("Image Uploaded Successfully")
-            if(progressDialog.isShowing) progressDialog.dismiss()
-        }.addOnFailureListener{
-            show("Image Not Uploaded Successfully. Please try again later. ")
-            if(progressDialog.isShowing) progressDialog.dismiss()
+        //performing positive action
+        builder.setPositiveButton("Gallery") { dialog, _ ->
+            dialog.dismiss()
+            imageLibrary.useGallery()
         }
-    }
+        //performing negative action
+        builder.setNegativeButton("Camera"){ dialog, _ ->
+            dialog.dismiss()
 
-    private fun downloadImg(imgUrl : String )
-    {
-        var storageReference = FirebaseStorage.getInstance().reference.child("images").child("asif").child(imgUrl)
-        val localfile = File.createTempFile("tempImage","png")
-        show(storageReference.toString())
+            photoFile = imageLibrary.getPhotoFile(FILENAME)
+            imageLibrary.useCamera(photoFile)
 
-        Log.d("ClaimsFormAct",storageReference.toString())
-        Toast.makeText(this, storageReference.toString(),Toast.LENGTH_LONG)
+        }
+        // Create the AlertDialog
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+    }//galleryAlertBuilder()
 
-        storageReference.getFile(localfile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+    /*
+    * set the imgViewUpload button or the thumbnail
+    * in the ClaimsForm to the chosen picture
+    * checks what action was taken
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == requestGallery && resultCode == Activity.RESULT_OK && data != null) {
+            binding.imgViewUpload.setImageURI(data.data)
+            imageURI = data.data!!
+        }
+        else if(requestCode == requestCamera && resultCode == Activity.RESULT_OK) {
+            val bitmap = BitmapFactory.decodeFile(photoFile.absolutePath)
             binding.imgViewUpload.setImageBitmap(bitmap)
-
-        }.addOnFailureListener(){
-            show("Image not downloaded successfully")
-            Log.d("ClaimFormsActivity",it.toString())
+            imageURI = photoFile.toUri()
         }
-    }
-//
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if(requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK && data != null) {
-//            binding.imageButtonAttachment.setImageURI(data.data)
-//            imageURI = data.data!!
-//            Log.d("ClaimsFormActivity",imageURI.toString())
-//            uploadImg()
-//        }
-//        else if(requestCode == REQUEST_IMAGE_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
-//            binding.imageButtonAttachment.setImageBitmap(data.extras?.get("data") as Bitmap)
-//        }
-//        else {
-//            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
-//        }
-//    }
+        else {
+            Toast.makeText(this, "Cannot access gallery", Toast.LENGTH_SHORT).show()
+        }
+    }//onActivityResult()
+
 }
 

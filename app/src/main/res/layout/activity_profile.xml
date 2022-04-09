@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     tools:layout_editor_absoluteX="1dp"
     tools:layout_editor_absoluteY="1dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorBackground"
     android:fillViewport="true"
     tools:context=".features.profile.ProfileActivity">
 
@@ -17,17 +17,17 @@
         android:layout_height="wrap_content" >
 
 
-    <ImageView
-            android:id="@+id/imageView"
+    <View
+            android:id="@+id/ViewBackground"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="350dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/top_background" />
+            android:background="@color/colorPrimary" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ProfileImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -37,7 +37,7 @@
         app:srcCompat="@drawable/profile" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -45,21 +45,21 @@
         android:textColor="#ffffff"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintEnd_toEndOf="@+id/ProfileImage"
         app:layout_constraintHorizontal_bias="0.494"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintStart_toStartOf="@+id/ProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/ProfileImage" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="jackwillson@gmail.com"
         android:textColor="#ffffff"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintEnd_toEndOf="@+id/textViewName"
+        app:layout_constraintStart_toStartOf="@+id/textViewName"
+        app:layout_constraintTop_toBottomOf="@+id/textViewName" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -72,7 +72,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2">
+        app:layout_constraintTop_toBottomOf="@+id/textViewEmail">
 
 
         <LinearLayout
@@ -81,20 +81,21 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/CheckInLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/top_button_background"
                 android:elevation="5dp"
+                android:background="@drawable/white_rectangle_background"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView4"
+                    android:id="@+id/imageViewCheckIn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/ic_1" />
+                    app:srcCompat="@drawable/check_in" />
 
                 <TextView
                     android:id="@+id/textViewSettings"
@@ -109,12 +110,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/EditProfileLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/top_button_background"
                 android:elevation="5dp"
+                android:background="@drawable/white_rectangle_background"
                 android:orientation="vertical">
 
                 <ImageView
@@ -122,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/ic_2" />
+                    app:srcCompat="@drawable/edit_profile" />
 
                 <TextView
                     android:id="@+id/textView1"
@@ -137,23 +139,22 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/LogoutLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:background="@drawable/top_button_background"
+                android:background="@drawable/white_rectangle_background"
                 android:elevation="5dp"
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imageView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    app:srcCompat="@drawable/ic_3" />
+                    app:srcCompat="@drawable/logout" />
 
                 <TextView
-                    android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -177,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Position:"
-                android:textColor="#5917e1"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <TextView
@@ -211,7 +212,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Mobile:"
-                android:textColor="#5917e1"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <TextView
@@ -240,20 +241,20 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/TextViewDOB"
+                android:id="@+id/textViewDOB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Tell:"
-                android:textColor="#5917e1"
+                android:text="Date of birth:"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/TextViewDOBValue"
+                android:id="@+id/textViewDOBValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="123-123-1234"
+                android:text="11/2/1998"
                 android:textAlignment="viewEnd"
                 android:textColor="#5b5b5b"
                 android:textSize="18sp" />
@@ -279,7 +280,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Address:"
-                android:textColor="#5917e1"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <TextView
@@ -287,7 +288,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="NY-Street 22- no74"
+                android:text="Woodlands Avenue 6 "
                 android:textAlignment="viewEnd"
                 android:textColor="#5b5b5b"
                 android:textSize="18sp" />
@@ -307,23 +308,55 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textViewPostal"
+                android:id="@+id/textViewDepartment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="PostalCode:"
-                android:textColor="#5917e1"
+                android:text="Department:"
+                android:textColor="@color/colorAccent"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textViewPostalValue"
+                android:id="@+id/textViewDepartmentValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="9998887775"
+                android:text="Human Resources"
                 android:textAlignment="viewEnd"
                 android:textColor="#5b5b5b"
                 android:textSize="18sp" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:alpha="0.5"
+            android:background="#585858" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewFingerprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Enable Fingerprint Login:"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp" />
+
+            <Switch
+                android:id="@+id/EnableFingerprint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="viewEnd"
+                android:textColor="#5b5b5b"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
         </LinearLayout>
 
     </LinearLayout>

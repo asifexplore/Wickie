@@ -1,6 +1,9 @@
 package com.example.Wickie
 
+import android.view.View
 import android.widget.EditText
+import java.lang.Double.parseDouble
+import java.lang.Exception
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -25,17 +28,9 @@ import java.util.regex.Pattern
 *---------------------------------------------------
 */
 
-class Validation (list: Array<EditText>){
-    private lateinit var pattern: Pattern;
-    private lateinit var matcher: Matcher;
-    val DATE_PATTERN =
-        "(0?[1-9]|1[012]) [/.-] (0?[1-9]|[12][0-9]|3[01]) [/.-] ((19|20)\\d\\d)";
-    private lateinit var list: Array<EditText>
-    init {
-        this.list = list
-    }
+class Validation (){
 
-    fun validateEmpty(array : Array<EditText>): Boolean {
+    private fun validateEmptyEditText(array : Array<EditText>): Boolean {
         for (item in array) {
             if(item.text.toString().isEmpty()) {
                 item.error = "This field is missing"
@@ -45,13 +40,30 @@ class Validation (list: Array<EditText>){
         return true
     }
 
-
-
-    fun validateClaim(array : Array<EditText>): Boolean {
-        if (validateEmpty(array)) {
+    fun validateLogin(username: EditText, password: EditText) : Boolean {
+        val loginInputs = arrayOf<EditText>(username, password)
+        if (validateEmptyEditText(loginInputs))
+        {
             return true
-
         }
         return false
+    }
+    fun validateClaim(title: EditText, amount: EditText, type: EditText, date : EditText, reason : EditText ) : Boolean
+    {
+        val claim = arrayOf<EditText>(title, amount, type, date, reason)
+            if (validateEmptyEditText(claim))
+            {
+                return try {
+                    val amountDouble = parseDouble(amount.text.toString())
+                    true
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    amount.error = "Amount not in numeric format"
+                    false
+                }
+            }
+
+        return false
+
     }
 }
